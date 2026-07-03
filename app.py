@@ -173,17 +173,20 @@ def read_training_schedule():
                 "title": second_text,
                 "items": split_training_items(second_text),
             })
-        for col_index, title in ((3, "下午第一组"), (4, "下午第二组")):
+        afternoon_parts = []
+        for col_index in (3, 4):
             if len(row) > col_index and row[col_index]:
-                text = str(row[col_index]).strip()
-                events.append({
-                    "date": schedule_date,
-                    "weekday": weekday,
-                    "time": "14:00-17:30",
-                    "period": title,
-                    "title": text,
-                    "items": split_training_items(text),
-                })
+                afternoon_parts.append(str(row[col_index]).strip())
+        if afternoon_parts:
+            text = "、".join(afternoon_parts)
+            events.append({
+                "date": schedule_date,
+                "weekday": weekday,
+                "time": "14:00-17:30",
+                "period": "下午",
+                "title": text,
+                "items": split_training_items(text),
+            })
         if len(row) > 5 and row[5]:
             text = str(row[5]).strip()
             events.append({

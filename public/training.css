@@ -1,0 +1,135 @@
+.training-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: linear-gradient(135deg, #ffffff 0%, #eef8f4 100%);
+}
+
+.training-hero h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.training-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.training-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+}
+
+.training-legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.training-list {
+  display: grid;
+  gap: 16px;
+}
+
+.training-day {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #e6ecea;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 2px 9px #17312f08;
+}
+
+.training-date {
+  border-right: 1px solid var(--line);
+  padding-right: 16px;
+}
+
+.training-date b,
+.training-date span {
+  display: block;
+}
+
+.training-date b {
+  font-size: 18px;
+}
+
+.training-date span {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.training-events {
+  display: grid;
+  gap: 12px;
+}
+
+.training-events article {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 14px;
+  padding: 14px;
+  background: #f8fbfa;
+  border: 1px solid #eef3f1;
+  border-radius: 12px;
+}
+
+.training-time {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.training-time small {
+  display: block;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.training-events h3 {
+  margin: 0 0 9px;
+  font-size: 15px;
+  white-space: pre-line;
+}
+
+.training-events p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0;
+}
+
+.training-events p span {
+  padding: 4px 8px;
+  border-radius: 99px;
+  background: var(--mint);
+  color: var(--green);
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .training-hero,
+  .training-day,
+  .training-events article {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .training-date {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0 0 12px;
+  }
+}

@@ -14,6 +14,7 @@ DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
 DB_PATH = DATA_DIR / "hazards.db"
 UPLOAD_DIR = DATA_DIR / "uploads"
 SEED_DIR = ROOT / "seed"
+TRAINING_SCHEDULE_FILE = SEED_DIR / "2026年7月安全培训安排表.xlsx"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -115,6 +116,93 @@ def detect_dataset_type(filename):
         if re.fullmatch(dataset["filenamePattern"], name, flags=re.IGNORECASE):
             return dataset
     return None
+
+
+def parse_training_date(value):
+    text = str(value or "").strip()
+    match = re.search(r"(\d{4})/(\d{1,2})/(\d{1,2})", text)
+    if not match:
+        return "", ""
+    year, month, day = map(int, match.groups())
+    date_text = date(year, month, day).isoformat()
+    weekday_match = re.search(r"（([^）]+)）", text)
+    return date_text, weekday_match.group(1) if weekday_match else ""
+
+
+def split_training_items(value):
+    text = str(value or "").strip()
+    if not text:
+        return []
+    parts = []
+    for line in re.split(r"[\n\r]+", text):
+        for item in re.split(r"[、，,]", str(line).strip()):
+            item = item.strip()
+            if item:
+                parts.append(item)
+    return parts
+
+
+def read_training_schedule():
+    if not TRAINING_SCHEDULE_FILE.exists():
+        return []
+    workbook = load_workbook(TRAINING_SCHEDULE_FILE, read_only=True, data_only=True)
+    sheet = workbook[workbook.sheetnames[0]]
+    events = []
+    for row in sheet.iter_rows(min_row=3, values_only=True):
+        schedule_date, weekday = parse_training_date(row[0] if len(row) > 0 else "")
+        if not schedule_date:
+            continue
+        morning_text = row[1] if len(row) > 1 else None
+        morning_lines = [line.strip() for line in re.split(r"[\n\r]+", str(morning_text or "").strip()) if line.strip()]
+        if morning_lines:
+            events.append({
+                "date": schedule_date,
+                "weekday": weekday,
+                "time": "08:00-10:00",
+                "period": "上午第一场",
+                "title": morning_lines[0],
+                "items": split_training_items(morning_lines[0]),
+            })
+        if len(morning_lines) > 1:
+            second_text = "\n".join(morning_lines[1:])
+            events.append({
+                "date": schedule_date,
+                "weekday": weekday,
+                "time": "10:00-11:30",
+                "period": "上午第二场",
+                "title": second_text,
+                "items": split_training_items(second_text),
+            })
+        for col_index, title in ((3, "下午第一组"), (4, "下午第二组")):
+            if len(row) > col_index and row[col_index]:
+                text = str(row[col_index]).strip()
+                events.append({
+                    "date": schedule_date,
+                    "weekday": weekday,
+                    "time": "14:00-17:30",
+                    "period": title,
+                    "title": text,
+                    "items": split_training_items(text),
+                })
+        if len(row) > 5 and row[5]:
+            text = str(row[5]).strip()
+            events.append({
+                "date": schedule_date,
+                "weekday": weekday,
+                "time": "晚上",
+                "period": "晚上",
+                "title": text,
+                "items": split_training_items(text),
+            })
+    return events
+
+
+def week_range_for(value):
+    current = iso_date(value) if value else date.today().isoformat()
+    current_date = datetime.strptime(current, "%Y-%m-%d").date()
+    start = current_date - timedelta(days=current_date.weekday())
+    end = start + timedelta(days=6)
+    return start.isoformat(), end.isoformat()
 
 
 def iso_date(value):
@@ -260,6 +348,11 @@ def index():
     return send_from_directory(app.static_folder, "index.html")
 
 
+@app.get("/training")
+def training_page():
+    return send_from_directory(app.static_folder, "index.html")
+
+
 @app.get("/api/health")
 def health():
     with db() as conn:
@@ -396,6 +489,36 @@ def statistics():
                    comparison={"internal": internal_count, "external": external_count, "ratio": ratio,
                                "target": ratio_target, "met": external_count == 0 or ratio >= ratio_target,
                                "internalUnit": internal})
+
+
+@app.get("/api/training/schedule")
+def training_schedule():
+    events = read_training_schedule()
+    bounds = {
+        "min": min((event["date"] for event in events), default=""),
+        "max": max((event["date"] for event in events), default=""),
+        "count": len(events),
+        "source": TRAINING_SCHEDULE_FILE.name if TRAINING_SCHEDULE_FILE.exists() else "",
+    }
+    start = request.args.get("start") or ""
+    end = request.args.get("end") or ""
+    if not start or not end:
+        today = date.today().isoformat()
+        if bounds["min"] and not (bounds["min"] <= today <= bounds["max"]):
+            today = bounds["min"]
+        start, end = week_range_for(today)
+    keyword = (request.args.get("keyword") or "").strip()
+    filtered = []
+    for event in events:
+        if start and event["date"] < start:
+            continue
+        if end and event["date"] > end:
+            continue
+        haystack = " ".join([event["date"], event["weekday"], event["time"], event["period"], event["title"], " ".join(event["items"])])
+        if keyword and keyword not in haystack:
+            continue
+        filtered.append(event)
+    return jsonify({"items": filtered, "bounds": bounds, "start": start, "end": end})
 
 
 init_db()

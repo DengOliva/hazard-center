@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>隐患数据中心</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/imports.css">
+</head>
+<body>
+  <aside>
+    <div class="brand"><span>安</span><div><b>隐患数据中心</b><small>SAFETY INSIGHTS</small></div></div>
+    <nav>
+      <button class="active" data-page="dashboard">▦　统计看板</button>
+      <button data-page="hazards">☷　隐患列表</button>
+      <button data-page="people">♙　人员与标准</button>
+      <button data-page="imports">⇧　数据更新</button>
+    </nav>
+    <div class="side-foot"><i></i><div><b>数据已本地保存</b><small id="dataState">正在读取…</small></div></div>
+  </aside>
+  <main>
+    <header><div><h1 id="pageTitle">统计看板</h1><p id="pageSub">隐患录入达标情况与单位对比</p></div><button class="primary" onclick="showPage('imports')">＋ 更新隐患数据</button></header>
+
+    <section id="dashboard" class="page active">
+      <div class="filters panel">
+        <label>开始日期<input type="date" id="startDate"></label><label>结束日期<input type="date" id="endDate"></label>
+        <label>人员种类<select id="categoryFilter"><option value="">全部种类</option></select></label>
+        <label>部门 / 班组<select id="departmentFilter"><option value="">全部部门</option></select></label>
+        <button class="primary" onclick="loadStatistics()">查询统计</button>
+      </div>
+      <div class="cards">
+        <article><small>中建二局录入</small><strong id="internalCount">—</strong><em>条隐患</em></article>
+        <article><small>外部单位录入</small><strong id="externalCount">—</strong><em>条隐患</em></article>
+        <article><small>内外部录入比例</small><strong id="ratioCount">—</strong><em id="ratioTarget">目标 ≥ 5 : 1</em></article>
+        <article><small>人员达标率</small><strong id="metRate">—</strong><em id="metSummary">—</em></article>
+      </div>
+      <div class="grid2">
+        <div class="panel"><div class="panel-title"><div><h2>单位录入对比</h2><p>按“检查单位”统计</p></div><span id="ratioBadge" class="badge">—</span></div><div class="bar-chart"><div><label>中建二局 <b id="internalBarText"></b></label><span><i id="internalBar"></i></span></div><div><label>其他单位 <b id="externalBarText"></b></label><span><i id="externalBar" class="orange"></i></span></div></div></div>
+        <div class="panel"><div class="panel-title"><div><h2>达标概览</h2><p>按当前筛选与时间区间</p></div></div><div class="donut-wrap"><div class="donut" id="donut"><b id="donutText">—</b><small>达标率</small></div><div class="legend"><span><i class="green"></i>已达标 <b id="metCount">0</b></span><span><i class="red"></i>未达标 <b id="unmetCount">0</b></span></div></div></div>
+      </div>
+      <div class="panel"><div class="panel-title"><div><h2>人员隐患录入得分</h2><p>安全员、领导、班组长与驻场代表分板块展示</p></div><button onclick="downloadStats()">导出 CSV</button></div><div id="statsGroups" class="score-groups"></div></div>
+    </section>
+
+    <section id="hazards" class="page">
+      <div class="filters panel"><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button></div>
+      <div class="panel"><div class="panel-title"><div><h2>隐患列表</h2><p id="hazardTotal">共 0 条</p></div></div><div class="table-wrap"><table class="hazards-table"><thead><tr><th>检查日期</th><th>隐患单号</th><th>检查人</th><th>检查单位</th><th>隐患描述</th><th>区域</th><th>级别</th><th>状态</th></tr></thead><tbody id="hazardBody"></tbody></table></div><div class="pager"><button onclick="loadHazards(hazardPage-1)">上一页</button><span id="pageInfo"></span><button onclick="loadHazards(hazardPage+1)">下一页</button></div></div>
+    </section>
+
+    <section id="people" class="page">
+      <div class="panel"><div class="panel-title"><div><h2>人员与录入标准</h2><p>人员姓名需与 Excel “检查人姓名”中的姓名一致</p></div><button class="primary" onclick="openPerson()">＋ 添加人员</button></div><div class="table-wrap"><table><thead><tr><th>人员种类</th><th>部门/班组</th><th>姓名</th><th>标准</th><th>启用</th><th>操作</th></tr></thead><tbody id="peopleBody"></tbody></table></div></div>
+    </section>
+
+    <section id="imports" class="page">
+      <div class="upload panel" id="dropZone"><div class="upload-icon">⇧</div><h2>把数据文件拖到这里</h2><p>系统会先识别文件名，再自动更新对应的数据模块</p><div id="fileRecognition" class="file-recognition">等待文件</div><input type="file" id="fileInput" accept=".xlsx" hidden><button class="primary" onclick="fileInput.click()">选择 Excel 文件</button><small>仅支持 .xlsx，最大 30 MB</small></div>
+      <div class="panel"><div class="panel-title"><div><h2>已支持的数据文件</h2><p>文件名用于判断数据去向，避免不同种类的数据互相覆盖</p></div></div><div id="datasetTypes" class="dataset-types"></div></div>
+      <div class="panel"><div class="panel-title"><div><h2>当前数据</h2><p id="importInfo">正在读取…</p></div></div><div id="importResult" class="notice">每次导入采用“完整快照更新”：旧隐患列表会被新表替换，避免重复累计。</div></div>
+    </section>
+  </main>
+
+  <dialog id="personDialog"><form method="dialog" id="personForm"><h2 id="personDialogTitle">添加人员</h2><input type="hidden" id="personId"><label>姓名<input id="personName" required></label><label>人员种类<input id="personCategory" list="categories" required><datalist id="categories"></datalist></label><label>部门 / 班组<input id="personDepartment" list="departments"><datalist id="departments"></datalist></label><div class="form-row"><label>标准数量<input id="personTarget" type="number" min="0" step="0.5" required></label><label>考核周期<select id="personPeriod"><option value="day">每天</option><option value="week">每周</option></select></label></div><label class="check"><input id="personActive" type="checkbox" checked> 启用统计</label><div class="dialog-actions"><button value="cancel">取消</button><button value="default" class="primary" onclick="savePerson(event)">保存</button></div></form></dialog>
+  <div id="toast"></div>
+  <script src="/app.js"></script>
+</body></html>

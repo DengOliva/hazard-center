@@ -1,0 +1,14 @@
+.file-recognition { display: inline-block; margin-top: 13px; padding: 7px 12px; border-radius: 8px; background: #eef3f2; color: var(--muted); font-size: 12px; }
+.file-recognition.good { background: var(--mint); color: var(--green); }
+.file-recognition.bad { background: #fdecec; color: var(--red); }
+.dataset-types { display: grid; gap: 10px; }
+.dataset-type { display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; }
+.dataset-type b { color: var(--green); }
+.dataset-type code { display: block; margin-bottom: 4px; color: var(--ink); }
+.dataset-type small { color: var(--muted); }
+.score-groups { display: grid; gap: 18px; }
+.score-group { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.score-heading { display: flex; justify-content: space-between; align-items: center; padding: 15px 17px; background: #f7faf9; }
+.score-heading h3 { margin: 0 0 2px; font-size: 15px; }
+.score-heading small { color: var(--muted); }
+.score-heading > b { color: var(--green); font-size: 13px; }

@@ -28,11 +28,40 @@
 
     <section class="panel training-hero">
       <div><h2>本周培训 / 考试安排</h2><p id="trainingSummary">正在读取培训安排…</p></div>
-      <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span></div>
+      <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span><span><i></i>晚上 19:00-20:30</span></div>
     </section>
 
     <section id="trainingList" class="training-list"></section>
   </div>
+
+  <div class="modal-overlay" id="passwordModal">
+    <div class="modal-box">
+      <h3>验证身份</h3>
+      <p>请输入编辑密码</p>
+      <input type="password" id="editPassword" placeholder="请输入密码" autocomplete="off">
+      <div class="modal-actions">
+        <button onclick="closePasswordModal()">取消</button>
+        <button class="primary" id="passwordConfirmBtn">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-box modal-wide">
+      <h3>编辑培训安排</h3>
+      <input type="hidden" id="editEventId">
+      <label>时间段<input id="editTime" placeholder="08:00-10:00"></label>
+      <label>场次<input id="editPeriod" placeholder="上午第一场"></label>
+      <label>标题<input id="editTitle" placeholder="培训标题"></label>
+      <label>标签（用顿号、逗号或换行分隔）<textarea id="editItems" rows="3" placeholder="公司级、签到"></textarea></label>
+      <div class="modal-actions">
+        <button class="danger" id="editResetBtn">恢复默认</button>
+        <button onclick="closeEditModal()">取消</button>
+        <button class="primary" onclick="saveEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast"></div>
   <script src="/training-app.js"></script>
 </body>

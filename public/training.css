@@ -126,12 +126,17 @@
 
 .training-events article {
   display: grid;
-  grid-template-columns: 130px 1fr;
+  grid-template-columns: 130px 1fr auto;
   gap: 14px;
   padding: 14px;
   background: #f8fbfa;
   border: 1px solid #eef3f1;
   border-radius: 12px;
+}
+
+.training-events article.training-edited {
+  border-color: #f0c060;
+  background: #fffdf7;
 }
 
 .training-time {
@@ -167,6 +172,122 @@
   font-size: 12px;
 }
 
+.training-edit-btn {
+  align-self: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0;
+  transition: all .15s;
+}
+
+.training-edit-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: var(--mint);
+}
+
+/* modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #1a2e2b60;
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  width: min(420px, calc(100vw - 40px));
+  box-shadow: 0 12px 40px #17312f20;
+}
+
+.modal-box.modal-wide {
+  width: min(520px, calc(100vw - 40px));
+}
+
+.modal-box h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.modal-box > p {
+  color: var(--muted);
+  margin: 0 0 16px;
+  font-size: 14px;
+}
+
+.modal-box label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.modal-box input,
+.modal-box textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modal-box input:focus,
+.modal-box textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px #1f776820;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+}
+
+.modal-actions button.primary {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+
+.modal-actions button.danger {
+  color: #c0392b;
+  border-color: #e0c0c0;
+  margin-right: auto;
+}
+
 @media (max-width: 760px) {
   .training-site {
     width: min(100vw - 24px, 1180px);
@@ -189,5 +310,9 @@
     border-right: 0;
     border-bottom: 1px solid var(--line);
     padding: 0 0 12px;
+  }
+
+  .training-edit-btn {
+    justify-self: end;
   }
 }

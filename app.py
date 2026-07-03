@@ -15,6 +15,8 @@ DB_PATH = DATA_DIR / "hazards.db"
 UPLOAD_DIR = DATA_DIR / "uploads"
 SEED_DIR = ROOT / "seed"
 TRAINING_SCHEDULE_FILE = SEED_DIR / "2026年7月安全培训安排表.xlsx"
+TRAINING_OVERRIDES_FILE = DATA_DIR / "training_overrides.json"
+TRAINING_EDIT_PASSWORD = os.environ.get("TRAINING_EDIT_PASSWORD", "@q")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -142,6 +144,72 @@ def split_training_items(value):
     return parts
 
 
+def training_event(event_id, schedule_date, weekday, time_text, period, title, items=None, order=0):
+    return {
+        "id": event_id,
+        "date": schedule_date,
+        "weekday": weekday,
+        "time": time_text,
+        "period": period,
+        "title": title,
+        "items": items if items is not None else split_training_items(title),
+        "order": order,
+    }
+
+
+def load_training_overrides():
+    if not TRAINING_OVERRIDES_FILE.exists():
+        return {}
+    try:
+        return json.loads(TRAINING_OVERRIDES_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+
+
+def save_training_overrides(overrides):
+    TRAINING_OVERRIDES_FILE.parent.mkdir(parents=True, exist_ok=True)
+    TRAINING_OVERRIDES_FILE.write_text(json.dumps(overrides, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def apply_training_overrides(events):
+    overrides = load_training_overrides()
+    for event in events:
+        override = overrides.get(event["id"])
+        if not override:
+            continue
+        for key in ("time", "period", "title", "items"):
+            if key in override:
+                event[key] = override[key]
+        event["edited"] = True
+    return events
+
+
+def add_annual_retraining(events):
+    plans = {
+        "2026-07-04": "7月年度复训",
+        "2026-07-05": "7月年度复训",
+        "2026-07-24": "8月年度复训",
+        "2026-07-25": "8月年度复训",
+    }
+    weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+    for schedule_date, label in plans.items():
+        current = date.fromisoformat(schedule_date)
+        weekday = weekday_names[current.weekday()]
+        events.append(training_event(
+            f"annual:{schedule_date}:signin", schedule_date, weekday, "08:00-10:00",
+            "年度复训签到", f"{label}公司级签到", ["年度复训", "公司级签到"], 80,
+        ))
+        events.append(training_event(
+            f"annual:{schedule_date}:exam", schedule_date, weekday, "10:00-11:30",
+            "年度复训考试", f"11:00 {label}公司级考试", ["年度复训", "公司级考试"], 81,
+        ))
+        events.append(training_event(
+            f"annual:{schedule_date}:night", schedule_date, weekday, "19:00-20:30",
+            "晚上", label, [label], 90,
+        ))
+    return events
+
+
 def read_training_schedule():
     if not TRAINING_SCHEDULE_FILE.exists():
         return []
@@ -152,52 +220,39 @@ def read_training_schedule():
         schedule_date, weekday = parse_training_date(row[0] if len(row) > 0 else "")
         if not schedule_date:
             continue
+        day_index = len([event for event in events if event["date"] == schedule_date])
         morning_text = row[1] if len(row) > 1 else None
         morning_lines = [line.strip() for line in re.split(r"[\n\r]+", str(morning_text or "").strip()) if line.strip()]
         if morning_lines:
-            events.append({
-                "date": schedule_date,
-                "weekday": weekday,
-                "time": "08:00-10:00",
-                "period": "上午第一场",
-                "title": morning_lines[0],
-                "items": split_training_items(morning_lines[0]),
-            })
+            events.append(training_event(
+                f"base:{schedule_date}:morning1", schedule_date, weekday, "08:00-10:00",
+                "上午第一场", morning_lines[0], order=10 + day_index,
+            ))
         if len(morning_lines) > 1:
             second_text = "\n".join(morning_lines[1:])
-            events.append({
-                "date": schedule_date,
-                "weekday": weekday,
-                "time": "10:00-11:30",
-                "period": "上午第二场",
-                "title": second_text,
-                "items": split_training_items(second_text),
-            })
+            events.append(training_event(
+                f"base:{schedule_date}:morning2", schedule_date, weekday, "10:00-11:30",
+                "上午第二场", second_text, order=20 + day_index,
+            ))
         afternoon_parts = []
         for col_index in (3, 4):
             if len(row) > col_index and row[col_index]:
                 afternoon_parts.append(str(row[col_index]).strip())
         if afternoon_parts:
             text = "、".join(afternoon_parts)
-            events.append({
-                "date": schedule_date,
-                "weekday": weekday,
-                "time": "14:00-17:30",
-                "period": "下午",
-                "title": text,
-                "items": split_training_items(text),
-            })
+            events.append(training_event(
+                f"base:{schedule_date}:afternoon", schedule_date, weekday, "14:00-17:30",
+                "下午", text, order=30 + day_index,
+            ))
         if len(row) > 5 and row[5]:
             text = str(row[5]).strip()
-            events.append({
-                "date": schedule_date,
-                "weekday": weekday,
-                "time": "晚上",
-                "period": "晚上",
-                "title": text,
-                "items": split_training_items(text),
-            })
-    return events
+            events.append(training_event(
+                f"base:{schedule_date}:night", schedule_date, weekday, "19:00-20:30",
+                "晚上", text, order=90 + day_index,
+            ))
+    add_annual_retraining(events)
+    apply_training_overrides(events)
+    return sorted(events, key=lambda item: (item["date"], item.get("order", 0), item["time"], item["period"]))
 
 
 def week_range_for(value):
@@ -522,6 +577,41 @@ def training_schedule():
             continue
         filtered.append(event)
     return jsonify({"items": filtered, "bounds": bounds, "start": start, "end": end})
+
+
+@app.post("/api/training/save")
+def training_save():
+    body = request.get_json(force=True)
+    pwd = str(body.get("password") or "")
+    if pwd != TRAINING_EDIT_PASSWORD:
+        return jsonify(error="密码错误"), 403
+    event_id = str(body.get("id") or "").strip()
+    if not event_id:
+        return jsonify(error="缺少事件 ID"), 400
+    overrides = load_training_overrides()
+    entry = overrides.get(event_id, {})
+    for key in ("time", "period", "title", "items"):
+        if key in body and body[key] is not None:
+            entry[key] = body[key]
+    overrides[event_id] = entry
+    save_training_overrides(overrides)
+    return jsonify(ok=True, id=event_id)
+
+
+@app.post("/api/training/reset")
+def training_reset():
+    body = request.get_json(force=True)
+    pwd = str(body.get("password") or "")
+    if pwd != TRAINING_EDIT_PASSWORD:
+        return jsonify(error="密码错误"), 403
+    event_id = str(body.get("id") or "").strip()
+    overrides = load_training_overrides()
+    if event_id:
+        overrides.pop(event_id, None)
+    else:
+        overrides.clear()
+    save_training_overrides(overrides)
+    return jsonify(ok=True)
 
 
 init_db()

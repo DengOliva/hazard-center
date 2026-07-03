@@ -1,3 +1,51 @@
+.training-body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, #d9f3ec 0, transparent 30%),
+    linear-gradient(180deg, #f4f8f7 0%, #edf3f1 100%);
+}
+
+.training-site {
+  width: min(1180px, calc(100vw - 36px));
+  margin: 0 auto;
+  padding: 34px 0 46px;
+}
+
+.training-top {
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.training-top small {
+  display: block;
+  color: var(--green);
+  letter-spacing: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.training-top h1 {
+  font-size: 32px;
+}
+
+.training-top p {
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+
+.training-link {
+  color: var(--green);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+
 .training-hero {
   display: flex;
   align-items: center;
@@ -120,6 +168,16 @@
 }
 
 @media (max-width: 760px) {
+  .training-site {
+    width: min(100vw - 24px, 1180px);
+    padding-top: 20px;
+  }
+
+  .training-top {
+    display: grid;
+    gap: 14px;
+  }
+
   .training-hero,
   .training-day,
   .training-events article {

@@ -353,7 +353,7 @@ def index():
 
 @app.get("/training")
 def training_page():
-    return send_from_directory(app.static_folder, "index.html")
+    return send_from_directory(app.static_folder, "training.html")
 
 
 @app.get("/api/health")

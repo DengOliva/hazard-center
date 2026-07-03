@@ -5,7 +5,6 @@
   <title>隐患数据中心</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/imports.css">
-  <link rel="stylesheet" href="/training.css">
 </head>
 <body>
   <aside>
@@ -13,7 +12,6 @@
     <nav>
       <button class="active" data-page="dashboard">▦　统计看板</button>
       <button data-page="hazards">☷　隐患列表</button>
-      <button data-page="training">◴　培训安排</button>
       <button data-page="people">♙　人员与标准</button>
       <button data-page="imports">⇧　数据更新</button>
     </nav>
@@ -45,21 +43,6 @@
     <section id="hazards" class="page">
       <div class="filters panel"><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button></div>
       <div class="panel"><div class="panel-title"><div><h2>隐患列表</h2><p id="hazardTotal">共 0 条</p></div></div><div class="table-wrap"><table class="hazards-table"><thead><tr><th>检查日期</th><th>隐患单号</th><th>检查人</th><th>检查单位</th><th>隐患描述</th><th>区域</th><th>级别</th><th>状态</th></tr></thead><tbody id="hazardBody"></tbody></table></div><div class="pager"><button onclick="loadHazards(hazardPage-1)">上一页</button><span id="pageInfo"></span><button onclick="loadHazards(hazardPage+1)">下一页</button></div></div>
-    </section>
-
-    <section id="training" class="page">
-      <div class="filters panel">
-        <label>开始日期<input type="date" id="trainingStart"></label>
-        <label>结束日期<input type="date" id="trainingEnd"></label>
-        <label>关键词<input id="trainingKeyword" placeholder="公司级、项目级、焊工、电工…"></label>
-        <button class="primary" onclick="loadTraining()">查询安排</button>
-        <button onclick="setTrainingThisWeek()">本周</button>
-      </div>
-      <div class="panel training-hero">
-        <div><h2>安全培训 / 考试安排查询</h2><p id="trainingSummary">正在读取培训安排…</p></div>
-        <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span></div>
-      </div>
-      <div id="trainingList" class="training-list"></div>
     </section>
 
     <section id="people" class="page">

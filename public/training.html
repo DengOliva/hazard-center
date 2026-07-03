@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>安全培训安排查询</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/training.css">
+</head>
+<body class="training-body">
+  <div class="training-site">
+    <header class="training-top">
+      <div>
+        <small>GXAJB TRAINING SCHEDULE</small>
+        <h1>安全培训安排查询</h1>
+        <p>默认显示本周安排，可按日期和关键词查询考试 / 培训时间。</p>
+      </div>
+      <a class="training-link" href="/">隐患数据中心</a>
+    </header>
+
+    <section class="filters panel">
+      <label>开始日期<input type="date" id="trainingStart"></label>
+      <label>结束日期<input type="date" id="trainingEnd"></label>
+      <label>关键词<input id="trainingKeyword" placeholder="公司级、项目级、焊工、电工…"></label>
+      <button class="primary" onclick="loadTraining()">查询安排</button>
+      <button onclick="setTrainingThisWeek()">本周</button>
+    </section>
+
+    <section class="panel training-hero">
+      <div><h2>本周培训 / 考试安排</h2><p id="trainingSummary">正在读取培训安排…</p></div>
+      <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span></div>
+    </section>
+
+    <section id="trainingList" class="training-list"></section>
+  </div>
+  <div id="toast"></div>
+  <script src="/training-app.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>安全培训安排查询</title>
+  <title>安全培训 — GXAJB</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/training.css">
 </head>
@@ -11,26 +11,41 @@
   <div class="training-site">
     <header class="training-top">
       <div>
-        <small>GXAJB TRAINING SCHEDULE</small>
-        <h1>安全培训安排查询</h1>
-        <p>默认显示本周安排，可按日期和关键词查询考试 / 培训时间。</p>
+        <small>GXAJB TRAINING</small>
+        <h1>安全培训</h1>
+        <p>培训安排查询与资料管理</p>
       </div>
+      <nav class="training-tabs">
+        <button class="tab active" data-tab="schedule">培训安排</button>
+        <button class="tab" data-tab="materials">培训资料</button>
+      </nav>
     </header>
 
-    <section class="filters panel">
-      <label>开始日期<input type="date" id="trainingStart"></label>
-      <label>结束日期<input type="date" id="trainingEnd"></label>
-      <label>关键词<input id="trainingKeyword" placeholder="公司级、项目级、焊工、电工…"></label>
-      <button class="primary" onclick="loadTraining()">查询安排</button>
-      <button onclick="setTrainingThisWeek()">本周</button>
-    </section>
+    <div id="tabSchedule" class="tab-panel active">
+      <section class="filters panel">
+        <label>开始日期<input type="date" id="trainingStart"></label>
+        <label>结束日期<input type="date" id="trainingEnd"></label>
+        <label>关键词<input id="trainingKeyword" placeholder="公司级、项目级、焊工、电工…"></label>
+        <button class="primary" onclick="loadTraining()">查询安排</button>
+        <button onclick="setTrainingThisWeek()">本周</button>
+      </section>
 
-    <section class="panel training-hero">
-      <div><h2>本周培训 / 考试安排</h2><p id="trainingSummary">正在读取培训安排…</p></div>
-      <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span><span><i></i>晚上 19:00-20:30</span></div>
-    </section>
+      <section class="panel training-hero">
+        <div><h2>本周培训 / 考试安排</h2><p id="trainingSummary">正在读取培训安排…</p></div>
+        <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span><span><i></i>晚上 19:00-20:30</span></div>
+      </section>
 
-    <section id="trainingList" class="training-list"></section>
+      <section id="trainingList" class="training-list"></section>
+    </div>
+
+    <div id="tabMaterials" class="tab-panel">
+      <section class="filters panel">
+        <label>分类筛选<select id="materialCategoryFilter"><option value="">全部分类</option></select></label>
+        <button class="primary" onclick="loadMaterials()">筛选</button>
+        <button id="materialsAddBtn" style="display:none" onclick="openMaterialEdit()">＋ 添加资料</button>
+      </section>
+      <section id="materialsContent"></section>
+    </div>
   </div>
 
   <div class="modal-overlay" id="passwordModal">
@@ -57,6 +72,22 @@
         <button class="danger" id="editResetBtn">恢复默认</button>
         <button onclick="closeEditModal()">取消</button>
         <button class="primary" onclick="saveEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="materialEditModal">
+    <div class="modal-box modal-wide">
+      <h3 id="materialEditTitle">添加资料</h3>
+      <input type="hidden" id="materialEditId">
+      <label>分类<select id="materialEditCategory"></select></label>
+      <label>标题<input id="materialEditName" placeholder="资料标题"></label>
+      <label>排序<input type="number" id="materialEditSort" value="0" style="width:100px"></label>
+      <label>内容<textarea id="materialEditContent" rows="12" placeholder="支持换行，将按段落展示"></textarea></label>
+      <div class="modal-actions">
+        <button class="danger" id="materialDeleteBtn" style="display:none">删除</button>
+        <button onclick="closeMaterialEditModal()">取消</button>
+        <button class="primary" onclick="saveMaterial()">保存</button>
       </div>
     </div>
   </div>

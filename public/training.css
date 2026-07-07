@@ -37,6 +37,91 @@
   margin: 8px 0 0;
 }
 
+.training-tabs {
+  display: flex;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 4px;
+}
+
+.training-tabs .tab {
+  padding: 9px 22px;
+  border-radius: 99px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.training-tabs .tab.active {
+  background: var(--green);
+  color: #fff;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* materials */
+.materials-list { display: grid; gap: 16px; }
+
+.material-card {
+  background: #fff;
+  border: 1px solid #e6ecea;
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 9px #17312f08;
+}
+
+.material-card .material-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.material-card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.material-card .material-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.material-card .material-cat {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--mint);
+  color: var(--green);
+}
+
+.material-card .material-body {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #444;
+  white-space: pre-line;
+}
+
+.material-card .material-body p { margin: 8px 0; }
+
+.material-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+  font-size: 15px;
+  background: #fff;
+  border: 1px solid #e6ecea;
+  border-radius: 14px;
+}
+
 
 .training-hero {
   display: flex;

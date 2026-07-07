@@ -3,6 +3,7 @@ import math
 import os
 import re
 import sqlite3
+import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -16,7 +17,9 @@ UPLOAD_DIR = DATA_DIR / "uploads"
 SEED_DIR = ROOT / "seed"
 TRAINING_SCHEDULE_FILE = SEED_DIR / "2026年7月安全培训安排表.xlsx"
 TRAINING_OVERRIDES_FILE = DATA_DIR / "training_overrides.json"
+TRAINING_MATERIALS_FILE = DATA_DIR / "training_materials.json"
 TRAINING_EDIT_PASSWORD = os.environ.get("TRAINING_EDIT_PASSWORD", "@q")
+MATERIAL_CATEGORIES = ["入场培训", "复训", "签到单", "三级安全教育卡", "通知目录", "其他"]
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -169,6 +172,20 @@ def load_training_overrides():
 def save_training_overrides(overrides):
     TRAINING_OVERRIDES_FILE.parent.mkdir(parents=True, exist_ok=True)
     TRAINING_OVERRIDES_FILE.write_text(json.dumps(overrides, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def load_training_materials():
+    if not TRAINING_MATERIALS_FILE.exists():
+        return []
+    try:
+        return json.loads(TRAINING_MATERIALS_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return []
+
+
+def save_training_materials(materials):
+    TRAINING_MATERIALS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    TRAINING_MATERIALS_FILE.write_text(json.dumps(materials, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def apply_training_overrides(events):
@@ -611,6 +628,68 @@ def training_reset():
     else:
         overrides.clear()
     save_training_overrides(overrides)
+    return jsonify(ok=True)
+
+
+@app.post("/api/training/verify")
+def training_verify():
+    body = request.get_json(force=True)
+    if str(body.get("password") or "") == TRAINING_EDIT_PASSWORD:
+        return jsonify(ok=True)
+    return jsonify(error="密码错误"), 403
+
+
+@app.get("/api/training/materials")
+def training_materials():
+    materials = load_training_materials()
+    category = request.args.get("category", "").strip()
+    if category:
+        materials = [m for m in materials if m.get("category") == category]
+    materials.sort(key=lambda m: (MATERIAL_CATEGORIES.index(m.get("category", "其他")) if m.get("category") in MATERIAL_CATEGORIES else 99, m.get("sort", 0)))
+    return jsonify({"items": materials, "categories": MATERIAL_CATEGORIES})
+
+
+@app.post("/api/training/materials/save")
+def training_materials_save():
+    body = request.get_json(force=True)
+    if str(body.get("password") or "") != TRAINING_EDIT_PASSWORD:
+        return jsonify(error="密码错误"), 403
+    materials = load_training_materials()
+    item_id = str(body.get("id") or "").strip()
+    now = datetime.now().isoformat(timespec="seconds")
+    if item_id:
+        found = False
+        for m in materials:
+            if m["id"] == item_id:
+                for key in ("category", "title", "content", "sort"):
+                    if key in body and body[key] is not None:
+                        m[key] = body[key]
+                m["updated_at"] = now
+                found = True
+                break
+        if not found:
+            return jsonify(error="未找到该资料"), 404
+    else:
+        materials.append({
+            "id": str(uuid.uuid4())[:8],
+            "category": body.get("category", "其他"),
+            "title": body.get("title", ""),
+            "content": body.get("content", ""),
+            "sort": int(body.get("sort", 0)),
+            "updated_at": now,
+        })
+    save_training_materials(materials)
+    return jsonify(ok=True)
+
+
+@app.post("/api/training/materials/delete")
+def training_materials_delete():
+    body = request.get_json(force=True)
+    if str(body.get("password") or "") != TRAINING_EDIT_PASSWORD:
+        return jsonify(error="密码错误"), 403
+    item_id = str(body.get("id") or "").strip()
+    materials = [m for m in load_training_materials() if m["id"] != item_id]
+    save_training_materials(materials)
     return jsonify(ok=True)
 
 

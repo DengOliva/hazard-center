@@ -37,14 +37,6 @@
   margin: 8px 0 0;
 }
 
-.training-link {
-  color: var(--green);
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 99px;
-  padding: 10px 16px;
-  text-decoration: none;
-}
 
 .training-hero {
   display: flex;

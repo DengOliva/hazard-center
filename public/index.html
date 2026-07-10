@@ -18,14 +18,14 @@
     <div class="side-foot"><i></i><div><b>数据已本地保存</b><small id="dataState">正在读取…</small></div></div>
   </aside>
   <main>
-    <header><div><h1 id="pageTitle">统计看板</h1><p id="pageSub">隐患录入达标情况与单位对比</p></div><div style="text-align:right"><span id="headerUpdateTime" style="font-size:12px;color:var(--muted)"></span><button class="primary" onclick="showPage('imports')">＋ 更新隐患数据</button></div></header>
+    <header><div><h1 id="pageTitle">统计看板</h1><p id="pageSub">隐患录入达标情况与单位对比</p></div><button class="primary" onclick="showPage('imports')">＋ 更新隐患数据</button></header>
 
     <section id="dashboard" class="page active">
       <div class="filters panel">
         <label>开始日期<input type="date" id="startDate"></label><label>结束日期<input type="date" id="endDate"></label>
         <label>人员种类<select id="categoryFilter"><option value="">全部种类</option></select></label>
         <label>部门 / 班组<select id="departmentFilter"><option value="">全部部门</option></select></label>
-        <button class="primary" onclick="loadStatistics()">查询统计</button>
+        <button class="primary" onclick="loadStatistics()">查询统计</button><span id="headerUpdateTime" style="font-size:12px;color:var(--muted);align-self:center;white-space:nowrap"></span>
       </div>
       <div class="cards">
         <article><small>中建二局录入</small><strong id="internalCount">—</strong><em>条隐患</em></article>

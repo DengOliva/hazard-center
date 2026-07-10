@@ -511,11 +511,11 @@ def hazard_stats():
     clause = " AND ".join(where)
     with db() as conn:
         total = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause}", params).fetchone()[0]
-        levels = [dict(r) for r in conn.execute(
-            f"SELECT hazard_level, COUNT(*) as cnt FROM hazards WHERE {clause} GROUP BY hazard_level ORDER BY cnt DESC", params)]
-        categories = [dict(r) for r in conn.execute(
-            f"SELECT hazard_category, COUNT(*) as cnt FROM hazards WHERE {clause} AND hazard_category<>'' GROUP BY hazard_category ORDER BY cnt DESC", params)]
-    return jsonify(total=total, levels=levels, categories=categories)
+        internal_count = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND check_unit=?", params + ["中建二局"]).fetchone()[0]
+        external_count = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND check_unit=?", params + ["工程公司"]).fetchone()[0]
+        b_hazards = [dict(r) for r in conn.execute(
+            f"SELECT description, checker_name, check_date FROM hazards WHERE {clause} AND hazard_level='B' ORDER BY check_date DESC", params)]
+    return jsonify(total=total, internal=internal_count, external=external_count, bHazards=b_hazards)
 
 
 @app.get("/api/people")

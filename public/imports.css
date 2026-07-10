@@ -6,9 +6,9 @@
 .dataset-type b { color: var(--green); }
 .dataset-type code { display: block; margin-bottom: 4px; color: var(--ink); }
 .dataset-type small { color: var(--muted); }
-.score-groups { display: grid; gap: 18px; }
+.score-groups { display: grid; gap: 12px; }
 .score-group { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.score-heading { display: flex; justify-content: space-between; align-items: center; padding: 15px 17px; background: #f7faf9; }
+.score-heading { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #f7faf9; }
 .score-heading h3 { margin: 0 0 2px; font-size: 15px; }
 .score-heading small { color: var(--muted); }
 .score-heading > b { color: var(--green); font-size: 13px; }

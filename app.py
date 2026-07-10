@@ -542,7 +542,7 @@ def statistics():
         internal = settings.get("internal_unit", "中建二局")
         ratio_target = float(settings.get("ratio_target", 5))
         internal_count = conn.execute("SELECT COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND check_unit=?", (start, end, internal)).fetchone()[0]
-        external_count = conn.execute("SELECT COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND (check_unit<>? OR check_unit IS NULL OR check_unit='')", (start, end, internal)).fetchone()[0]
+        external_count = conn.execute("SELECT COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND check_unit=?", (start, end, "工程公司")).fetchone()[0]
         where = ["active=1"]
         params = []
         if category:

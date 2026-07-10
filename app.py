@@ -335,8 +335,7 @@ def import_hazards(path, original_name):
     if not records:
         raise ValueError("表格中没有可导入的隐患记录")
     with db() as conn:
-        conn.execute("DELETE FROM hazards")
-        conn.executemany("""INSERT INTO hazards VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", records)
+        conn.executemany("""INSERT OR REPLACE INTO hazards VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", records)
         dates = [r[1] for r in records if r[1]]
         conn.execute("INSERT INTO imports(filename,imported_at,row_count,min_date,max_date) VALUES (?,?,?,?,?)",
                      (original_name, now, len(records), min(dates) if dates else None, max(dates) if dates else None))

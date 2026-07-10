@@ -25,7 +25,7 @@
         <label>开始日期<input type="date" id="startDate"></label><label>结束日期<input type="date" id="endDate"></label>
         <label>人员种类<select id="categoryFilter"><option value="">全部种类</option></select></label>
         <label>部门 / 班组<select id="departmentFilter"><option value="">全部部门</option></select></label>
-        <button class="primary" onclick="loadStatistics()">查询统计</button><span id="headerUpdateTime" style="font-size:12px;color:var(--muted);align-self:center;white-space:nowrap"></span>
+        <button class="primary" onclick="loadStatistics()">查询统计</button><span id="headerUpdateTime" class="badge" style="align-self:center;white-space:nowrap"></span>
       </div>
       <div class="cards">
         <article><small>中建二局录入</small><strong id="internalCount">—</strong><em>条隐患</em></article>
@@ -42,7 +42,7 @@
 
     <section id="hazards" class="page">
       <div class="filters panel"><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button></div>
-      <div class="panel"><div class="panel-title"><div><h2>隐患列表</h2><p id="hazardTotal">共 0 条</p></div></div><div class="table-wrap"><table class="hazards-table"><thead><tr><th>检查日期</th><th>隐患单号</th><th>检查人</th><th>检查单位</th><th>隐患描述</th><th>区域</th><th>级别</th><th>状态</th></tr></thead><tbody id="hazardBody"></tbody></table></div><div class="pager"><button onclick="loadHazards(hazardPage-1)">上一页</button><span id="pageInfo"></span><button onclick="loadHazards(hazardPage+1)">下一页</button></div></div>
+      <div class="panel"><div class="panel-title"><div><h2>隐患列表</h2><p id="hazardTotal">共 0 条</p></div></div><div class="table-wrap"><table class="hazards-table"><thead><tr><th>检查日期</th><th>检查人</th><th>检查单位</th><th>隐患分类</th><th>隐患描述</th><th>区域</th><th>级别</th><th>状态</th></tr></thead><tbody id="hazardBody"></tbody></table></div><div class="pager"><button onclick="loadHazards(hazardPage-1)">上一页</button><span id="pageInfo"></span><button onclick="loadHazards(hazardPage+1)">下一页</button></div></div>
     </section>
 
     <section id="people" class="page">

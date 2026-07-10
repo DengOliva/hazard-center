@@ -41,7 +41,17 @@
     </section>
 
     <section id="hazards" class="page">
-      <div class="filters panel"><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button></div>
+      <div class="filters panel"><label>开始日期<input type="date" id="hazardStartDate"></label><label>结束日期<input type="date" id="hazardEndDate"></label><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button></div>
+      <div class="cards" id="hazardCards">
+        <article><small>隐患总数</small><strong id="hazardTotalCount">—</strong><em>条</em></article>
+        <article><small>B 级隐患</small><strong id="hazardB">—</strong><em>条</em></article>
+        <article><small>C 级隐患</small><strong id="hazardC">—</strong><em>条</em></article>
+        <article><small>D 级隐患</small><strong id="hazardD">—</strong><em>条</em></article>
+      </div>
+      <div class="grid2" id="hazardCharts">
+        <div class="panel"><div class="panel-title"><h2>隐患分类分布</h2></div><canvas id="pieChart" width="360" height="280"></canvas><div id="pieLegend" class="chart-legend"></div></div>
+        <div class="panel"><div class="panel-title"><h2>隐患分类排行</h2></div><canvas id="barChart" width="440" height="340"></canvas></div>
+      </div>
       <div class="panel"><div class="panel-title"><div><h2>隐患列表</h2><p id="hazardTotal">共 0 条</p></div></div><div class="table-wrap"><table class="hazards-table"><thead><tr><th>检查日期</th><th>检查人</th><th>检查单位</th><th>隐患分类</th><th>隐患描述</th><th>区域</th><th>级别</th><th>状态</th></tr></thead><tbody id="hazardBody"></tbody></table></div><div class="pager"><button onclick="loadHazards(hazardPage-1)">上一页</button><span id="pageInfo"></span><button onclick="loadHazards(hazardPage+1)">下一页</button></div></div>
     </section>
 

@@ -495,6 +495,29 @@ def hazards():
     return jsonify(items=[dict(r) for r in rows], total=total, page=page, size=size, units=units)
 
 
+@app.get("/api/hazards/stats")
+def hazard_stats():
+    start, end = range_args()
+    search = request.args.get("search", "").strip()
+    unit = request.args.get("unit", "").strip()
+    where = ["check_date BETWEEN ? AND ?"]
+    params = [start, end]
+    if search:
+        where.append("(checker_name LIKE ? OR description LIKE ? OR hazard_no LIKE ? OR area LIKE ?)")
+        params += [f"%{search}%"] * 4
+    if unit:
+        where.append("check_unit=?")
+        params.append(unit)
+    clause = " AND ".join(where)
+    with db() as conn:
+        total = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause}", params).fetchone()[0]
+        levels = [dict(r) for r in conn.execute(
+            f"SELECT hazard_level, COUNT(*) as cnt FROM hazards WHERE {clause} GROUP BY hazard_level ORDER BY cnt DESC", params)]
+        categories = [dict(r) for r in conn.execute(
+            f"SELECT hazard_category, COUNT(*) as cnt FROM hazards WHERE {clause} AND hazard_category<>'' GROUP BY hazard_category ORDER BY cnt DESC", params)]
+    return jsonify(total=total, levels=levels, categories=categories)
+
+
 @app.get("/api/people")
 def people():
     with db() as conn:

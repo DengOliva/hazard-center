@@ -65,6 +65,30 @@
       </div>
     </div>
   </section>
+  <section class="panel" id="sec-type-analysis">
+    <h2 class="section-title">四、问题类型统计分析</h2>
+    <div class="filter-bar">
+      <label>类别：<select id="type-cat-filter">
+        <option value="">全部</option>
+        <option value="external">外部预警刹车</option>
+        <option value="internal">项目内部预警刹车</option>
+      </select></label>
+      <label>预警类型：<select id="type-name-filter">
+        <option value="">全部类型</option>
+      </select></label>
+    </div>
+    <div class="charts-row">
+      <div class="chart-box">
+        <h3>预警类型占比</h3>
+        <canvas id="chart-type-pie"></canvas>
+        <div class="chart-legend" id="type-pie-legend"></div>
+      </div>
+      <div class="chart-box">
+        <h3>预警类型排行</h3>
+        <canvas id="chart-type-bar"></canvas>
+      </div>
+    </div>
+  </section>
   <section class="panel" id="sec-subcontractors">
     <h2 class="section-title">五、分包单位预警刹车数据统计</h2>
     <div class="filter-bar">

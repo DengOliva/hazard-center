@@ -154,6 +154,159 @@
   var globalSubBarData = [];
   var globalDeptBarData = [];
 
+  // === Type stats (section 四) ===
+
+  var TYPE_COLORS = [
+    "#c84d4d", "#409eff", "#e6a23c", "#087b68", "#8b5cf6", "#f97316",
+    "#06b6d4", "#ec4899", "#84cc16", "#f43f5e", "#6366f1", "#14b8a6"
+  ];
+
+  function drawDonutChart(canvasId, items) {
+    var canvas = $(canvasId);
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    var dpr = window.devicePixelRatio || 1;
+    var parent = canvas.parentElement;
+    var w = parent.getBoundingClientRect().width;
+    var h = 230;
+    if (w < 10) return;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    ctx.scale(dpr, dpr);
+
+    var cx = w / 2, cy = h / 2, r = Math.min(cx, cy) - 20;
+    if (r < 20) return;
+    var total = items.reduce(function (s, it) { return s + it.count; }, 0);
+    if (total === 0) {
+      ctx.fillStyle = "#999"; ctx.font = "14px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("暂无数据", cx, cy);
+      return;
+    }
+
+    var angle = -Math.PI / 2;
+    items.forEach(function (item, i) {
+      var slice = (item.count / total) * Math.PI * 2;
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, angle, angle + slice);
+      ctx.closePath();
+      ctx.fillStyle = TYPE_COLORS[i % TYPE_COLORS.length];
+      ctx.fill();
+      angle += slice;
+    });
+
+    // Center hole
+    ctx.beginPath(); ctx.arc(cx, cy, r * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff"; ctx.fill();
+    ctx.fillStyle = "#333"; ctx.font = "bold 15px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("总计", cx, cy - 4);
+    ctx.font = "bold 18px sans-serif";
+    ctx.fillText(total, cx, cy + 18);
+
+    // Legend
+    var legend = document.getElementById(canvasId.replace("chart-", "") + "-legend");
+    if (legend) {
+      legend.innerHTML = items.slice(0, 8).map(function (item, i) {
+        return '<span class="legend-item"><i style="background:' + TYPE_COLORS[i % TYPE_COLORS.length] + '"></i>' +
+          esc(item.name) + " " + item.count + "</span>";
+      }).join("");
+    }
+  }
+
+  function drawHBarChart(canvasId, items, maxItems) {
+    var canvas = $(canvasId);
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    var dpr = window.devicePixelRatio || 1;
+    var parent = canvas.parentElement;
+    var w = parent.getBoundingClientRect().width;
+    maxItems = maxItems || 10;
+    var barH = 22, gap = 6, topPad = 4, leftPad = 80, rightPad = 50, bottomPad = 4;
+    var n = Math.min(items.length, maxItems);
+    var h = topPad + (barH + gap) * n + bottomPad;
+    if (w < 10 || n === 0 || h < 40) {
+      canvas.width = w * dpr;
+      canvas.height = 60 * dpr;
+      canvas.style.width = w + "px";
+      canvas.style.height = "60px";
+      ctx.scale(dpr, dpr);
+      ctx.fillStyle = "#999"; ctx.font = "14px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("暂无数据", w / 2, 30);
+      return;
+    }
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    ctx.scale(dpr, dpr);
+
+    var topItems = items.slice(0, maxItems);
+    var maxVal = topItems[0].count || 1;
+    var barAreaW = w - leftPad - rightPad;
+
+    topItems.forEach(function (item, i) {
+      var y = topPad + i * (barH + gap);
+      var bw = (item.count / maxVal) * barAreaW;
+      if (bw < 2) bw = 2;
+
+      // Label
+      ctx.fillStyle = "#333"; ctx.font = "12px sans-serif"; ctx.textAlign = "right";
+      var label = item.name;
+      if (label.length > 5) label = label.substring(0, 5);
+      ctx.fillText(label, leftPad - 8, y + barH - 6);
+
+      // Bar
+      ctx.fillStyle = TYPE_COLORS[i % TYPE_COLORS.length];
+      ctx.fillRect(leftPad, y, bw, barH);
+
+      // Value
+      ctx.fillStyle = "#333"; ctx.font = "11px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText(item.count, leftPad + bw + 6, y + barH - 6);
+    });
+  }
+
+  var typeChartsDrawn = false;
+
+  async function refreshTypeStats() {
+    var catVal = ($("type-cat-filter") && $("type-cat-filter").value) || "";
+    var typeVal = ($("type-name-filter") && $("type-name-filter").value) || "";
+    var params = "?" + dateParams();
+    if (catVal) params += "&category=" + encodeURIComponent(catVal);
+    if (typeVal) params += "&type=" + encodeURIComponent(typeVal);
+
+    var data = await api("/api/alert/type-stats" + params);
+
+    if (typeVal) {
+      // Drilldown: show dept/sub distribution
+      drawDonutChart("chart-type-pie", data.dept_counts || []);
+      drawHBarChart("chart-type-bar", data.dept_counts || []);
+      document.querySelector("#sec-type-analysis .chart-box:first-of-type h3").textContent = typeVal + " 部门分布";
+      document.querySelector("#sec-type-analysis .chart-box:last-of-type h3").textContent = typeVal + " 部门排行";
+    } else {
+      drawDonutChart("chart-type-pie", data.type_counts || []);
+      drawHBarChart("chart-type-bar", data.type_counts || []);
+      document.querySelector("#sec-type-analysis .chart-box:first-of-type h3").textContent = "预警类型占比";
+      document.querySelector("#sec-type-analysis .chart-box:last-of-type h3").textContent = "预警类型排行";
+    }
+    typeChartsDrawn = true;
+  }
+
+  function buildTypeNameFilter() {
+    var sel = $("type-name-filter");
+    if (!sel) return;
+    var currentVal = sel.value;
+    sel.innerHTML = '<option value="">全部类型</option>';
+    var allTypes = EXT_TYPE_ORDER.concat(INT_TYPE_ORDER.filter(function (t) { return EXT_TYPE_ORDER.indexOf(t) < 0; }));
+    allTypes.forEach(function (t) {
+      var opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      sel.appendChild(opt);
+    });
+    if (currentVal) sel.value = currentVal;
+  }
+
   async function refreshSubData() {
     var subVal = ($("sub-filter") && $("sub-filter").value) || "";
     var params = "?" + dateParams();
@@ -254,14 +407,21 @@
       await refreshDeptData();
       buildDeptFilter();
 
+      buildTypeNameFilter();
+      await refreshTypeStats();
+
       window.addEventListener("resize", function () {
         chartsDrawn = false;
+        typeChartsDrawn = false;
         drawCharts();
+        refreshTypeStats();
       });
 
       setTimeout(function () {
         chartsDrawn = false;
+        typeChartsDrawn = false;
         drawCharts();
+        refreshTypeStats();
       }, 400);
 
     } catch (err) {
@@ -295,6 +455,7 @@
       currentStart = ($("start-date") && $("start-date").value) || yearStartISO();
       currentEnd = ($("end-date") && $("end-date").value) || todayISO();
       chartsDrawn = false;
+      typeChartsDrawn = false;
       init();
     }
   });
@@ -302,6 +463,8 @@
   document.addEventListener("change", function (e) {
     if (e.target.id === "sub-filter") refreshSubData();
     if (e.target.id === "dept-filter") refreshDeptData();
+    if (e.target.id === "type-cat-filter") { typeChartsDrawn = false; refreshTypeStats(); }
+    if (e.target.id === "type-name-filter") { typeChartsDrawn = false; refreshTypeStats(); }
     if (e.target.id === "import-file") {
       $("btn-upload").disabled = !e.target.files.length;
       var st = $("import-status");

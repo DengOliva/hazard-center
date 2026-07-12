@@ -1,13 +1,10 @@
 (function () {
   "use strict";
 
-  function $(id) {
-    var el = document.getElementById(id);
-    return el;
-  }
+  var $ = function (id) { return document.getElementById(id); };
 
   function esc(s) {
-    return String(s).replace(/&/g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   async function api(url) {
@@ -18,9 +15,7 @@
 
   function todayISO() {
     var d = new Date();
-    var m = String(d.getMonth() + 1).padStart(2, "0");
-    var day = String(d.getDate()).padStart(2, "0");
-    return d.getFullYear() + "-" + m + "-" + day;
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   }
 
   function yearStartISO() {
@@ -34,7 +29,8 @@
     return "start=" + encodeURIComponent(currentStart) + "&end=" + encodeURIComponent(currentEnd);
   }
 
-  // ── Cards ──
+  // === Cards ===
+
   function renderCards(containerId, items) {
     var container = $(containerId);
     if (!container) return;
@@ -42,10 +38,10 @@
       var total = item.total || 0;
       var cls = total > 0 ? " highlight" : "";
       return '<div class="stat-card' + cls + '">' +
-        '<div class="card-label">' + esc(item.name) + "</div>" +
-        '<div class="card-value">' + total + "</div>" +
-        '<div class="card-detail">累计 " + total + " 条</div>" +
-        "</div>";
+        '<div class="card-label">' + esc(item.name) + '</div>' +
+        '<div class="card-value">' + total + '</div>' +
+        '<div class="card-detail">累计 ' + total + ' 条</div>' +
+        '</div>';
     }).join("");
   }
 
@@ -55,14 +51,15 @@
     container.innerHTML = items.map(function (item) {
       var cls = item.count > 0 ? " highlight" : "";
       return '<div class="stat-card' + cls + '">' +
-        '<div class="card-label">' + esc(item.name) + "</div>" +
-        '<div class="card-value">' + item.count + "</div>" +
-        '<div class="card-detail">累计 " + item.count + " 条</div>" +
-        "</div>";
+        '<div class="card-label">' + esc(item.name) + '</div>' +
+        '<div class="card-value">' + item.count + '</div>' +
+        '<div class="card-detail">累计 ' + item.count + ' 条</div>' +
+        '</div>';
     }).join("") || '<div class="stat-card"><div class="card-label">暂无数据</div><div class="card-value">0</div></div>';
   }
 
-  // ── Line chart ──
+  // === Line chart ===
+
   function drawLineChart(canvasId, datasets, yMin, yMax) {
     var canvas = $(canvasId);
     if (!canvas) return;
@@ -136,7 +133,7 @@
       var smax = Math.ceil(Math.max.apply(null, allS.map(function (d) { return d.score; })) + 1);
       drawLineChart("chart-star5", [
         { labels: star5.map(function (d) { return d.month; }), data: star5.map(function (d) { return d.score; }), color: "#e6a23c" },
-        { labels: star6.map(function (d) { return d.month; }), data: star6.map(function (d) { return d.score; }), color: "#c84d4d" },
+        { labels: star6.map(function (d) { return d.month; }), data: star6.map(function (d) { return d.score; }), color: "#c84d4d" }
       ], smin, smax);
     }
 
@@ -148,7 +145,7 @@
       var amax = Math.ceil(Math.max.apply(null, allA.map(function (d) { return d.score; })) + 1);
       drawLineChart("chart-aqhb", [
         { labels: aq5.map(function (d) { return d.month; }), data: aq5.map(function (d) { return d.score; }), color: "#087b68" },
-        { labels: aq6.map(function (d) { return d.month; }), data: aq6.map(function (d) { return d.score; }), color: "#409eff" },
+        { labels: aq6.map(function (d) { return d.month; }), data: aq6.map(function (d) { return d.score; }), color: "#409eff" }
       ], amin, amax);
     }
     chartsDrawn = true;
@@ -157,31 +154,28 @@
   var globalSubBarData = [];
   var globalDeptBarData = [];
 
-  // ── Refresh subcontractor section ──
   async function refreshSubData() {
     var subVal = ($("sub-filter") && $("sub-filter").value) || "";
     var params = "?" + dateParams();
     if (subVal) params += "&sub=" + encodeURIComponent(subVal);
     var data = await api("/api/alert/subcontractors" + params);
     globalSubBarData = data.bar_data || [];
-
     renderCardsDynamic("sub-ext-cards", data.external_types || []);
     renderCardsDynamic("sub-int-cards", data.internal_types || []);
   }
 
-  // ── Refresh department section ──
   async function refreshDeptData() {
     var deptVal = ($("dept-filter") && $("dept-filter").value) || "";
     var params = "?" + dateParams();
     if (deptVal) params += "&dept=" + encodeURIComponent(deptVal);
     var data = await api("/api/alert/departments" + params);
     globalDeptBarData = data.bar_data || [];
-
     renderCardsDynamic("dept-ext-cards", data.external_types || []);
     renderCardsDynamic("dept-int-cards", data.internal_types || []);
   }
 
-  // ── Import dialog ──
+  // === Import dialog ===
+
   function showImportDialog() {
     var dlg = $("import-dialog");
     if (!dlg) return;
@@ -240,7 +234,8 @@
     });
   }
 
-  // ── Init ──
+  // === Init ===
+
   async function init() {
     try {
       var summary = await api("/api/alert/summary?" + dateParams());
@@ -280,7 +275,8 @@
     }
   }
 
-  // ── Bootstrap ──
+  // === Bootstrap ===
+
   (function setDates() {
     var sd = $("start-date");
     var ed = $("end-date");
@@ -304,12 +300,8 @@
   });
 
   document.addEventListener("change", function (e) {
-    if (e.target.id === "sub-filter") {
-      refreshSubData();
-    }
-    if (e.target.id === "dept-filter") {
-      refreshDeptData();
-    }
+    if (e.target.id === "sub-filter") refreshSubData();
+    if (e.target.id === "dept-filter") refreshDeptData();
     if (e.target.id === "import-file") {
       $("btn-upload").disabled = !e.target.files.length;
       var st = $("import-status");

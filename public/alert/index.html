@@ -12,14 +12,10 @@
   <h1>防城港三期 内外部安全看板</h1>
   <span class="subtitle">预警刹车机制数据总览</span>
   <div class="header-actions">
-    <label>开始日期<input type="date" id="start-date"></label>
-    <label>结束日期<input type="date" id="end-date"></label>
-    <button id="btn-filter" class="btn-filter">筛选</button>
     <button id="btn-import" class="btn-import">导入台账数据</button>
   </div>
 </header>
 
-<!-- Dialog outside main so it survives error states -->
 <dialog id="import-dialog">
   <div class="dialog-content">
     <h3>导入台账数据</h3>
@@ -34,6 +30,12 @@
 </dialog>
 
 <main>
+  <div class="filters panel">
+    <label>开始日期<input type="date" id="start-date"></label>
+    <label>结束日期<input type="date" id="end-date"></label>
+    <button id="btn-filter" class="btn-filter">筛选</button>
+  </div>
+
   <section class="panel" id="sec-external">
     <h2 class="section-title">一、外部预警刹车数据统计</h2>
     <div class="card-row card-row-8" id="cards-external"></div>

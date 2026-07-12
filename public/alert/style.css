@@ -39,19 +39,6 @@ body {
   align-items: center;
   gap: 10px;
 }
-.header-actions label { font-size: 13px; color: rgba(255,255,255,.7); }
-.header-actions input[type=date] {
-  padding: 5px 8px; border: 1px solid rgba(255,255,255,.35);
-  background: rgba(255,255,255,.1); color: #fff;
-  border-radius: 6px; font-size: 13px;
-}
-.header-actions input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); }
-.btn-filter {
-  padding: 6px 14px; border: 1px solid rgba(255,255,255,.35);
-  background: rgba(255,255,255,.15); color: #fff;
-  border-radius: 6px; cursor: pointer; font-size: 13px; transition: .15s;
-}
-.btn-filter:hover { background: rgba(255,255,255,.25); }
 .btn-import {
   padding: 7px 18px; border: 1px solid rgba(255,255,255,.35);
   background: rgba(255,255,255,.1); color: #fff;
@@ -60,6 +47,21 @@ body {
 .btn-import:hover { background: rgba(255,255,255,.2); }
 
 main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 40px; }
+
+/* Date filter panel */
+.filters {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.filters label { font-size: 14px; color: var(--ink); }
+.filters input[type=date] {
+  padding: 6px 10px; border: 1px solid var(--border);
+  border-radius: 6px; font-size: 14px; color: var(--ink); background: #fff;
+}
+.btn-filter {
+  padding: 7px 20px; background: var(--green); color: #fff;
+  border: none; border-radius: 6px; cursor: pointer; font-size: 14px; transition: .15s;
+}
+.btn-filter:hover { background: #066b5a; }
 
 /* Panels */
 .panel {

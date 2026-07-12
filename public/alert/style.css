@@ -33,7 +33,19 @@ body {
 }
 .top-bar h1 { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
 .top-bar .subtitle { font-size: 13px; color: rgba(255,255,255,.6); }
-.header-actions { margin-left: auto; }
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.month-label { font-size: 13px; color: rgba(255,255,255,.7); }
+.month-select {
+  padding: 6px 12px; border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.1); color: #fff;
+  border-radius: 6px; font-size: 13px; cursor: pointer;
+}
+.month-select option { color: #333; background: #fff; }
 .btn-import {
   padding: 7px 18px; border: 1px solid rgba(255,255,255,.35);
   background: rgba(255,255,255,.1); color: #fff;
@@ -64,6 +76,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 40px; }
 .card-row { display: grid; gap: 14px; }
 .card-row-8 { grid-template-columns: repeat(8, 1fr); }
 .card-row-4 { grid-template-columns: repeat(4, 1fr); }
+.card-row-dynamic { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 .card-row-8.many { grid-template-columns: repeat(4, 1fr); }
 
 .stat-card {

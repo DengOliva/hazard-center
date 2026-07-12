@@ -403,15 +403,15 @@ async function exportPPTX() {
   const btn = $('#btn-export');
   btn.textContent = '生成中…'; btn.disabled = true;
   try {
-    const resp = await fetch('/api/meeting/export-pptx', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({slides:[], start:week().start, end:week().end}),
-    });
+    // Save manual edits first
+    if (dirty) await save();
+    const w = week();
+    const resp = await fetch(`/api/meeting/export-pptx?start=${w.start}&end=${w.end}`, { method:'POST' });
     if (!resp.ok) { const e=await resp.json(); throw new Error(e.error); }
     const blob = await resp.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `体系部门周会材料_${week().start}.pptx`;
+    a.href = url; a.download = `体系部门周会材料_${w.start}.pptx`;
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   } catch(e) { alert('导出失败: '+e.message); }

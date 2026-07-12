@@ -4,7 +4,7 @@ import sqlite3
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-from flask import Blueprint, jsonify, request, send_from_directory
+from flask import Blueprint, jsonify, request, send_file, send_from_directory
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
@@ -429,3 +429,24 @@ def meeting_manual_save():
     MEETING_DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     MEETING_DATA_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
     return jsonify(ok=True)
+
+
+@bp.post("/api/meeting/export-pptx")
+def meeting_export_pptx():
+    """Generate and download a filled PPTX from template."""
+    start = request.args.get("start", "").strip()
+    end = request.args.get("end", "").strip()
+    if not start or not end:
+        from datetime import date as _d, timedelta as _td
+        today = _d.today()
+        start = (today - _td(days=today.weekday())).isoformat()
+        end = (today + _td(days=6 - today.weekday())).isoformat()
+
+    try:
+        from pptx_export import generate
+        buf = generate(start, end)
+        filename = f"体系部门周会材料_{start}.pptx"
+        return send_file(buf, mimetype="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                        as_attachment=True, download_name=filename)
+    except Exception as exc:
+        return jsonify(error=str(exc)), 500

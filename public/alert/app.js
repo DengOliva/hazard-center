@@ -1,49 +1,49 @@
 (function () {
   "use strict";
 
-  const $ = (id) => document.getElementById(id);
+  function $(id) {
+    var el = document.getElementById(id);
+    return el;
+  }
 
-  // ── API helpers ──
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
   async function api(url) {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error(r.status + " " + r.statusText);
+    var r = await fetch(url);
+    if (!r.ok) throw new Error("HTTP " + r.status);
     return r.json();
   }
 
-  // ── Render summary cards ──
+  // ── Cards ──
   function renderCards(containerId, items, months) {
-    const container = $(containerId);
-    const currentMonth = new Date().getMonth(); // 0-indexed
-    const thisMonthIdx = currentMonth; // Jan=0
-    const thisMonthLabel = months[thisMonthIdx] || "";
+    var container = $(containerId);
+    if (!container) return;
+    var thisMonthIdx = new Date().getMonth();
+    var thisMonthLabel = months[thisMonthIdx] || "";
 
-    container.innerHTML = items
-      .map(function (item) {
-        let thisMonthVal = 0;
-        if (thisMonthIdx < item.monthly.length) {
-          thisMonthVal = item.monthly[thisMonthIdx];
-        }
-        var cls = item.total > 0 ? " highlight" : "";
-        return (
-          '<div class="stat-card' + cls + '">' +
-          '<div class="card-label">' + esc(item.name) + "</div>" +
-          '<div class="card-value">' + item.total + "</div>" +
-          '<div class="card-detail">' + thisMonthLabel + " " + thisMonthVal + " 条 · 累计 " + item.total + " 条</div>" +
-          "</div>"
-        );
-      })
-      .join("");
+    container.innerHTML = items.map(function (item) {
+      var thisMonthVal = thisMonthIdx < item.monthly.length ? item.monthly[thisMonthIdx] : 0;
+      var cls = item.total > 0 ? " highlight" : "";
+      return '<div class="stat-card' + cls + '">' +
+        '<div class="card-label">' + esc(item.name) + "</div>" +
+        '<div class="card-value">' + item.total + "</div>" +
+        '<div class="card-detail">' + thisMonthLabel + " " + thisMonthVal + " 条 · 累计 " + item.total + " 条</div>" +
+        "</div>";
+    }).join("");
   }
 
   // ── Line chart ──
   function drawLineChart(canvasId, datasets, yMin, yMax) {
     var canvas = $(canvasId);
+    if (!canvas) return;
     var ctx = canvas.getContext("2d");
     var dpr = window.devicePixelRatio || 1;
-
     var rect = canvas.parentElement.getBoundingClientRect();
     var w = rect.width;
     var h = 260;
+    if (w < 10) return;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + "px";
@@ -57,220 +57,188 @@
 
     var range = yMax - yMin || 10;
     var months = datasets[0].data.length;
-
     function x(i) { return pad.left + (i / (months - 1 || 1)) * pw; }
     function y(v) { return pad.top + ph - ((v - yMin) / range) * ph; }
 
     // Grid
     ctx.strokeStyle = "#eee";
     ctx.lineWidth = 1;
-    var steps = 5;
-    for (var s = 0; s <= steps; s++) {
-      var gy = pad.top + (s / steps) * ph;
-      var val = yMin + ((steps - s) / steps) * range;
-      ctx.beginPath();
-      ctx.moveTo(pad.left, gy);
-      ctx.lineTo(w - pad.right, gy);
-      ctx.stroke();
-      ctx.fillStyle = "#999";
-      ctx.font = "11px sans-serif";
-      ctx.textAlign = "right";
+    for (var s = 0; s <= 5; s++) {
+      var gy = pad.top + (s / 5) * ph;
+      ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(w - pad.right, gy); ctx.stroke();
+      var val = yMin + ((5 - s) / 5) * range;
+      ctx.fillStyle = "#999"; ctx.font = "11px sans-serif"; ctx.textAlign = "right";
       ctx.fillText(Math.round(val), pad.left - 8, gy + 4);
     }
 
     // X labels
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#999";
-    ctx.font = "11px sans-serif";
+    ctx.textAlign = "center"; ctx.fillStyle = "#999";
     for (var i = 0; i < months; i++) {
-      var label = datasets[0].labels[i];
-      if (label.length > 3) label = label.replace("月", "");
-      ctx.fillText(label, x(i), h - pad.bottom + 16);
+      var lbl = datasets[0].labels[i];
+      if (lbl.length > 3) lbl = lbl.replace("月", "");
+      ctx.fillText(lbl, x(i), h - pad.bottom + 16);
     }
 
-    // Lines + dots
+    // Lines
     datasets.forEach(function (ds) {
-      ctx.strokeStyle = ds.color;
-      ctx.lineWidth = 2.5;
-      ctx.lineJoin = "round";
+      ctx.strokeStyle = ds.color; ctx.lineWidth = 2.5; ctx.lineJoin = "round";
       ctx.beginPath();
       for (var i = 0; i < ds.data.length; i++) {
         var px = x(i), py = y(ds.data[i]);
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
       }
       ctx.stroke();
-
-      // Dots
       ctx.fillStyle = ds.color;
       for (var i = 0; i < ds.data.length; i++) {
-        ctx.beginPath();
-        ctx.arc(x(i), y(ds.data[i]), 3.5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(x(i), y(ds.data[i]), 3.5, 0, Math.PI * 2); ctx.fill();
       }
     });
-
-    // Zero line
-    ctx.strokeStyle = "#ddd";
-    ctx.lineWidth = 1;
-    ctx.setLineDash([2, 4]);
-    var zy = y(0);
-    if (zy > pad.top && zy < h - pad.bottom) {
-      ctx.beginPath();
-      ctx.moveTo(pad.left, zy);
-      ctx.lineTo(w - pad.right, zy);
-      ctx.stroke();
-    }
-    ctx.setLineDash([]);
   }
 
-  var scoreChartsDrawn = false;
-  function drawScoreCharts(scores, months) {
-    if (scoreChartsDrawn) return;
-    // Wait for container to have width
+  var chartsDrawn = false;
+  var cachedScores = null;
+  var cachedMonths = [];
+
+  function drawCharts() {
+    if (chartsDrawn || !cachedScores) return;
     var box = document.querySelector(".chart-box");
     if (!box || box.getBoundingClientRect().width < 10) return;
 
-    // Star5 chart
-    var star52025 = scores.star5_2025 || [];
-    var star52026 = scores.star5_2026 || [];
-    var allStar5 = star5_2025.concat(star52026);
-    var s5min = allStar5.length ? Math.floor(Math.min.apply(null, allStar5.map(function (d) { return d.score; })) - 2) : 80;
-    var s5max = allStar5.length ? Math.ceil(Math.max.apply(null, allStar5.map(function (d) { return d.score; })) + 1) : 100;
+    var star5 = cachedScores.star5_2025 || [];
+    var star6 = cachedScores.star5_2026 || [];
+    var allS = star5.concat(star6);
+    if (allS.length) {
+      var smin = Math.floor(Math.min.apply(null, allS.map(function (d) { return d.score; })) - 2);
+      var smax = Math.ceil(Math.max.apply(null, allS.map(function (d) { return d.score; })) + 1);
+      drawLineChart("chart-star5", [
+        { labels: star5.map(function (d) { return d.month; }), data: star5.map(function (d) { return d.score; }), color: "#e6a23c" },
+        { labels: star6.map(function (d) { return d.month; }), data: star6.map(function (d) { return d.score; }), color: "#c84d4d" },
+      ], smin, smax);
+    }
 
-    drawLineChart(
-      "chart-star5",
-      [
-        { labels: star5_2025.map(function (d) { return d.month; }), data: star5_2025.map(function (d) { return d.score; }), color: "#e6a23c" },
-        { labels: star52026.map(function (d) { return d.month; }), data: star52026.map(function (d) { return d.score; }), color: "#c84d4d" },
-      ],
-      s5min, s5max
-    );
-
-    // AQHB chart
-    var aq2025 = scores.aqhb_2025 || [];
-    var aq2026 = scores.aqhb_2026 || [];
-    var allAq = aq2025.concat(aq2026);
-    var amin = allAq.length ? Math.floor(Math.min.apply(null, allAq.map(function (d) { return d.score; })) - 2) : 90;
-    var amax = allAq.length ? Math.ceil(Math.max.apply(null, allAq.map(function (d) { return d.score; })) + 1) : 110;
-
-    drawLineChart(
-      "chart-aqhb",
-      [
-        { labels: aq2025.map(function (d) { return d.month; }), data: aq2025.map(function (d) { return d.score; }), color: "#087b68" },
-        { labels: aq2026.map(function (d) { return d.month; }), data: aq2026.map(function (d) { return d.score; }), color: "#409eff" },
-      ],
-      amin, amax
-    );
-
-    scoreChartsDrawn = true;
+    var aq5 = cachedScores.aqhb_2025 || [];
+    var aq6 = cachedScores.aqhb_2026 || [];
+    var allA = aq5.concat(aq6);
+    if (allA.length) {
+      var amin = Math.floor(Math.min.apply(null, allA.map(function (d) { return d.score; })) - 2);
+      var amax = Math.ceil(Math.max.apply(null, allA.map(function (d) { return d.score; })) + 1);
+      drawLineChart("chart-aqhb", [
+        { labels: aq5.map(function (d) { return d.month; }), data: aq5.map(function (d) { return d.score; }), color: "#087b68" },
+        { labels: aq6.map(function (d) { return d.month; }), data: aq6.map(function (d) { return d.score; }), color: "#409eff" },
+      ], amin, amax);
+    }
+    chartsDrawn = true;
   }
 
   // ── Department table ──
   function renderDeptTable(tableId, headers, rows) {
     var table = $(tableId);
-    var thHtml = "<tr>" + headers.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr>";
-    var tbody = "<tbody>" +
-      rows
-        .map(function (row) {
-          return (
-            "<tr>" +
-            row
-              .map(function (cell, i) {
-                var cls = i > 0 ? " class='num'" : "";
-                return "<td" + cls + ">" + esc(String(cell)) + "</td>";
-              })
-              .join("") +
-            "</tr>"
-          );
-        })
-        .join("") +
-      "</tbody>";
-    table.innerHTML = thHtml + tbody;
+    if (!table) return;
+    table.innerHTML = "<thead><tr>" + headers.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr></thead>" +
+      "<tbody>" + rows.map(function (row) {
+        return "<tr>" + row.map(function (cell, i) {
+          return "<td" + (i > 0 ? " class='num'" : "") + ">" + esc(String(cell)) + "</td>";
+        }).join("") + "</tr>";
+      }).join("") + "</tbody>";
   }
 
-  // ── Subcontractor table ──
+  // ── Sub table ──
   function renderSubTable(tableId, items) {
     var table = $(tableId);
-    var tbody = items
-      .map(function (item) { return "<tr><td>" + esc(item.name) + "</td><td class='num'>" + item.count + "</td></tr>"; })
-      .join("");
-    table.querySelector("tbody").innerHTML = tbody || "<tr><td colspan='2' style='color:var(--muted)'>暂无数据</td></tr>";
+    if (!table) return;
+    var tbody = table.querySelector("tbody");
+    if (!tbody) return;
+    tbody.innerHTML = items.map(function (item) {
+      return "<tr><td>" + esc(item.name) + "</td><td class='num'>" + item.count + "</td></tr>";
+    }).join("") || "<tr><td colspan='2' style='color:var(--muted)'>暂无数据</td></tr>";
   }
 
-  function esc(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+  var globalSubs = [];
+
+  // ── Import dialog ──
+  function showImportDialog() {
+    var dlg = $("import-dialog");
+    if (!dlg) return;
+    dlg.showModal();
+    $("import-file").value = "";
+    var st = $("import-status");
+    st.textContent = "";
+    st.className = "dialog-status";
+    $("btn-upload").disabled = true;
+  }
+
+  async function doImport() {
+    var file = $("import-file").files[0];
+    if (!file) return;
+    var st = $("import-status");
+    st.textContent = "正在上传解析...";
+    st.className = "dialog-status";
+    $("btn-upload").disabled = true;
+    var fd = new FormData();
+    fd.append("file", file);
+    try {
+      var r = await fetch("/api/alert/import", { method: "POST", body: fd });
+      var data = await r.json();
+      if (!r.ok) throw new Error(data.error || "上传失败");
+      st.textContent = "导入成功！外部" + data.external_count + "项，内部" + data.internal_count + "项。正在刷新...";
+      st.className = "dialog-status success";
+      setTimeout(function () { location.reload(); }, 600);
+    } catch (err) {
+      st.textContent = "导入失败: " + err.message;
+      st.className = "dialog-status error";
+      $("btn-upload").disabled = false;
+    }
   }
 
   // ── Init ──
-  var globalSubs = [];
-  var globalMonths = [];
-
   async function init() {
     try {
       var summary = await api("/api/alert/summary");
-      globalMonths = summary.months || [];
-      renderCards("cards-external", summary.external || [], globalMonths);
-      renderCards("cards-internal", summary.internal || [], globalMonths);
+      cachedMonths = summary.months || [];
+      if (summary.external && summary.external.length) {
+        renderCards("cards-external", summary.external, cachedMonths);
+        renderCards("cards-internal", summary.internal || [], cachedMonths);
+      }
 
-      var scores = await api("/api/alert/scores");
-      drawScoreCharts(scores, globalMonths);
+      cachedScores = await api("/api/alert/scores");
+      drawCharts();
 
       var depts = await api("/api/alert/departments");
+      if (depts.names && depts.names.length) {
+        var extHeaders = ["部门"].concat(depts.external.map(function (d) { return d.label; }));
+        var extRows = depts.names.map(function (name, i) {
+          return [name].concat(depts.external.map(function (d) { return d.values[i] || 0; }));
+        });
+        renderDeptTable("dept-ext-table", extHeaders, extRows);
 
-      // External dept table
-      var extHeaders = ["部门"].concat(depts.external.map(function (d) { return d.label; }));
-      var extRows = depts.names.map(function (name, i) {
-        return [name].concat(depts.external.map(function (d) { return d.values[i] || 0; }));
-      });
-      renderDeptTable("dept-ext-table", extHeaders, extRows);
+        var intData = depts.internal || [];
+        renderDeptTable("dept-int-table", ["部门", "整改单(累计)", "违章培训(累计)", "处理通报(累计)"],
+          intData.map(function (d) { return [d.name, d.rectification || 0, d.violation || 0, d.notice || 0]; }));
+      }
 
-      // Internal dept table
-      var intHeaders = ["部门", "整改单", "违章培训", "处理通报"];
-      var intData = depts.internal || [];
-      var intLen = intHeaders.length;
-      var intRows = intData.map(function (d) {
-        var arr = [d.name, d.rectification || 0, d.violation || 0, d.notice || 0];
-        while (arr.length < intLen) arr.push(0);
-        return arr;
-      });
-      renderDeptTable("dept-int-table", ["部门", "整改单(累计)", "违章培训(累计)", "处理通报(累计)"], intRows);
-
-      // Subcontractors
       var subData = await api("/api/alert/subcontractors");
       globalSubs = subData.items || [];
       renderSubTable("sub-external-table", globalSubs);
       renderSubTable("sub-internal-table", globalSubs);
-      populateSubFilter();
+      buildSubFilter();
 
-      // Redraw charts after layout settles
-      window.addEventListener("resize", function () {
-        scoreChartsDrawn = false;
-        drawScoreCharts(scores, globalMonths);
-      });
-      setTimeout(function () {
-        scoreChartsDrawn = false;
-        drawScoreCharts(scores, globalMonths);
-      }, 300);
+      window.addEventListener("resize", function () { chartsDrawn = false; drawCharts(); });
+      setTimeout(function () { chartsDrawn = false; drawCharts(); }, 400);
 
     } catch (err) {
-      console.error("Failed to load alert dashboard:", err);
+      console.error("Alert load error:", err);
       var main = document.querySelector("main");
-      main.innerHTML =
-        '<div class="panel" style="text-align:center;padding:40px">' +
-        '<p style="font-size:16px;color:var(--red);margin-bottom:12px">暂无数据，请先导入台账文件</p>' +
-        '<p style="font-size:13px;color:var(--muted)">点击右上角 "导入台账数据" 按钮上传</p>' +
-        '<p style="font-size:13px;color:var(--muted)">文件：防城港三期安全管理数据总台账.xlsx</p>' +
-        '</div>';
+      main.insertAdjacentHTML("afterbegin",
+        '<div class="panel" style="text-align:center;padding:32px;margin-bottom:20px">' +
+        '<p style="font-size:16px;color:var(--red);margin-bottom:8px">暂无台账数据</p>' +
+        '<p style="font-size:13px;color:var(--muted)">请点击右上角 <b>"导入台账数据"</b> 按钮上传 Excel 文件</p>' +
+        '</div>');
     }
   }
 
-  function populateSubFilter() {
+  function buildSubFilter() {
     var sel = $("sub-filter");
+    if (!sel) return;
     globalSubs.forEach(function (s) {
       var opt = document.createElement("option");
       opt.value = s.name;
@@ -279,76 +247,36 @@
     });
   }
 
-  // ── Import dialog ──
-  function showImportDialog() {
-    $("import-dialog").showModal();
-    $("import-file").value = "";
-    $("import-status").textContent = "";
-    $("import-status").className = "dialog-status";
-    $("btn-upload").disabled = true;
-  }
+  // ── Bootstrap ──
+  init();
 
-  async function doImport() {
-    var file = $("import-file").files[0];
-    if (!file) return;
-    var status = $("import-status");
-    status.textContent = "正在上传解析...";
-    status.className = "dialog-status";
-    $("btn-upload").disabled = true;
-
-    var fd = new FormData();
-    fd.append("file", file);
-    try {
-      var r = await fetch("/api/alert/import", { method: "POST", body: fd });
-      var data = await r.json();
-      if (!r.ok) throw new Error(data.error || "上传失败");
-      status.textContent = "导入成功！外部" + data.external_count + "项，内部" + data.internal_count + "项。正在刷新...";
-      status.className = "dialog-status success";
-      setTimeout(function () {
-        $("import-dialog").close();
-        location.reload();
-      }, 800);
-    } catch (err) {
-      status.textContent = "导入失败: " + err.message;
-      status.className = "dialog-status error";
-      $("btn-upload").disabled = false;
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (t.id === "btn-import") showImportDialog();
+    if (t.id === "btn-cancel") { var d = $("import-dialog"); if (d) d.close(); }
+    if (t.id === "btn-upload") doImport();
+    if (t.classList.contains("tab-btn")) {
+      document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
+      t.classList.add("active");
+      document.querySelectorAll(".dept-content").forEach(function (c) { c.classList.remove("active"); });
+      var target = $(t.dataset.tab);
+      if (target) target.classList.add("active");
     }
-  }
-
-  // ── Event handlers ──
-  document.addEventListener("DOMContentLoaded", function () {
-    init();
-
-    // Import button
-    $("btn-import").addEventListener("click", showImportDialog);
-    $("btn-cancel").addEventListener("click", function () { $("import-dialog").close(); });
-    $("btn-upload").addEventListener("click", doImport);
-    $("import-file").addEventListener("change", function () {
-      $("btn-upload").disabled = !this.files.length;
-      $("import-status").textContent = this.files.length ? "已选择: " + this.files[0].name : "";
-      $("import-status").className = "dialog-status";
-    });
-
-    // Subcontractor filter
-    document.addEventListener("change", function (e) {
-      if (e.target.id === "sub-filter") {
-        var val = e.target.value;
-        var filtered = val ? globalSubs.filter(function (s) { return s.name === val; }) : globalSubs;
-        renderSubTable("sub-external-table", filtered);
-        renderSubTable("sub-internal-table", filtered);
-      }
-    });
-
-    // Department tabs
-    document.addEventListener("click", function (e) {
-      if (e.target.classList.contains("tab-btn")) {
-        var tab = e.target.dataset.tab;
-        document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
-        e.target.classList.add("active");
-        document.querySelectorAll(".dept-content").forEach(function (c) { c.classList.remove("active"); });
-        var target = document.getElementById(tab);
-        if (target) target.classList.add("active");
-      }
-    });
   });
+
+  document.addEventListener("change", function (e) {
+    if (e.target.id === "sub-filter") {
+      var val = e.target.value;
+      var filtered = val ? globalSubs.filter(function (s) { return s.name === val; }) : globalSubs;
+      renderSubTable("sub-external-table", filtered);
+      renderSubTable("sub-internal-table", filtered);
+    }
+    if (e.target.id === "import-file") {
+      $("btn-upload").disabled = !e.target.files.length;
+      var st = $("import-status");
+      st.textContent = e.target.files.length ? "已选择: " + e.target.files[0].name : "";
+      st.className = "dialog-status";
+    }
+  });
+
 })();

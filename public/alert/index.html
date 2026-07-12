@@ -16,34 +16,29 @@
   </div>
 </header>
 
-<main>
-  <!-- Import dialog -->
-  <dialog id="import-dialog">
-    <div class="dialog-content">
-      <h3>导入台账数据</h3>
-      <p>请上传 "防城港三期安全管理数据总台账" Excel 文件（.xlsx 或 .xls）</p>
-      <input type="file" id="import-file" accept=".xlsx,.xls">
-      <div class="dialog-status" id="import-status"></div>
-      <div class="dialog-btns">
-        <button id="btn-upload" class="btn-primary" disabled>上传并解析</button>
-        <button id="btn-cancel" class="btn-secondary">取消</button>
-      </div>
+<!-- Dialog outside main so it survives error states -->
+<dialog id="import-dialog">
+  <div class="dialog-content">
+    <h3>导入台账数据</h3>
+    <p>请上传 "防城港三期安全管理数据总台账" Excel 文件（.xlsx 或 .xls）</p>
+    <input type="file" id="import-file" accept=".xlsx,.xls">
+    <div class="dialog-status" id="import-status"></div>
+    <div class="dialog-btns">
+      <button id="btn-upload" class="btn-primary" disabled>上传并解析</button>
+      <button id="btn-cancel" class="btn-secondary">取消</button>
     </div>
-  </dialog>
+  </div>
+</dialog>
 
-  <!-- Section 1: 外部预警刹车 -->
+<main>
   <section class="panel" id="sec-external">
     <h2 class="section-title">一、外部预警刹车数据统计</h2>
     <div class="card-row card-row-8" id="cards-external"></div>
   </section>
-
-  <!-- Section 2: 项目内部预警刹车 -->
   <section class="panel" id="sec-internal">
     <h2 class="section-title">二、项目内部预警刹车数据统计</h2>
     <div class="card-row card-row-4" id="cards-internal"></div>
   </section>
-
-  <!-- Section 3 & 4: Score trend charts -->
   <section class="panel">
     <h2 class="section-title">三、安质环考核得分 &amp; 五星评估得分</h2>
     <div class="charts-row">
@@ -65,8 +60,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Section 5: Subcontractor statistics -->
   <section class="panel">
     <h2 class="section-title">五、分包单位预警刹车数据统计</h2>
     <div class="filter-bar">
@@ -76,20 +69,14 @@
     <div class="sub-flex">
       <div class="sub-half">
         <h3>外部预警刹车数据统计</h3>
-        <div class="table-wrap">
-          <table id="sub-external-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table>
-        </div>
+        <div class="table-wrap"><table id="sub-external-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table></div>
       </div>
       <div class="sub-half">
         <h3>项目内部预警刹车数据统计</h3>
-        <div class="table-wrap">
-          <table id="sub-internal-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table>
-        </div>
+        <div class="table-wrap"><table id="sub-internal-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table></div>
       </div>
     </div>
   </section>
-
-  <!-- Section 6: Department statistics -->
   <section class="panel">
     <h2 class="section-title">六、各部门预警刹车数据统计</h2>
     <div class="dept-tabs">
@@ -97,14 +84,10 @@
       <button class="tab-btn" data-tab="dept-internal">项目内部预警刹车</button>
     </div>
     <div id="dept-external" class="dept-content active">
-      <div class="table-wrap">
-        <table id="dept-ext-table"><thead></thead><tbody></tbody></table>
-      </div>
+      <div class="table-wrap"><table id="dept-ext-table"><thead></thead><tbody></tbody></table></div>
     </div>
     <div id="dept-internal" class="dept-content">
-      <div class="table-wrap">
-        <table id="dept-int-table"><thead></thead><tbody></tbody></table>
-      </div>
+      <div class="table-wrap"><table id="dept-int-table"><thead></thead><tbody></tbody></table></div>
     </div>
   </section>
 </main>

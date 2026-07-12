@@ -82,7 +82,6 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 40px; }
 .card-row { display: grid; gap: 14px; }
 .card-row-8 { grid-template-columns: repeat(8, 1fr); }
 .card-row-4 { grid-template-columns: repeat(4, 1fr); }
-.card-row-dynamic { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 .card-row-8.many { grid-template-columns: repeat(4, 1fr); }
 
 .stat-card {
@@ -139,33 +138,6 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 40px; }
   border-radius: 6px; font-size: 14px; min-width: 200px;
 }
 
-/* Subcontractor flex */
-.sub-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.sub-half h3 { font-size: 14px; margin-bottom: 10px; color: var(--ink); }
-
-/* Tables */
-.table-wrap { max-height: 400px; overflow-y: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-thead { position: sticky; top: 0; z-index: 1; }
-th {
-  background: #f5f7f6; text-align: left; padding: 10px 12px;
-  border-bottom: 2px solid var(--border); font-weight: 600; color: var(--ink);
-}
-td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }
-tbody tr:hover { background: #f9fbfa; }
-td.num { text-align: right; font-variant-numeric: tabular-nums; }
-
-/* Department tabs */
-.dept-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
-.tab-btn {
-  padding: 8px 20px; border: 1px solid var(--border);
-  background: #f9fbfa; border-radius: 6px 6px 0 0;
-  font-size: 14px; cursor: pointer; transition: .15s;
-}
-.tab-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
-.dept-content { display: none; }
-.dept-content.active { display: block; }
-
 /* Import dialog */
 dialog { border: none; border-radius: var(--radius); padding: 0; box-shadow: 0 8px 32px rgba(0,0,0,.2); }
 dialog::backdrop { background: rgba(0,0,0,.4); }
@@ -193,7 +165,7 @@ dialog::backdrop { background: rgba(0,0,0,.4); }
 }
 @media (max-width: 800px) {
   .card-row-8, .card-row-4 { grid-template-columns: repeat(2, 1fr); }
-  .charts-row, .sub-flex { grid-template-columns: 1fr; }
+  .charts-row { grid-template-columns: 1fr; }
   .top-bar { flex-direction: column; gap: 4px; padding: 14px 20px; }
   main { padding: 16px 12px 32px; }
   .panel { padding: 16px; }

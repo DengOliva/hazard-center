@@ -71,31 +71,15 @@
     </div>
     <div class="card-row card-row-8" id="sub-ext-cards"></div>
     <div class="card-row card-row-4" id="sub-int-cards"></div>
-    <div class="sub-flex">
-      <div class="sub-half">
-        <h3>外部预警刹车数据统计</h3>
-        <div class="table-wrap"><table id="sub-external-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table></div>
-      </div>
-      <div class="sub-half">
-        <h3>项目内部预警刹车数据统计</h3>
-        <div class="table-wrap"><table id="sub-internal-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table></div>
-      </div>
-    </div>
   </section>
   <section class="panel" id="sec-departments">
     <h2 class="section-title">六、各部门预警刹车数据统计</h2>
-    <div class="dept-tabs">
-      <button class="tab-btn active" data-tab="dept-external">外部预警刹车</button>
-      <button class="tab-btn" data-tab="dept-internal">项目内部预警刹车</button>
+    <div class="filter-bar">
+      <label>筛选部门：</label>
+      <select id="dept-filter"><option value="">全部</option></select>
     </div>
-    <div id="dept-external" class="dept-content active">
-      <div class="card-row card-row-8" id="dept-ext-cards"></div>
-      <div class="table-wrap"><table id="dept-ext-table"><thead></thead><tbody></tbody></table></div>
-    </div>
-    <div id="dept-internal" class="dept-content">
-      <div class="card-row card-row-4" id="dept-int-cards"></div>
-      <div class="table-wrap"><table id="dept-int-table"><thead></thead><tbody></tbody></table></div>
-    </div>
+    <div class="card-row card-row-8" id="dept-ext-cards"></div>
+    <div class="card-row card-row-4" id="dept-int-cards"></div>
   </section>
 </main>
 

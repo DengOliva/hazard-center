@@ -44,7 +44,7 @@
       return '<div class="stat-card' + cls + '">' +
         '<div class="card-label">' + esc(item.name) + "</div>" +
         '<div class="card-value">' + total + "</div>" +
-        '<div class="card-detail">累计 ' + total + " 条</div>" +
+        '<div class="card-detail">累计 " + total + " 条</div>" +
         "</div>";
     }).join("");
   }
@@ -57,7 +57,7 @@
       return '<div class="stat-card' + cls + '">' +
         '<div class="card-label">' + esc(item.name) + "</div>" +
         '<div class="card-value">' + item.count + "</div>" +
-        '<div class="card-detail">累计 ' + item.count + " 条</div>" +
+        '<div class="card-detail">累计 " + item.count + " 条</div>" +
         "</div>";
     }).join("") || '<div class="stat-card"><div class="card-label">暂无数据</div><div class="card-value">0</div></div>';
   }
@@ -154,31 +154,8 @@
     chartsDrawn = true;
   }
 
-  // ── Department table ──
-  function renderDeptTable(tableId, headers, rows) {
-    var table = $(tableId);
-    if (!table) return;
-    table.innerHTML = "<thead><tr>" + headers.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr></thead>" +
-      "<tbody>" + rows.map(function (row) {
-        return "<tr>" + row.map(function (cell, i) {
-          return "<td" + (i > 0 ? " class='num'" : "") + ">" + esc(String(cell)) + "</td>";
-        }).join("") + "</tr>";
-      }).join("") + "</tbody>";
-  }
-
-  // ── Sub table ──
-  function renderSubTable(tableId, items) {
-    var table = $(tableId);
-    if (!table) return;
-    var tbody = table.querySelector("tbody");
-    if (!tbody) return;
-    tbody.innerHTML = items.map(function (item) {
-      return "<tr><td>" + esc(item.name) + "</td><td class='num'>" + item.count + "</td></tr>";
-    }).join("") || "<tr><td colspan='2' style='color:var(--muted)'>暂无数据</td></tr>";
-  }
-
-  var globalSubs = [];
   var globalSubBarData = [];
+  var globalDeptBarData = [];
 
   // ── Refresh subcontractor section ──
   async function refreshSubData() {
@@ -186,33 +163,22 @@
     var params = "?" + dateParams();
     if (subVal) params += "&sub=" + encodeURIComponent(subVal);
     var data = await api("/api/alert/subcontractors" + params);
-    globalSubs = data.items || [];
     globalSubBarData = data.bar_data || [];
 
     renderCardsDynamic("sub-ext-cards", data.external_types || []);
     renderCardsDynamic("sub-int-cards", data.internal_types || []);
-    renderSubTable("sub-external-table", globalSubs);
-    renderSubTable("sub-internal-table", globalSubs);
   }
 
   // ── Refresh department section ──
   async function refreshDeptData() {
+    var deptVal = ($("dept-filter") && $("dept-filter").value) || "";
     var params = "?" + dateParams();
-    var depts = await api("/api/alert/departments" + params);
+    if (deptVal) params += "&dept=" + encodeURIComponent(deptVal);
+    var data = await api("/api/alert/departments" + params);
+    globalDeptBarData = data.bar_data || [];
 
-    renderCardsDynamic("dept-ext-cards", depts.external_types || []);
-    if (depts.names && depts.names.length) {
-      var extHeaders = ["部门"].concat(depts.external.map(function (d) { return d.label; }));
-      var extRows = depts.names.map(function (name, i) {
-        return [name].concat(depts.external.map(function (d) { return d.values[i] || 0; }));
-      });
-      renderDeptTable("dept-ext-table", extHeaders, extRows);
-    }
-
-    renderCardsDynamic("dept-int-cards", depts.internal_types || []);
-    var intData = depts.internal || [];
-    renderDeptTable("dept-int-table", ["部门", "整改单(累计)", "违章培训(累计)", "处理通报(累计)"],
-      intData.map(function (d) { return [d.name, d.rectification || 0, d.violation || 0, d.notice || 0]; }));
+    renderCardsDynamic("dept-ext-cards", data.external_types || []);
+    renderCardsDynamic("dept-int-cards", data.internal_types || []);
   }
 
   // ── Import dialog ──
@@ -262,6 +228,18 @@
     });
   }
 
+  function buildDeptFilter() {
+    var sel = $("dept-filter");
+    if (!sel) return;
+    sel.innerHTML = '<option value="">全部</option>';
+    globalDeptBarData.forEach(function (s) {
+      var opt = document.createElement("option");
+      opt.value = s.name;
+      opt.textContent = s.name + " (" + s.total + ")";
+      sel.appendChild(opt);
+    });
+  }
+
   // ── Init ──
   async function init() {
     try {
@@ -279,6 +257,7 @@
       buildSubFilter();
 
       await refreshDeptData();
+      buildDeptFilter();
 
       window.addEventListener("resize", function () {
         chartsDrawn = false;
@@ -302,7 +281,6 @@
   }
 
   // ── Bootstrap ──
-  // Set default date inputs
   (function setDates() {
     var sd = $("start-date");
     var ed = $("end-date");
@@ -323,18 +301,14 @@
       chartsDrawn = false;
       init();
     }
-    if (t.classList.contains("tab-btn")) {
-      document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
-      t.classList.add("active");
-      document.querySelectorAll(".dept-content").forEach(function (c) { c.classList.remove("active"); });
-      var target = $(t.dataset.tab);
-      if (target) target.classList.add("active");
-    }
   });
 
   document.addEventListener("change", function (e) {
     if (e.target.id === "sub-filter") {
       refreshSubData();
+    }
+    if (e.target.id === "dept-filter") {
+      refreshDeptData();
     }
     if (e.target.id === "import-file") {
       $("btn-upload").disabled = !e.target.files.length;

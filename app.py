@@ -558,6 +558,7 @@ def load_alert_data():
     dept_monthly = {}  # {month: {dept_name: {"external": {type: cnt}, "internal": {type: cnt}}}}
     sub_totals = {}  # {sub_name: {"external": total, "internal": total}}
     dept_totals = {}  # {dept_name: {"external": total, "internal": total}}
+    detail_records = []  # [{date, sub_name, dept_name, category, type_name}]
 
     for sheet_name, category, type_name, date_col, dept_col, sub_col in DETAIL_SHEET_CONFIG:
         if sheet_name not in wb.sheetnames:
@@ -588,6 +589,11 @@ def load_alert_data():
                 dept_name = str(dws.cell(row=r, column=dept_col).value or "").strip()
                 if dept_name in ("/", "None", "#N/A", ""):
                     dept_name = ""
+
+            detail_records.append({
+                "date": parsed, "sub_name": sub_name,
+                "dept_name": dept_name, "category": category, "type_name": type_name,
+            })
 
             if sub_name:
                 m = sub_monthly.setdefault(month, {})
@@ -639,6 +645,7 @@ def load_alert_data():
         "dept_monthly": dept_monthly,
         "sub_totals": sub_totals,
         "dept_totals": dept_totals,
+        "detail_records": detail_records,
     }
     return _alert_data
 
@@ -1057,33 +1064,45 @@ def alert_import():
         return jsonify(error=f"文件解析失败: {exc}"), 400
 
 
-def _filter_monthly(items, month):
-    """Return items with 'total' replaced by the given month's value (1-12). month=0 returns unchanged."""
-    if not month:
+def _filter_monthly(items, start, end):
+    """Return items with 'total' aggregated from months overlapping [start, end].
+    If start/end are empty, return unchanged (all months)."""
+    if not start and not end:
         return items
+    try:
+        s_month = int(start[5:7]) if start else 1
+        e_month = int(end[5:7]) if end else 12
+    except (ValueError, IndexError):
+        return items
+    if s_month < 1: s_month = 1
+    if e_month > 12: e_month = 12
+    if s_month > e_month:
+        s_month, e_month = e_month, s_month
+
     result = []
     for item in items:
         monthly = item.get("monthly", [])
-        m_idx = month - 1
-        m_val = monthly[m_idx] if 0 <= m_idx < len(monthly) else 0
-        result.append({**item, "total": m_val, "monthly": monthly})
+        total = 0
+        for m in range(s_month - 1, e_month):
+            if m < len(monthly):
+                total += monthly[m]
+        result.append({**item, "total": total})
     return result
 
 
 @app.get("/api/alert/summary")
 def alert_summary():
     data = load_alert_data()
-    month = request.args.get("month", "0").strip()
-    month_int = int(month) if month.isdigit() else 0
-    if month_int < 0 or month_int > 12:
-        month_int = 0
-    external = _filter_monthly(data.get("external", []), month_int)
-    internal = _filter_monthly(data.get("internal", []), month_int)
+    start = request.args.get("start", "").strip()
+    end = request.args.get("end", "").strip()
+    external = _filter_monthly(data.get("external", []), start, end)
+    internal = _filter_monthly(data.get("internal", []), start, end)
     return jsonify({
         "external": external,
         "internal": internal,
         "months": data.get("months", []),
-        "currentMonth": month_int,
+        "start": start,
+        "end": end,
     })
 
 
@@ -1101,37 +1120,39 @@ def _aggregate_types(type_data, type_order):
     return result
 
 
-def _aggregate_category(monthly, month, name_filter, category):
-    """Aggregate type counts for a given category (external/internal) from monthly data.
-    monthly: {month: {name: {"external": {type: cnt}, "internal": {type: cnt}}}}
-    name_filter: if set, only count for this name; if empty, count all
-    """
+def _aggregate_category(records, start, end, name_filter, category):
+    """Aggregate type counts from detail_records filtered by date range."""
     types = {}
-    months_to_check = [month] if month > 0 else range(1, 13)
-    for m in months_to_check:
-        if m not in monthly:
+    for rec in records:
+        if start and rec["date"] < start:
             continue
-        for name, cats in monthly[m].items():
-            if name_filter and name != name_filter:
-                continue
-            for t, c in cats.get(category, {}).items():
-                types[t] = types.get(t, 0) + c
+        if end and rec["date"] > end:
+            continue
+        if rec["category"] != category:
+            continue
+        if name_filter and rec["sub_name"] != name_filter and rec["dept_name"] != name_filter:
+            continue
+        tn = rec["type_name"]
+        types[tn] = types.get(tn, 0) + 1
     total = sum(types.values())
     return types, total
 
 
-def _build_bar_data(monthly, month, category):
-    """Build ranking bar data: [{name, external, internal, total}] sorted by total desc."""
+def _build_bar_data(records, start, end, field):
+    """Build ranking data from detail_records filtered by date range.
+    field: 'sub_name' or 'dept_name'"""
     totals = {}
-    months_to_check = [month] if month > 0 else range(1, 13)
-    for m in months_to_check:
-        if m not in monthly:
+    for rec in records:
+        if start and rec["date"] < start:
             continue
-        for name, cats in monthly[m].items():
-            if name not in totals:
-                totals[name] = {"external": 0, "internal": 0}
-            totals[name]["external"] += sum(cats.get("external", {}).values())
-            totals[name]["internal"] += sum(cats.get("internal", {}).values())
+        if end and rec["date"] > end:
+            continue
+        name = rec.get(field, "")
+        if not name:
+            continue
+        if name not in totals:
+            totals[name] = {"external": 0, "internal": 0}
+        totals[name][rec["category"]] += 1
     result = []
     for name, counts in totals.items():
         result.append({
@@ -1147,47 +1168,39 @@ def _build_bar_data(monthly, month, category):
 @app.get("/api/alert/departments")
 def alert_departments():
     data = load_alert_data()
-    month = request.args.get("month", "0").strip()
+    start = request.args.get("start", "").strip()
+    end = request.args.get("end", "").strip()
     dept = request.args.get("dept", "").strip()
-    month_int = int(month) if month.isdigit() else 0
-    if month_int < 0 or month_int > 12:
-        month_int = 0
 
-    dept_monthly = data.get("dept_monthly", {})
-    ext_types, ext_total = _aggregate_category(dept_monthly, month_int, dept, "external")
-    int_types, int_total = _aggregate_category(dept_monthly, month_int, dept, "internal")
+    records = data.get("detail_records", [])
+    ext_types, ext_total = _aggregate_category(records, start, end, dept, "external")
+    int_types, int_total = _aggregate_category(records, start, end, dept, "internal")
 
     return jsonify({
-        # Original fields
         "names": data.get("departments", {}).get("names", []),
         "external": data.get("departments", {}).get("external", []),
         "internal": data.get("departments", {}).get("internal", []),
-        # New fields for cards & charts
         "external_types": _aggregate_types(ext_types, EXT_TYPE_ORDER),
         "internal_types": _aggregate_types(int_types, INT_TYPE_ORDER),
-        "pie_data": {"external": ext_total, "internal": int_total},
-        "bar_data": _build_bar_data(dept_monthly, month_int, None),
-        "currentMonth": month_int,
+        "bar_data": _build_bar_data(records, start, end, "dept_name"),
+        "start": start,
+        "end": end,
     })
 
 
 @app.get("/api/alert/subcontractors")
 def alert_subcontractors():
     data = load_alert_data()
-    month = request.args.get("month", "0").strip()
+    start = request.args.get("start", "").strip()
+    end = request.args.get("end", "").strip()
     sub = request.args.get("sub", "").strip()
-    month_int = int(month) if month.isdigit() else 0
-    if month_int < 0 or month_int > 12:
-        month_int = 0
 
-    sub_monthly = data.get("sub_monthly", {})
-    ext_types, ext_total = _aggregate_category(sub_monthly, month_int, sub, "external")
-    int_types, int_total = _aggregate_category(sub_monthly, month_int, sub, "internal")
+    records = data.get("detail_records", [])
+    ext_types, ext_total = _aggregate_category(records, start, end, sub, "external")
+    int_types, int_total = _aggregate_category(records, start, end, sub, "internal")
 
-    # Rebuild items list filtered by month
+    bar_data = _build_bar_data(records, start, end, "sub_name")
     items = []
-    bar_data = _build_bar_data(sub_monthly, month_int, None)
-    bar_map = {b["name"]: b for b in bar_data}
     for b in bar_data:
         items.append({"name": b["name"], "count": b["total"],
                        "external": b["external"], "internal": b["internal"]})
@@ -1196,9 +1209,9 @@ def alert_subcontractors():
         "items": items,
         "external_types": _aggregate_types(ext_types, EXT_TYPE_ORDER),
         "internal_types": _aggregate_types(int_types, INT_TYPE_ORDER),
-        "pie_data": {"external": ext_total, "internal": int_total},
         "bar_data": bar_data,
-        "currentMonth": month_int,
+        "start": start,
+        "end": end,
     })
 
 

@@ -12,14 +12,9 @@
   <h1>防城港三期 内外部安全看板</h1>
   <span class="subtitle">预警刹车机制数据总览</span>
   <div class="header-actions">
-    <label class="month-label">时间筛选：</label>
-    <select id="month-filter" class="month-select">
-      <option value="0">全部月份</option>
-      <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
-      <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
-      <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
-      <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
-    </select>
+    <label>开始日期<input type="date" id="start-date"></label>
+    <label>结束日期<input type="date" id="end-date"></label>
+    <button id="btn-filter" class="btn-filter">筛选</button>
     <button id="btn-import" class="btn-import">导入台账数据</button>
   </div>
 </header>
@@ -76,16 +71,6 @@
     </div>
     <div class="card-row card-row-8" id="sub-ext-cards"></div>
     <div class="card-row card-row-4" id="sub-int-cards"></div>
-    <div class="charts-row">
-      <div class="chart-box">
-        <h3>预警类型分布</h3>
-        <canvas id="chart-sub-pie"></canvas>
-      </div>
-      <div class="chart-box">
-        <h3>分包单位排行</h3>
-        <canvas id="chart-sub-bar"></canvas>
-      </div>
-    </div>
     <div class="sub-flex">
       <div class="sub-half">
         <h3>外部预警刹车数据统计</h3>
@@ -104,31 +89,11 @@
       <button class="tab-btn" data-tab="dept-internal">项目内部预警刹车</button>
     </div>
     <div id="dept-external" class="dept-content active">
-      <div class="card-row card-row-dynamic" id="dept-ext-cards"></div>
-      <div class="charts-row">
-        <div class="chart-box">
-          <h3>外部预警类型分布</h3>
-          <canvas id="chart-dept-ext-pie"></canvas>
-        </div>
-        <div class="chart-box">
-          <h3>各部门排行</h3>
-          <canvas id="chart-dept-bar"></canvas>
-        </div>
-      </div>
+      <div class="card-row card-row-8" id="dept-ext-cards"></div>
       <div class="table-wrap"><table id="dept-ext-table"><thead></thead><tbody></tbody></table></div>
     </div>
     <div id="dept-internal" class="dept-content">
-      <div class="card-row card-row-dynamic" id="dept-int-cards"></div>
-      <div class="charts-row">
-        <div class="chart-box">
-          <h3>内部预警类型分布</h3>
-          <canvas id="chart-dept-int-pie"></canvas>
-        </div>
-        <div class="chart-box">
-          <h3>各部门排行</h3>
-          <canvas id="chart-dept-int-bar"></canvas>
-        </div>
-      </div>
+      <div class="card-row card-row-4" id="dept-int-cards"></div>
       <div class="table-wrap"><table id="dept-int-table"><thead></thead><tbody></tbody></table></div>
     </div>
   </section>

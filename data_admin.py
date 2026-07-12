@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-from flask import Blueprint, jsonify, send_from_directory
+from flask import Blueprint, abort, jsonify, request, send_from_directory, send_file
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
@@ -119,3 +119,14 @@ def admin_imports():
     with _db() as conn:
         rows = conn.execute("SELECT * FROM imports ORDER BY id DESC").fetchall()
     return jsonify([dict(r) for r in rows])
+
+
+@bp.get("/api/admin/download")
+def admin_download():
+    filename = request.args.get("file", "").strip()
+    if not filename:
+        abort(400)
+    target = UPLOAD_DIR / filename
+    if not target.exists() or not target.is_file():
+        abort(404)
+    return send_file(target, as_attachment=True, download_name=filename)

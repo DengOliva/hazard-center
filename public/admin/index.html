@@ -71,6 +71,11 @@ td { padding: 10px 12px; border-bottom: 1px solid #edf1f0; font-size: 14px; }
 .file-list { max-height: 360px; overflow-y: auto; }
 .file-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f3f2; font-size: 13px; }
 .file-row:last-child { border-bottom: 0; }
+.dl-btn {
+  color: var(--green); text-decoration: none; font-size: 18px; padding: 2px 6px;
+  border-radius: 6px; line-height: 1; flex-shrink: 0; margin-left: 8px;
+}
+.dl-btn:hover { background: var(--mint); }
 .file-name { color: var(--ink); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; }
 .file-size { color: var(--muted); font-size: 12px; }
 .file-time { color: var(--muted); font-size: 12px; white-space: nowrap; }
@@ -262,6 +267,7 @@ function render(data) {
         <span class="file-name">${f.name}</span>
         <span class="file-size">${fmtSize(f.size)}</span>
         <span class="file-time">${fmtDate(f.modified)}</span>
+        <a href="/api/admin/download?file=${encodeURIComponent(f.name)}" class="dl-btn" title="下载">&#8615;</a>
       </div>
     `).join('');
   }

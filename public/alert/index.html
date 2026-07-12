@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>防城港三期 内外部安全看板</title>
+<link rel="stylesheet" href="/alert/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <h1>防城港三期 内外部安全看板</h1>
+  <span class="subtitle">预警刹车机制数据总览</span>
+</header>
+
+<main>
+  <!-- Section 1: 外部预警刹车 -->
+  <section class="panel" id="sec-external">
+    <h2 class="section-title">一、外部预警刹车数据统计</h2>
+    <div class="card-row card-row-8" id="cards-external"></div>
+  </section>
+
+  <!-- Section 2: 项目内部预警刹车 -->
+  <section class="panel" id="sec-internal">
+    <h2 class="section-title">二、项目内部预警刹车数据统计</h2>
+    <div class="card-row card-row-4" id="cards-internal"></div>
+  </section>
+
+  <!-- Section 3 & 4: Score trend charts -->
+  <section class="panel">
+    <h2 class="section-title">三、安质环考核得分 &amp; 五星评估得分</h2>
+    <div class="charts-row">
+      <div class="chart-box">
+        <h3>五星评估得分 <small>（趋势）</small></h3>
+        <canvas id="chart-star5"></canvas>
+        <div class="chart-legend">
+          <span class="legend-item"><i style="background:#e6a23c"></i>2025年</span>
+          <span class="legend-item"><i style="background:#c84d4d"></i>2026年</span>
+        </div>
+      </div>
+      <div class="chart-box">
+        <h3>安质环考核得分 <small>（趋势）</small></h3>
+        <canvas id="chart-aqhb"></canvas>
+        <div class="chart-legend">
+          <span class="legend-item"><i style="background:#087b68"></i>2025年</span>
+          <span class="legend-item"><i style="background:#409eff"></i>2026年</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Subcontractor statistics -->
+  <section class="panel">
+    <h2 class="section-title">五、分包单位预警刹车数据统计</h2>
+    <div class="filter-bar">
+      <label>筛选分包单位：</label>
+      <select id="sub-filter"><option value="">全部</option></select>
+    </div>
+    <div class="sub-flex">
+      <div class="sub-half">
+        <h3>外部预警刹车数据统计</h3>
+        <div class="table-wrap">
+          <table id="sub-external-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+      <div class="sub-half">
+        <h3>项目内部预警刹车数据统计</h3>
+        <div class="table-wrap">
+          <table id="sub-internal-table"><thead><tr><th>分包单位</th><th>数量</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Department statistics -->
+  <section class="panel">
+    <h2 class="section-title">六、各部门预警刹车数据统计</h2>
+    <div class="dept-tabs">
+      <button class="tab-btn active" data-tab="dept-external">外部预警刹车</button>
+      <button class="tab-btn" data-tab="dept-internal">项目内部预警刹车</button>
+    </div>
+    <div id="dept-external" class="dept-content active">
+      <div class="table-wrap">
+        <table id="dept-ext-table"><thead></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <div id="dept-internal" class="dept-content">
+      <div class="table-wrap">
+        <table id="dept-int-table"><thead></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="/alert/app.js"></script>
+</body>
+</html>

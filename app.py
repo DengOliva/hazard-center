@@ -20,6 +20,10 @@ TRAINING_OVERRIDES_FILE = DATA_DIR / "training_overrides.json"
 TRAINING_MATERIALS_FILE = DATA_DIR / "training_materials.json"
 TRAINING_EDIT_PASSWORD = os.environ.get("TRAINING_EDIT_PASSWORD", "@q")
 MATERIAL_CATEGORIES = ["入场培训", "复训", "签到单", "三级安全教育卡", "通知目录", "其他"]
+ALERT_SEED_FILE = SEED_DIR / "01 防城港三期安全管理数据总台账.xlsx"
+
+# Alert dashboard data cache (parsed once at startup)
+_alert_data = None
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -401,6 +405,165 @@ def apply_role_rules():
                      (ROLE_RULES_VERSION,))
 
 
+def load_alert_data():
+    """Parse the 总台账 Excel file once at startup and cache in memory."""
+    global _alert_data
+    if _alert_data is not None:
+        return _alert_data
+    if not ALERT_SEED_FILE.exists():
+        _alert_data = {}
+        return _alert_data
+
+    wb = load_workbook(ALERT_SEED_FILE, data_only=True)
+
+    def cell(ws, r, c):
+        v = ws.cell(row=r, column=c).value
+        return v if v is not None else 0
+
+    # --- Parse 总台账及统计分析 ---
+    ws = wb["总台账及统计分析"]
+    MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
+
+    external_types = [
+        ("挂牌督办", 4), ("管理约谈", 5), ("红黄牌", 6), ("处理通报", 7),
+        ("停工令", 9), ("整改单", 11), ("违章培训通知单", 13), ("监理通知单", 16),
+    ]
+    internal_types = [
+        ("停工令", 10), ("处理通报", 8), ("整改单", 12), ("违章培训通知单", 14),
+    ]
+
+    def parse_monthly(row):
+        monthly = []
+        for c in range(2, 14):  # cols B-M
+            v = cell(ws, row, c)
+            monthly.append(int(v) if v else 0)
+        return monthly
+
+    external = []
+    for name, row in external_types:
+        monthly = parse_monthly(row)
+        external.append({"name": name, "monthly": monthly, "total": sum(monthly)})
+
+    internal = []
+    for name, row in internal_types:
+        monthly = parse_monthly(row)
+        internal.append({"name": name, "monthly": monthly, "total": sum(monthly)})
+
+    # Department data (rows 5-14, columns Q-AG)
+    # Dept col mapping: R/S=整改单(当月/累计), T/U=监理, V/W=项目内部,
+    #   X/Y=违章培训(当月/累计), Z/AA=项目内部违章,
+    #   AB/AC=处理通报(当月/累计), AD/AE=项目内部通报,
+    #   AF=黄牌, AG=挂牌督办
+    dept_names = []
+    dept_external_rect = []  # 整改单 累计
+    dept_external_violation = []  # 违章培训 累计
+    dept_external_notice = []  # 处理通报 累计
+    dept_yellow = []  # 黄牌
+    dept_supervision = []  # 挂牌督办
+
+    for r in range(5, 15):
+        name = str(cell(ws, r, 17) or "")  # Q column
+        if not name or name == "0":
+            continue
+        dept_names.append(name)
+        dept_external_rect.append(int(cell(ws, r, 19)))  # S=累计
+        dept_external_violation.append(int(cell(ws, r, 25)))  # Y=累计
+        dept_external_notice.append(int(cell(ws, r, 29)))  # AC=累计
+        dept_yellow.append(int(cell(ws, r, 32)))  # AF
+        dept_supervision.append(int(cell(ws, r, 33)))  # AG
+
+    departments = {
+        "names": dept_names,
+        "external": [
+            {"label": "整改单", "values": dept_external_rect},
+            {"label": "违章培训通知单", "values": dept_external_violation},
+            {"label": "处理通报", "values": dept_external_notice},
+            {"label": "黄牌", "values": dept_yellow},
+            {"label": "挂牌督办", "values": dept_supervision},
+        ],
+        # Internal dept data: project rectification + project violation + project notice
+        # From cols: V=当月, W=累计(整改单), Z=当月, AA=累计(违章), AD=当月, AE=累计(通报)
+        "internal": [],
+    }
+    for r in range(5, 15):
+        name = str(cell(ws, r, 17) or "")
+        if not name or name == "0":
+            continue
+        departments["internal"].append({
+            "name": name,
+            "rectification": int(cell(ws, r, 23)),  # W=累计
+            "violation": int(cell(ws, r, 27)),  # AA=累计
+            "notice": int(cell(ws, r, 31)),  # AE=累计
+        })
+
+    # --- Parse subcontractor data from detail sheets ---
+    subcontractors = {}
+    detail_sheets = [
+        "工程公司挂牌督办单", "红黄牌", "工程公司处理通报", "工程公司通报批评",
+        "工程公司整改单", "工程公司停工令", "监理业主整改通知单",
+        "项目内部处理通报", "项目整改通知单", "项目停工令",
+        "项目违章培训通知单", "工程公司违章培训通知单",
+    ]
+    for sheet_name in detail_sheets:
+        if sheet_name not in wb.sheetnames:
+            continue
+        dws = wb[sheet_name]
+        # Determine column index for subcontractor name (varies by sheet)
+        header_row = 1
+        sub_col = None
+        for c in range(1, dws.max_column + 1):
+            h = str(dws.cell(row=1, column=c).value or "")
+            if "分包" in h:
+                sub_col = c
+                break
+        if sub_col is None:
+            continue
+        for r in range(2, dws.max_row + 1):
+            name = str(dws.cell(row=r, column=sub_col).value or "").strip()
+            if name and name not in ("/", "None", "#N/A", ""):
+                subcontractors[name] = subcontractors.get(name, 0) + 1
+
+    sub_list = sorted(
+        [{"name": k, "count": v} for k, v in subcontractors.items()],
+        key=lambda x: -x["count"],
+    )
+
+    # --- Parse scores ---
+    scores = {"star5_2025": [], "aqhb_2025": [], "star5_2026": [], "aqhb_2026": []}
+    if "五星评估、安质环考核得分" in wb.sheetnames:
+        sws = wb["五星评估、安质环考核得分"]
+        # 2025 data rows 14-16
+        for i, m in enumerate(MONTHS):
+            v = sws.cell(row=15, column=2 + i).value
+            if v is not None:
+                scores["star5_2025"].append({"month": m, "score": float(v)})
+        for i, m in enumerate(MONTHS):
+            v = sws.cell(row=16, column=2 + i).value
+            if v is not None:
+                scores["aqhb_2025"].append({"month": m, "score": float(v)})
+        # 2026 data rows 78-79
+        for i, m in enumerate(MONTHS):
+            v = sws.cell(row=78, column=2 + i).value
+            if v is not None:
+                scores["star5_2026"].append({"month": m, "score": float(v)})
+        for i, m in enumerate(MONTHS):
+            v = sws.cell(row=79, column=2 + i).value
+            if v is not None:
+                scores["aqhb_2026"].append({"month": m, "score": float(v)})
+
+    wb.close()
+
+    _alert_data = {
+        "external": external,
+        "internal": internal,
+        "departments": departments,
+        "subcontractors": sub_list,
+        "scores": scores,
+        "months": MONTHS,
+    }
+    return _alert_data
+
+
 def seed_data():
     with db() as conn:
         count = conn.execute("SELECT COUNT(*) FROM hazards").fetchone()[0]
@@ -779,10 +942,103 @@ def training_materials_delete():
     return jsonify(ok=True)
 
 
+# ---------------------------------------------------------------------------
+# Alert dashboard routes
+# ---------------------------------------------------------------------------
+
+@app.get("/alert")
+def alert_page():
+    return send_from_directory(app.static_folder + "/alert", "index.html")
+
+
+@app.get("/api/alert/summary")
+def alert_summary():
+    data = load_alert_data()
+    return jsonify({
+        "external": data.get("external", []),
+        "internal": data.get("internal", []),
+        "months": data.get("months", []),
+    })
+
+
+@app.get("/api/alert/scores")
+def alert_scores():
+    data = load_alert_data()
+    return jsonify(data.get("scores", {}))
+
+
+@app.get("/api/alert/departments")
+def alert_departments():
+    data = load_alert_data()
+    return jsonify(data.get("departments", {}))
+
+
+@app.get("/api/alert/subcontractors")
+def alert_subcontractors():
+    data = load_alert_data()
+    return jsonify({"items": data.get("subcontractors", [])})
+
+
+@app.get("/api/alert/details")
+def alert_details():
+    data = load_alert_data()
+    detail_type = request.args.get("type", "").strip()
+    sheet_map = {
+        "挂牌督办": "工程公司挂牌督办单",
+        "管理约谈": "工程公司管理约谈",
+        "红黄牌": "红黄牌",
+        "处理通报": "工程公司处理通报",
+        "通报批评": "工程公司通报批评",
+        "工程整改单": "工程公司整改单",
+        "工程停工令": "工程公司停工令",
+        "监理通知单": "监理业主整改通知单",
+        "项目处理通报": "项目内部处理通报",
+        "项目整改单": "项目整改通知单",
+        "项目停工令": "项目停工令",
+        "项目违章培训": "项目违章培训通知单",
+        "工程违章培训": "工程公司违章培训通知单",
+    }
+    sheet_name = sheet_map.get(detail_type)
+    if not sheet_name:
+        return jsonify({"items": [], "total": 0})
+
+    wb = load_workbook(ALERT_SEED_FILE, data_only=True)
+    if sheet_name not in wb.sheetnames:
+        wb.close()
+        return jsonify({"items": [], "total": 0})
+
+    ws = wb[sheet_name]
+    headers = []
+    for c in range(1, ws.max_column + 1):
+        h = ws.cell(row=1, column=c).value
+        if h:
+            headers.append(str(h).strip())
+
+    items = []
+    for r in range(2, ws.max_row + 1):
+        row_vals = [str(ws.cell(row=r, column=c).value or "") for c in range(1, ws.max_column + 1)]
+        if all(v == "" for v in row_vals):
+            continue
+        entry = {}
+        for i, h in enumerate(headers):
+            if i < len(row_vals):
+                entry[h] = row_vals[i]
+        items.append(entry)
+
+    wb.close()
+    page = int(request.args.get("page", 1))
+    size = int(request.args.get("size", 20))
+    total = len(items)
+    start = (page - 1) * size
+    return jsonify({"items": items[start:start + size], "total": total, "page": page, "size": size,
+                    "headers": headers})
+
+
 init_db()
 seed_people()
 apply_role_rules()
 seed_data()
+load_alert_data()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("APP_PORT", "8010")), debug=os.environ.get("FLASK_DEBUG") == "1")

@@ -10,6 +10,8 @@ from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory
 from openpyxl import load_workbook
 
+from data_admin import bp as admin_bp
+
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
 DB_PATH = DATA_DIR / "hazards.db"
@@ -39,6 +41,31 @@ DETAIL_SHEET_CONFIG = [
     ("项目停工令", "internal", "停工令", 2, 6, 10),
     ("项目违章培训通知单", "internal", "违章培训通知单", 7, 10, 4),
 ]
+
+NON_SUB_NAMES = {"分包", "责任分包", "项目总承包部", "总承包", "总承包部",
+                  "综合车间", "钢结构队", "核岛一队", "水电队", "机械队", "搅拌站",
+                  "驻场人员", "综合队", "测量队", "金属试验室", "机械设备管理部"}
+
+
+def clean_sub_name(raw):
+    """Normalize subcontractor name: remove | prefix, strip （...）suffix, skip invalid."""
+    if not raw:
+        return ""
+    name = raw.strip()
+    if name in NON_SUB_NAMES:
+        return ""
+    # Cells with many 、 are summary lists, not single subs (3+ names = 2+ separators)
+    if name.count("、") >= 2:
+        return ""
+    # Take the part after the last |
+    if "|" in name:
+        name = name.rsplit("|", 1)[-1].strip()
+    # Remove （...） / (...) suffix
+    name = re.sub(r"[（(][^）)]*[）)]", "", name).strip()
+    if not name or name in ("/", "None", "#N/A", "") or name in NON_SUB_NAMES:
+        return ""
+    return name
+
 
 # Alert dashboard data cache
 _alert_data = None
@@ -544,8 +571,8 @@ def load_alert_data():
         if sub_col is None:
             continue
         for r in range(2, dws.max_row + 1):
-            name = str(dws.cell(row=r, column=sub_col).value or "").strip()
-            if name and name not in ("/", "None", "#N/A", ""):
+            name = clean_sub_name(str(dws.cell(row=r, column=sub_col).value or ""))
+            if name:
                 subcontractors[name] = subcontractors.get(name, 0) + 1
 
     sub_list = sorted(
@@ -580,9 +607,7 @@ def load_alert_data():
 
             sub_name = ""
             if sub_col > 0:
-                sub_name = str(dws.cell(row=r, column=sub_col).value or "").strip()
-                if sub_name in ("/", "None", "#N/A", ""):
-                    sub_name = ""
+                sub_name = clean_sub_name(str(dws.cell(row=r, column=sub_col).value or ""))
 
             dept_name = ""
             if dept_col > 0:
@@ -1272,6 +1297,8 @@ def alert_details():
     return jsonify({"items": items[start:start + size], "total": total, "page": page, "size": size,
                     "headers": headers})
 
+
+app.register_blueprint(admin_bp)
 
 init_db()
 seed_people()

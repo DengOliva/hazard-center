@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据管理后台</title>
+<style>
+:root {
+  --nav: #122b29; --green: #087b68; --mint: #e7f5f0; --ink: #17312f;
+  --muted: #72817f; --line: #dfe8e5; --bg: #f3f6f5; --red: #c84d4d; --orange: #e6a23c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 15px/1.5 Inter, "Microsoft YaHei", sans-serif; color: var(--ink); background: var(--bg); }
+aside {
+  position: fixed; inset: 0 auto 0 0; width: 240px; background: var(--nav);
+  color: white; padding: 28px 18px; display: flex; flex-direction: column;
+}
+.brand { display: flex; gap: 12px; align-items: center; padding: 0 8px 30px; }
+.brand > span { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: #16a085; font-size: 21px; font-weight: bold; }
+.brand b, .brand small { display: block; }
+.brand b { font-size: 17px; }
+.brand small { font-size: 9px; letter-spacing: 1.8px; color: #9bb5b1; margin-top: 2px; }
+nav { display: grid; gap: 7px; }
+nav a {
+  border: 0; background: transparent; color: #a9c0bd; text-decoration: none;
+  padding: 13px 15px; border-radius: 10px; cursor: pointer; font-size: 14px; display: block;
+}
+nav a:hover, nav a.active { background: #24413e; color: #fff; }
+.side-foot { margin-top: auto; border-top: 1px solid #31504c; padding: 20px 8px 0; display: flex; gap: 10px; }
+.side-foot i { width: 9px; height: 9px; border-radius: 50%; background: #2ecc71; margin-top: 5px; box-shadow: 0 0 0 4px #2ecc7125; }
+.side-foot b, .side-foot small { display: block; }
+.side-foot b { font-size: 12px; }
+.side-foot small { font-size: 11px; color: #8fa9a5; }
+main { margin-left: 240px; padding: 28px 32px 40px; }
+header { height: 82px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+h1 { font-size: 25px; margin: 0; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.cards article {
+  background: white; border: 1px solid #e6ecea; border-radius: 14px;
+  padding: 20px; box-shadow: 0 2px 9px #17312f08;
+}
+.cards small { display: block; color: var(--muted); font-size: 13px; }
+.cards strong { display: inline-block; font-size: 34px; margin: 6px 8px 2px 0; }
+.cards em { font-style: normal; font-size: 13px; color: var(--muted); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.panel {
+  background: #fff; border: 1px solid #e6ecea; border-radius: 14px;
+  padding: 22px; box-shadow: 0 2px 9px #17312f08; margin-bottom: 20px;
+}
+.panel h2 { font-size: 17px; margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+.badge { font-size: 12px; padding: 4px 10px; border-radius: 99px; font-weight: normal; }
+.badge-ok { background: var(--mint); color: var(--green); }
+.badge-warn { background: #fef0e5; color: var(--orange); }
+table { width: 100%; border-collapse: collapse; }
+th { font-size: 13px; color: #657875; background: #f7f9f8; text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+td { padding: 10px 12px; border-bottom: 1px solid #edf1f0; font-size: 14px; }
+.source-card {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px; background: #f9fbfa; border-radius: 10px; margin-bottom: 12px;
+}
+.source-card:last-child { margin-bottom: 0; }
+.source-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; font-size: 20px; flex-shrink: 0; }
+.source-icon.db { background: #e8f4fd; color: #409eff; }
+.source-icon.excel { background: #e7f5f0; color: var(--green); }
+.source-icon.json { background: #fef0e5; color: var(--orange); }
+.source-body { flex: 1; min-width: 0; }
+.source-body h3 { margin: 0 0 4px; font-size: 15px; }
+.source-body p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.source-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; font-size: 12px; color: var(--muted); }
+.source-meta span { display: flex; align-items: center; gap: 4px; }
+.file-list { max-height: 360px; overflow-y: auto; }
+.file-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f3f2; font-size: 13px; }
+.file-row:last-child { border-bottom: 0; }
+.file-name { color: var(--ink); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; }
+.file-size { color: var(--muted); font-size: 12px; }
+.file-time { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.empty { text-align: center; color: var(--muted); padding: 24px 0; }
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 12px; padding: 3px 10px; border-radius: 6px; background: #edf2f1; }
+.unit-tag { background: #e8f4fd; color: #409eff; }
+#toast { position: fixed; right: 25px; bottom: 25px; background: #17312f; color: white; padding: 12px 18px; border-radius: 9px; opacity: 0; transform: translateY(10px); transition: .2s; pointer-events: none; z-index: 999; }
+#toast.show { opacity: 1; transform: none; }
+.loading { text-align: center; padding: 40px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <span>&#9889;</span>
+    <div><b>数据管理</b><small>DATA ADMIN</small></div>
+  </div>
+  <nav>
+    <a href="/">隐患看板</a>
+    <a href="/training">培训管理</a>
+    <a href="/alert">预警看板</a>
+    <a href="/admin" class="active">数据管理</a>
+  </nav>
+  <div class="side-foot">
+    <i></i>
+    <div><b>数据源状态</b><small id="status-text">加载中...</small></div>
+  </div>
+</aside>
+
+<main>
+  <header>
+    <div>
+      <h1>数据管理后台</h1>
+      <p style="color:var(--muted);margin:4px 0 0;">所有数据来源一览，掌握数据全貌</p>
+    </div>
+    <div>
+      <button onclick="location.reload()" style="font:inherit;border:1px solid var(--line);background:white;border-radius:8px;padding:9px 16px;cursor:pointer;">刷新数据</button>
+    </div>
+  </header>
+
+  <section class="cards" id="cards"></section>
+
+  <div class="grid2">
+    <section class="panel">
+      <h2>数据来源概览</h2>
+      <div id="sources"></div>
+    </section>
+
+    <section class="panel">
+      <h2>导入历史 <span class="badge badge-ok" id="import-total"></span></h2>
+      <div id="imports"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>上传文件列表 <span class="badge badge-ok" id="upload-count"></span></h2>
+    <div class="file-list" id="upload-list"></div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const S = (s) => document.querySelectorAll(s);
+
+function toast(msg) {
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function fmt(n) {
+  if (n == null) return '—';
+  return Number(n).toLocaleString();
+}
+
+function fmtSize(bytes) {
+  if (!bytes) return '—';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return d.replace('T', ' ').slice(0, 16);
+}
+
+async function load() {
+  try {
+    const res = await fetch('/api/admin/summary');
+    const data = await res.json();
+    render(data);
+    $('#status-text').textContent = '已连接';
+  } catch (e) {
+    $('#status-text').textContent = '加载失败';
+    toast('数据加载失败: ' + e.message);
+  }
+}
+
+function render(data) {
+  // --- cards ---
+  const hz = data.hazards || {};
+  const uploads = data.uploads || {};
+  const people = data.people || {};
+  const alert = data.alert || {};
+  const training = data.training || {};
+
+  $('#cards').innerHTML = [
+    { label: '隐患记录总数', value: fmt(hz.total), sub: `${hz.min_date || '—'} ~ ${hz.max_date || '—'}`, color: '' },
+    { label: '检查单位', value: (hz.by_unit || []).length, sub: (hz.by_unit || []).map(u => u.unit).join('、'), color: '' },
+    { label: '活跃人员', value: fmt(people.total_active), sub: (people.by_category || []).map(c => c.category + ' ' + c.count).join('  '), color: '' },
+    { label: '上传文件', value: uploads.count || 0, sub: '共 ' + (data.import_count || 0) + ' 次导入', color: '' },
+  ].map(c => `<article><small>${c.label}</small><strong>${c.value}</strong><em>${c.sub}</em></article>`).join('');
+
+  // --- sources ---
+  const sources = [
+    {
+      icon: 'db', title: '隐患录入数据库 (SQLite)',
+      desc: `SQLite · ${fmt(hz.total)} 条记录 · ${(hz.by_unit || []).length} 个检查单位`,
+      meta: [
+        `时间范围: ${hz.min_date || '—'} ~ ${hz.max_date || '—'}`,
+        `隐患级别: ${(hz.by_level || []).map(l => l.level + '级 ' + l.count + '条').join(', ')}`,
+      ],
+    },
+    {
+      icon: 'excel', title: '安全管理总台账',
+      desc: (alert.source && alert.source.exists)
+        ? `文件: ${alert.source.name} · ${fmtSize(alert.source.size)} · 更新于 ${fmtDate(alert.source.modified)}`
+        : '未找到台账文件',
+      meta: [(alert.source && alert.source.exists) ? alert.label : '请通过预警看板上传'],
+    },
+    {
+      icon: 'excel', title: '培训安排表',
+      desc: (training.schedule && training.schedule.exists)
+        ? `文件: ${training.schedule.name} · ${fmtSize(training.schedule.size)}`
+        : '未找到培训安排文件',
+      meta: [
+        (training.schedule && training.schedule.exists) ? `修改时间: ${fmtDate(training.schedule.modified)}` : '',
+        training.overrides_count ? `手动覆盖: ${training.overrides_count} 项` : '',
+      ].filter(Boolean),
+    },
+    {
+      icon: 'excel', title: '人员数据',
+      desc: `${fmt(people.total_active)} 名活跃人员`,
+      meta: (people.by_category || []).map(c => `${c.category}: ${c.count} 人`),
+    },
+    {
+      icon: 'json', title: '培训资料库',
+      desc: (training.materials && training.materials.exists)
+        ? `文件: ${training.materials.name} · ${fmtSize(training.materials.size)}`
+        : '暂无培训资料',
+      meta: [(training.materials && training.materials.exists) ? `修改时间: ${fmtDate(training.materials.modified)}` : ''],
+    },
+  ];
+
+  $('#sources').innerHTML = sources.map(s => `
+    <div class="source-card">
+      <div class="source-icon ${s.icon}">${s.icon === 'db' ? '&#128451;' : s.icon === 'excel' ? '&#128196;' : '&#12304;'}</div>
+      <div class="source-body">
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+        <div class="source-meta">${(s.meta || []).map(m => m ? `<span>${m}</span>` : '').join('')}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // --- import history ---
+  $('#import-total').textContent = '共 ' + (data.import_count || 0) + ' 次';
+  const importDiv = $('#imports');
+  if (!data.import_count) {
+    importDiv.innerHTML = '<div class="empty">暂无导入记录</div>';
+  } else {
+    loadImports();
+  }
+
+  // --- uploads ---
+  $('#upload-count').textContent = '共 ' + (uploads.count || 0) + ' 个文件';
+  const ulDiv = $('#upload-list');
+  if (!uploads.files || uploads.files.length === 0) {
+    ulDiv.innerHTML = '<div class="empty">暂无上传文件</div>';
+  } else {
+    ulDiv.innerHTML = uploads.files.map(f => `
+      <div class="file-row" title="${f.path}">
+        <span class="file-name">${f.name}</span>
+        <span class="file-size">${fmtSize(f.size)}</span>
+        <span class="file-time">${fmtDate(f.modified)}</span>
+      </div>
+    `).join('');
+  }
+}
+
+async function loadImports() {
+  try {
+    const res = await fetch('/api/admin/imports');
+    const rows = await res.json();
+    if (!rows.length) {
+      $('#imports').innerHTML = '<div class="empty">暂无导入记录</div>';
+      return;
+    }
+    $('#imports').innerHTML = `
+      <table><thead><tr>
+        <th>文件名</th><th>导入时间</th><th>记录数</th><th>数据范围</th>
+      </tr></thead><tbody>
+      ${rows.map(r => `<tr>
+        <td title="${r.filename}">${r.filename}</td>
+        <td>${fmtDate(r.imported_at)}</td>
+        <td>${fmt(r.row_count)}</td>
+        <td>${r.min_date || '—'} ~ ${r.max_date || '—'}</td>
+      </tr>`).join('')}
+      </tbody></table>`;
+  } catch (e) {
+    $('#imports').innerHTML = '<div class="empty">导入记录加载失败</div>';
+  }
+}
+
+load();
+</script>
+</body>
+</html>

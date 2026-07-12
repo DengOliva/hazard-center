@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>体系部门周会材料</title>
+<style>
+:root {
+  --bg: #e8ecf1;
+  --slide-bg: #fff;
+  --ink: #1a1a2e;
+  --muted: #6b7280;
+  --accent: #1e3a5f;
+  --green: #0d9488;
+  --red: #dc2626;
+  --orange: #d97706;
+  --blue: #2563eb;
+  --line: #e5e7eb;
+  --tag-bg: #f0fdf4;
+  --tag-text: #166534;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font: 15px/1.6 Inter, "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--ink); overflow: hidden; height: 100vh; }
+
+/* Top bar */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 48px; display: flex; align-items: center; gap: 12px;
+  padding: 0 20px; background: #1e293b; color: #fff; font-size: 13px;
+}
+#topbar label { display: flex; align-items: center; gap: 6px; }
+#topbar input[type="date"] {
+  background: #334155; color: #fff; border: 1px solid #475569;
+  border-radius: 6px; padding: 4px 8px; font: inherit; font-size: 12px;
+}
+#topbar button {
+  background: #334155; color: #e2e8f0; border: 1px solid #475569;
+  border-radius: 6px; padding: 5px 12px; cursor: pointer; font: inherit; font-size: 12px;
+}
+#topbar button:hover { background: #475569; }
+#topbar button.active-btn { background: var(--green); border-color: var(--green); color: #fff; }
+#topbar .sep { flex: 1; }
+#topbar .slide-counter { font-size: 12px; color: #94a3b8; }
+#topbar a { color: #94a3b8; text-decoration: none; font-size: 12px; }
+#topbar a:hover { color: #fff; }
+
+/* Slide area */
+#slides { height: calc(100vh - 48px); margin-top: 48px; overflow: hidden; position: relative; }
+.slide {
+  position: absolute; inset: 0; display: none;
+  padding: 40px 56px; overflow-y: auto;
+  background: var(--slide-bg);
+  animation: fadeIn .35s ease;
+}
+.slide.active { display: flex; flex-direction: column; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Slide types */
+.slide.cover { align-items: center; justify-content: center; text-align: center; background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); color: #fff; }
+.slide.cover h1 { font-size: 42px; font-weight: 700; letter-spacing: 4px; margin-bottom: 16px; }
+.slide.cover .date { font-size: 18px; color: #94a3b8; }
+.slide.cover .dept { font-size: 20px; color: #e2e8f0; margin-top: 8px; }
+.slide.toc { justify-content: center; }
+.slide.toc h2 { font-size: 28px; border-bottom: 3px solid var(--accent); padding-bottom: 16px; margin-bottom: 28px; }
+.slide.toc ol { font-size: 17px; line-height: 2.6; color: var(--muted); }
+.slide.toc ol li { padding-left: 4px; }
+.slide.toc ol li span { color: var(--ink); font-weight: 500; }
+
+.slide-title { font-size: 22px; font-weight: 700; color: var(--accent); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--line); flex-shrink: 0; }
+.slide-body { flex: 1; overflow-y: auto; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { background: #f8fafc; color: #475569; font-weight: 600; text-align: center; padding: 8px 6px; border: 1px solid var(--line); font-size: 12px; white-space: nowrap; }
+.data-table td { padding: 7px 6px; border: 1px solid var(--line); text-align: center; }
+.data-table td.left { text-align: left; }
+.data-table tr:hover { background: #f8fafc; }
+.data-table td[contenteditable] { background: #fffbeb; outline: 2px solid transparent; cursor: text; }
+.data-table td[contenteditable]:focus { outline-color: var(--blue); background: #fff; z-index: 1; position: relative; }
+.badge-cell { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+.badge-yes { background: #f0fdf4; color: #166534; }
+.badge-no { background: #fef2f2; color: #991b1b; }
+.badge-warn { background: #fffbeb; color: #92400e; }
+
+/* Stat cards */
+.stat-inline { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.stat-inline span { background: #f1f5f9; padding: 6px 14px; border-radius: 8px; font-size: 13px; }
+.stat-inline b { color: var(--accent); }
+
+/* Slide 22 ending */
+.slide.end { align-items: center; justify-content: center; text-align: center; background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); color: #fff; }
+.slide.end h1 { font-size: 48px; font-weight: 300; letter-spacing: 8px; }
+
+/* Auto-loading indicator */
+.loading-overlay { display: flex; align-items: center; justify-content: center; height: 160px; color: var(--muted); font-size: 14px; }
+.empty-hint { text-align: center; color: var(--muted); padding: 20px; font-size: 13px; }
+
+/* Keyboard hint */
+#keyboard-hint {
+  position: fixed; bottom: 16px; right: 20px;
+  background: #1e293bdd; color: #cbd5e1; font-size: 11px;
+  padding: 6px 12px; border-radius: 6px; pointer-events: none;
+  transition: opacity .6s;
+}
+
+/* Print */
+@media print {
+  #topbar, #keyboard-hint { display: none !important; }
+  .slide { position: static !important; display: block !important; page-break-after: always; animation: none; }
+  .slide:last-child { page-break-after: avoid; }
+}
+
+/* Save indicator */
+.save-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; }
+.save-dot.saved { background: #22c55e; }
+.save-dot.unsaved { background: var(--orange); animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <a href="/">&#8592; 返回看板</a>
+  <label>周范围：<input type="date" id="week-start"></label>
+  <span>—</span>
+  <input type="date" id="week-end">
+  <button id="btn-refresh">刷新数据</button>
+  <span class="sep"></span>
+  <button id="btn-prev" title="上一页 ←">◀</button>
+  <span class="slide-counter"><span id="cur-slide">1</span>/<span id="total-slides">22</span></span>
+  <button id="btn-next" title="下一页 →">▶</button>
+  <button id="btn-export" class="active-btn" style="margin-left:12px;">导出PPTX</button>
+  <span id="save-indicator" style="font-size:11px;"></span>
+</div>
+
+<div id="slides"></div>
+<div id="keyboard-hint">← → 键翻页 · 表格单元格双击编辑 · Ctrl+S 保存</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const WEEK_DAYS = ['周一','周二','周三','周四','周五','周六','周日'];
+let currentSlide = 0;
+let meetingData = {};
+let savedManual = {};
+let unsavedChanges = false;
+const SLIDES = [];
+
+// ============================================================
+// INIT
+// ============================================================
+function initDates() {
+  const now = new Date();
+  const day = now.getDay();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  const fmt = d => d.toISOString().slice(0, 10);
+  document.getElementById('week-start').value = fmt(monday);
+  document.getElementById('week-end').value = fmt(sunday);
+}
+
+function getWeekRange() {
+  return {
+    start: document.getElementById('week-start').value,
+    end: document.getElementById('week-end').value,
+  };
+}
+
+// Render slide list JSON that defines what each slide looks like
+function buildSlideDefs(data) {
+  const s = (d) => d || '—';
+  const weekLabel = `${getWeekRange().start} ~ ${getWeekRange().end}`;
+
+  const defs = [
+    // 1: Cover
+    { type: 'cover', html: () => `
+      <h1>体系部门周会</h1>
+      <div class="date">${weekLabel}</div>
+      <div class="dept">体系部门</div>
+    `},
+    // 2: TOC
+    { type: 'toc', html: () => `
+      <h2>会议议程</h2>
+      <ol>
+        <li><span>上周期主要完成工作</span></li>
+        <li><span>本期重点工作安排</span></li>
+        <li><span>现场检查及数据</span></li>
+        <li><span>重要事项及决议</span></li>
+      </ol>
+    `},
+
+    // 3: 年度工作计划/督办事项 (manual)
+    manualTableSlide(3, '年度工作计划/督办事项（截至6月）',
+      ['序号','工作任务','工作内容及要求','责任部门','完成时间','进展情况','下一步计划'], 10),
+
+    // 4: 上级重点关注/督办项 (manual)
+    manualTableSlide(4, '上级重点关注/督办项',
+      ['序号','来源','内容及要求','责任部门','完成时间','进展情况','下一步计划'], 10),
+
+    // 5: 年度工作计划/督办事项 7月 (manual)
+    manualTableSlide(5, '年度工作计划/督办事项（7月）',
+      ['序号','工作任务','工作内容及要求','责任部门','完成时间','备注'], 6),
+
+    // 6: 监查/监督报告提交 (manual, semi-structured)
+    manualTableSlide(6, '监查/监督报告提交（' + weekLabel + '）',
+      ['序号','类别','现场','承包商','监理','合计'], 5, [['1','行为偏差培训','','','',''],['2','管理缺陷','','','',''],['3','施工质量缺陷','','','',''],['4','事件报告','','','',''],['5','安全质量领导小组会议签到表','','','','']]),
+
+    // 7: 内外部行为偏差统计 (AUTO)
+    { title: '内外部行为偏差统计（' + weekLabel + '）', html: () => buildSlide7(data) },
+
+    // 8: 隐患记录提交 (AUTO)
+    { title: '隐患记录提交（' + weekLabel + '）', html: () => buildSlide8(data) },
+
+    // 9: 作业风险管控 (manual)
+    manualTableSlide(9, '作业风险管控提交（' + weekLabel + '）',
+      ['序号','提交类别','单位','检查人','落实情况'], 3),
+
+    // 10: 隐患记录抽查 (manual)
+    manualTableSlide(10, '职能部门隐患记录抽查情况',
+      ['序号','隐患记录数','隐患抽检数','备注'], 1),
+
+    // 11: 管理干部预警刹车 (AUTO)
+    { title: '管理干部预警刹车统计（' + weekLabel + '）', html: () => buildSlide11(data) },
+
+    // 12: 整改单关闭 (AUTO)
+    { title: '整改单关闭情况（' + weekLabel + '）', html: () => buildSlideClose(data, 'rectification', '整改单') },
+
+    // 13: 通报关闭 (AUTO)
+    { title: '通报关闭情况（' + weekLabel + '）', html: () => buildSlideClose(data, 'notice', '通报') },
+
+    // 14: 停工令关闭 (AUTO)
+    { title: '停工令关闭情况（' + weekLabel + '）', html: () => buildSlideClose(data, 'stop_work', '停工令') },
+
+    // 15: 证件管理 (manual - mixed with some auto)
+    manualTableSlide(15, '证件管理（' + weekLabel + '）',
+      ['序号','证件类别','办证数量','取证数量','备注'], 8),
+
+    // 16: 培训 (auto)
+    { title: '培训（' + weekLabel + '）', html: () => buildSlide16(data) },
+
+    // 17: 体系主要工作 1 (manual)
+    manualTableSlide(17, '体系主要工作（一）',
+      ['序号','工作内容','责任人','完成时间'], 8),
+
+    // 18: 体系主要工作 2 (manual)
+    manualTableSlide(18, '体系主要工作（二）',
+      ['序号','工作内容','责任人','完成时间'], 8),
+
+    // 19: 事件反馈 (manual)
+    { title: '本期重要事件反馈', html: () => manualFormSlide(19, '事件反馈', [
+      ['事件描述','textarea'],
+      ['原因分析','textarea'],
+      ['整改要求','textarea'],
+    ])},
+
+    // 20: 每周一学 (manual)
+    { title: '每周一学', html: () => manualFormSlide(20, '每周一学', [
+      ['学习内容','textarea'],
+    ])},
+
+    // 21: 每周一观 (manual)
+    { title: '每周一观', html: () => manualFormSlide(21, '每周一观', [
+      ['观看内容','textarea'],
+    ])},
+
+    // 22: 结束
+    { type: 'end', html: () => `<h1>汇报完毕</h1>` },
+  ];
+  return defs;
+}
+
+// ============================================================
+// SLIDE HELPERS
+// ============================================================
+function manualTableSlide(id, title, headers, rows_count, seedData) {
+  const key = 'slide_' + id;
+  return {
+    title: title,
+    html: () => {
+      const saved = savedManual[key] || {};
+      const tableData = saved.table || seedData || [];
+      // Ensure at least rows_count rows
+      while (tableData.length < rows_count) {
+        const row = [String(tableData.length + 1), ...headers.slice(1).map(() => '')];
+        tableData.push(row);
+      }
+      return buildEditableTable(key, headers, tableData);
+    }
+  };
+}
+
+function buildEditableTable(key, headers, data) {
+  let html = '<table class="data-table"><thead><tr>';
+  headers.forEach(h => html += `<th>${h}</th>`);
+  html += '</tr></thead><tbody>';
+  data.forEach((row, ri) => {
+    html += '<tr>';
+    row.forEach((cell, ci) => {
+      html += `<td contenteditable="true" data-key="${key}" data-row="${ri}" data-col="${ci}">${cell || ''}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  html += `<div style="margin-top:8px;font-size:11px;color:var(--muted);">双击单元格编辑 · 右键添加/删除行</div>`;
+  return html;
+}
+
+function manualFormSlide(id, title, fields) {
+  const key = 'slide_' + id;
+  return {
+    title: title,
+    html: () => {
+      const saved = savedManual[key] || {};
+      let html = '';
+      fields.forEach(([label, type]) => {
+        const val = saved[label] || '';
+        if (type === 'textarea') {
+          html += `<div style="margin-bottom:16px;"><b style="display:block;margin-bottom:6px;color:var(--accent);">${label}</b>`;
+          html += `<div contenteditable="true" data-key="${key}" data-field="${label}" style="min-height:100px;padding:12px;border:1px solid var(--line);border-radius:8px;background:#fafafa;white-space:pre-wrap;">${val}</div></div>`;
+        }
+      });
+      html += `<div style="font-size:11px;color:var(--muted);">点击文本框直接编辑</div>`;
+      return html;
+    }
+  };
+}
+
+// ============================================================
+// AUTO SLIDES
+// ============================================================
+
+// Slide 7: 内外部行为偏差统计
+function buildSlide7(data) {
+  const bs = data.behavior_stats || { internal: [], external: [] };
+  let html = '<div class="stat-inline">';
+  const intTotal = (bs.internal || []).reduce((s, i) => s + i.count, 0);
+  const extTotal = (bs.external || []).reduce((s, i) => s + i.count, 0);
+  html += `<span>内部行为偏差：<b>${intTotal} 项</b></span>`;
+  html += `<span>外部行为偏差：<b>${extTotal} 项</b></span>`;
+  html += '</div>';
+
+  if (intTotal === 0 && extTotal === 0) return html + '<div class="empty-hint">本周无行为偏差数据</div>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">';
+
+  // Internal table
+  html += '<div><h3 style="font-size:15px;margin-bottom:8px;color:var(--accent);">内部行为偏差</h3>';
+  html += '<table class="data-table"><thead><tr><th>序号</th><th>行为偏差类别</th><th>违章数量</th><th>备注</th></tr></thead><tbody>';
+  (bs.internal || []).forEach((item, i) => {
+    html += `<tr><td>${i+1}</td><td class="left">${item.type}</td><td>${item.count}</td><td></td></tr>`;
+  });
+  if ((bs.internal || []).length === 0) html += '<tr><td colspan="4" class="empty-hint">无</td></tr>';
+  html += `<tr style="font-weight:700;"><td></td><td>合计</td><td>${intTotal}</td><td></td></tr>`;
+  html += '</tbody></table></div>';
+
+  // External table
+  html += '<div><h3 style="font-size:15px;margin-bottom:8px;color:var(--accent);">外部行为偏差（工程公司）</h3>';
+  html += '<table class="data-table"><thead><tr><th>序号</th><th>行为偏差类别</th><th>违章数量</th><th>备注</th></tr></thead><tbody>';
+  (bs.external || []).forEach((item, i) => {
+    html += `<tr><td>${i+1}</td><td class="left">${item.type}</td><td>${item.count}</td><td></td></tr>`;
+  });
+  if ((bs.external || []).length === 0) html += '<tr><td colspan="4" class="empty-hint">无</td></tr>';
+  html += `<tr style="font-weight:700;"><td></td><td>合计</td><td>${extTotal}</td><td></td></tr>`;
+  html += '</tbody></table></div></div>';
+
+  html += `<div style="margin-top:10px;font-size:13px;color:var(--muted);">数据来源：安全管理总台账</div>`;
+  return html;
+}
+
+// Slide 8: 隐患记录提交
+function buildSlide8(data) {
+  const ps = data.people_stats;
+  if (!ps || !ps.groups) return '<div class="loading-overlay">加载人员数据中...</div>';
+
+  let html = `<div class="stat-inline"><span>本周隐患录入总数：<b>${ps.total_overall || 0}</b></span></div>`;
+  html += '<table class="data-table"><thead><tr><th>部门</th><th>人员类别</th><th>人员</th><th>隐患录入量</th><th>平均每人/每天录入<br>（含周末）</th><th>是否达标</th><th>隐患录入<br>抽查人员</th></tr></thead><tbody>';
+
+  ps.groups.forEach(g => {
+    const members = g.members || [];
+    const cats = [...new Set(members.map(m => m.category))];
+    cats.forEach(cat => {
+      const catMembers = members.filter(m => m.category === cat);
+      catMembers.forEach((m, i) => {
+        const avgPerDay = 7; // days in week
+        html += '<tr>';
+        if (i === 0) html += `<td rowspan="${catMembers.length}" style="font-weight:600;">${cat || '—'}</td>`;
+        html += `<td>${m.name}</td>`;
+        html += `<td>${m.count}</td>`;
+        html += `<td>${(m.count / avgPerDay).toFixed(1)}</td>`;
+        html += `<td>${(m.count / avgPerDay) >= 1 ? '<span class="badge-cell badge-yes">是</span>' : '<span class="badge-cell badge-no">否</span>'}</td>`;
+        html += '<td></td></tr>';
+      });
+    });
+    // Department total
+    html += `<tr style="font-weight:700;background:#f8fafc;"><td colspan="2">${g.category} 合计</td><td>${g.total}</td><td colspan="4"></td></tr>`;
+  });
+
+  html += '</tbody></table>';
+  html += '<div style="margin-top:8px;font-size:13px;color:var(--muted);">数据来源：隐患录入系统 · 抽查人员列可手动填写</div>';
+  return html;
+}
+
+// Slide 11: 管理干部预警刹车
+function buildSlide11(data) {
+  const da = data.dept_alert;
+  if (!da || !da.depts || da.depts.length === 0) return '<div class="empty-hint">本周无预警刹车数据</div>';
+
+  const extTypes = da.ext_types || [];
+  const intTypes = da.int_types || [];
+
+  let html = '<div style="overflow-x:auto;font-size:12px;">';
+  html += '<table class="data-table"><thead><tr><th rowspan="2">统计单位</th>';
+  html += '<th colspan="6">内部</th><th colspan="6">工程公司</th></tr><tr>';
+  intTypes.slice(0, 6).forEach(t => html += `<th>${t}</th>`);
+  while (intTypes.length < 6 && extTypes.length > 6) { html += '<th></th>'; }
+  extTypes.forEach(t => html += `<th>${t}</th>`);
+  html += '</tr></thead><tbody>';
+
+  da.depts.forEach(d => {
+    html += `<tr><td style="font-weight:600;">${d.dept}</td>`;
+    intTypes.forEach(t => html += `<td>${d['int_'+t] || 0}</td>`);
+    extTypes.forEach(t => html += `<td>${d['ext_'+t] || 0}</td>`);
+    html += '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  html += '<div style="margin-top:8px;font-size:13px;color:var(--muted);">数据来源：安全管理总台账</div>';
+  return html;
+}
+
+// Slides 12-14: Close status
+function buildSlideClose(data, key, label) {
+  const cs = data.close_status || {};
+  const items = cs[key] || [];
+
+  const openItems = items.filter(i => !i.closed || i.closed === '否' || i.closed === '');
+  const closedItems = items.filter(i => i.closed === '是' || i.closed === '已关闭');
+
+  let html = `<div class="stat-inline">`;
+  html += `<span>总计：<b>${items.length}</b> 份</span>`;
+  html += `<span>已关闭：<b style="color:var(--green);">${closedItems.length}</b> 份</span>`;
+  html += `<span>未关闭：<b style="color:var(--red);">${openItems.length}</b> 份</span>`;
+  html += '</div>';
+
+  if (items.length === 0) return html + '<div class="empty-hint">本周无' + label + '数据</div>';
+
+  html += '<table class="data-table"><thead><tr>';
+  const hdrs = ['序号', '来源', '编号', '责任部门', '下发日期', '主要内容', '整改期限', '是否关闭', '情况说明'];
+  hdrs.forEach(h => html += `<th>${h}</th>`);
+  html += '</tr></thead><tbody>';
+
+  items.forEach((item, i) => {
+    const closed = item.closed === '是' || item.closed === '已关闭';
+    html += `<tr>`;
+    html += `<td>${i+1}</td>`;
+    html += `<td>${item.source || ''}</td>`;
+    html += `<td>${item.no || ''}</td>`;
+    html += `<td>${item.dept || ''}</td>`;
+    html += `<td>${item.issue_date || ''}</td>`;
+    html += `<td class="left">${item.content || ''}</td>`;
+    html += `<td>${item.deadline || ''}</td>`;
+    html += `<td><span class="badge-cell ${closed ? 'badge-yes' : 'badge-no'}">${closed ? '是' : '否'}</span></td>`;
+    html += `<td>${item.remark || ''}</td>`;
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  html += '<div style="margin-top:8px;font-size:13px;color:var(--muted);">数据来源：安全管理总台账</div>';
+  return html;
+}
+
+// Slide 16: Training
+function buildSlide16(data) {
+  const t = data.training || { items: [], materials_count: 0 };
+  let html = `<div class="stat-inline">`;
+  html += `<span>本周培训场次：<b>${t.items.length}</b></span>`;
+  html += `<span>培训资料库：<b>${t.materials_count}</b> 份</span>`;
+  html += '</div>';
+
+  if (t.items.length === 0) return html + '<div class="empty-hint">本周无培训安排</div>';
+
+  html += '<table class="data-table"><thead><tr><th>序号</th><th>日期</th><th>培训内容</th><th>培训人</th></tr></thead><tbody>';
+  t.items.forEach((item, i) => {
+    const day = new Date(item.date).getDay();
+    const weekday = WEEK_DAYS[day === 0 ? 6 : day - 1];
+    html += `<tr><td>${i+1}</td><td>${item.date} ${weekday}</td><td class="left">${item.content}</td><td contenteditable="true" data-manual-key="training_${i}"></td></tr>`;
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderAll(data) {
+  SLIDES.length = 0;
+  const defs = buildSlideDefs(data);
+
+  const container = document.getElementById('slides');
+  container.innerHTML = '';
+
+  defs.forEach((def, i) => {
+    SLIDES.push(def);
+    const el = document.createElement('div');
+    el.className = 'slide' + (def.type ? ' ' + def.type : '');
+
+    if (def.type === 'cover' || def.type === 'end') {
+      el.innerHTML = def.html();
+    } else if (def.type === 'toc') {
+      el.innerHTML = def.html();
+    } else {
+      el.innerHTML = `<div class="slide-title">${def.title}</div><div class="slide-body">${def.html()}</div>`;
+    }
+    el.id = 'slide-' + i;
+    container.appendChild(el);
+  });
+
+  document.getElementById('total-slides').textContent = SLIDES.length;
+  showSlide(currentSlide);
+}
+
+function showSlide(index) {
+  if (index < 0 || index >= SLIDES.length) return;
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  currentSlide = index;
+  const el = document.getElementById('slide-' + index);
+  if (el) el.classList.add('active');
+  document.getElementById('cur-slide').textContent = index + 1;
+}
+
+// ============================================================
+// LOAD DATA
+// ============================================================
+async function loadData() {
+  const { start, end } = getWeekRange();
+  try {
+    const [dataRes, manualRes] = await Promise.all([
+      fetch(`/api/meeting/data?start=${start}&end=${end}`),
+      fetch('/api/meeting/manual'),
+    ]);
+    const data = await dataRes.json();
+    savedManual = await manualRes.json();
+    meetingData = data;
+    renderAll(data);
+    updateSlideContent(data); // Update any dynamic content in the active slide
+  } catch (e) {
+    console.error('Load failed:', e);
+    renderAll({});
+  }
+}
+
+function updateSlideContent(data) {
+  // Re-render auto slides with current data
+  const defs = buildSlideDefs(data);
+  for (let i = 0; i < SLIDES.length; i++) {
+    if (i >= defs.length) break;
+    const def = defs[i];
+    if (def.type === 'cover' || def.type === 'end' || def.type === 'toc') continue;
+    const el = document.getElementById('slide-' + i);
+    if (!el) continue;
+    const bodyEl = el.querySelector('.slide-body');
+    const titleEl = el.querySelector('.slide-title');
+    if (titleEl) titleEl.textContent = def.title;
+    if (bodyEl) bodyEl.innerHTML = def.html();
+  }
+}
+
+// ============================================================
+// SAVE MANUAL EDITS
+// ============================================================
+function collectManualData() {
+  const edits = {};
+  document.querySelectorAll('[contenteditable="true"][data-key]').forEach(el => {
+    const key = el.dataset.key;
+    if (!edits[key]) edits[key] = {};
+    if (el.dataset.field) {
+      edits[key][el.dataset.field] = el.textContent;
+    }
+    if (el.dataset.row !== undefined) {
+      if (!edits[key].table) edits[key].table = [];
+      const ri = parseInt(el.dataset.row);
+      const ci = parseInt(el.dataset.col);
+      if (!edits[key].table[ri]) edits[key].table[ri] = [];
+      edits[key].table[ri][ci] = el.textContent;
+    }
+  });
+  // Filter table null entries
+  for (const k in edits) {
+    if (edits[k].table) {
+      edits[k].table = edits[k].table.filter(r => r && r.some(c => c && c.trim()));
+    }
+  }
+  return edits;
+}
+
+async function saveManual() {
+  const edits = collectManualData();
+  for (const [slideId, data] of Object.entries(edits)) {
+    try {
+      await fetch('/api/meeting/manual', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slide_id: slideId, data }),
+      });
+    } catch (e) { console.error('Save failed for', slideId, e); }
+  }
+  unsavedChanges = false;
+  updateSaveIndicator();
+}
+
+function updateSaveIndicator() {
+  const el = document.getElementById('save-indicator');
+  if (unsavedChanges) {
+    el.innerHTML = '<span class="save-dot unsaved"></span>未保存';
+  } else {
+    el.innerHTML = '<span class="save-dot saved"></span>已保存';
+  }
+}
+
+// ============================================================
+// EXPORT PPTX
+// ============================================================
+async function exportPPTX() {
+  const btn = document.getElementById('btn-export');
+  btn.textContent = '生成中...';
+  btn.disabled = true;
+  try {
+    // Collect all slide content as JSON for server-side PPTX generation
+    const slides = [];
+    for (let i = 0; i < SLIDES.length; i++) {
+      const el = document.getElementById('slide-' + i);
+      if (!el) continue;
+      const clone = el.cloneNode(true);
+      // Remove edit hints
+      clone.querySelectorAll('[contenteditable]').forEach(e => e.removeAttribute('contenteditable'));
+      slides.push({ html: clone.outerHTML, index: i });
+    }
+
+    const resp = await fetch('/meeting/api/meeting/export-pptx', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slides, start: getWeekRange().start, end: getWeekRange().end }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.error || '导出失败');
+    }
+
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `体系部门周会材料_${getWeekRange().start}.pptx`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert('导出失败: ' + e.message);
+  }
+  btn.textContent = '导出PPTX';
+  btn.disabled = false;
+}
+
+// ============================================================
+// EVENT HANDLERS
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  initDates();
+  loadData();
+
+  document.getElementById('btn-refresh').addEventListener('click', loadData);
+  document.getElementById('btn-prev').addEventListener('click', () => {
+    if (currentSlide > 0) showSlide(currentSlide - 1);
+  });
+  document.getElementById('btn-next').addEventListener('click', () => {
+    if (currentSlide < SLIDES.length - 1) showSlide(currentSlide + 1);
+  });
+  document.getElementById('btn-export').addEventListener('click', exportPPTX);
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.target.isContentEditable) {
+      if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveManual(); }
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault();
+      if (currentSlide < SLIDES.length - 1) showSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (currentSlide > 0) showSlide(currentSlide - 1);
+    } else if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
+      saveManual();
+    }
+  });
+
+  // Content editable changes
+  document.getElementById('slides').addEventListener('input', e => {
+    if (e.target.isContentEditable) {
+      unsavedChanges = true;
+      updateSaveIndicator();
+    }
+  });
+
+  // Auto-save on blur
+  document.getElementById('slides').addEventListener('blur', e => {
+    if (e.target.isContentEditable && unsavedChanges) {
+      saveManual();
+    }
+  }, true);
+
+  // Hide keyboard hint after first interaction
+  let hintHidden = false;
+  document.addEventListener('keydown', () => {
+    if (!hintHidden) {
+      document.getElementById('keyboard-hint').style.opacity = '0';
+      setTimeout(() => { document.getElementById('keyboard-hint').style.opacity = '1'; }, 5000);
+      hintHidden = true;
+    }
+  }, { once: true });
+
+  updateSaveIndicator();
+});
+</script>
+</body>
+</html>

@@ -11,6 +11,7 @@ from flask import Flask, jsonify, request, send_from_directory
 from openpyxl import load_workbook
 
 from data_admin import bp as admin_bp
+from meeting import bp as meeting_bp
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
@@ -1240,6 +1241,64 @@ def alert_subcontractors():
     })
 
 
+@app.get("/api/alert/type-stats")
+def alert_type_stats():
+    """Aggregate type statistics for pie/bar charts with optional filters."""
+    data = load_alert_data()
+    start = request.args.get("start", "").strip()
+    end = request.args.get("end", "").strip()
+    category = request.args.get("category", "").strip()
+    type_name = request.args.get("type", "").strip()
+
+    records = data.get("detail_records", [])
+    # Filter by date range and category
+    filtered = []
+    for rec in records:
+        if start and rec["date"] < start:
+            continue
+        if end and rec["date"] > end:
+            continue
+        if category and rec["category"] != category:
+            continue
+        filtered.append(rec)
+
+    # Aggregate type counts
+    type_counts = {}
+    for rec in filtered:
+        key = (rec["type_name"], rec["category"])
+        if key not in type_counts:
+            type_counts[key] = 0
+        type_counts[key] += 1
+
+    type_list = []
+    for (tn, cat), cnt in sorted(type_counts.items(), key=lambda x: -x[1]):
+        type_list.append({"name": tn, "count": cnt, "category": cat})
+
+    # If a specific type is selected, break down by dept and sub
+    dept_list = []
+    sub_list = []
+    if type_name:
+        dept_counts = {}
+        sub_counts = {}
+        for rec in filtered:
+            if rec["type_name"] != type_name:
+                continue
+            if rec["dept_name"]:
+                dept_counts[rec["dept_name"]] = dept_counts.get(rec["dept_name"], 0) + 1
+            if rec["sub_name"]:
+                sub_counts[rec["sub_name"]] = sub_counts.get(rec["sub_name"], 0) + 1
+        dept_list = sorted([{"name": k, "count": v} for k, v in dept_counts.items()], key=lambda x: -x["count"])
+        sub_list = sorted([{"name": k, "count": v} for k, v in sub_counts.items()], key=lambda x: -x["count"])
+
+    return jsonify({
+        "type_counts": type_list,
+        "dept_counts": dept_list,
+        "sub_counts": sub_list,
+        "start": start,
+        "end": end,
+    })
+
+
 @app.get("/api/alert/details")
 def alert_details():
     data = load_alert_data()
@@ -1299,6 +1358,7 @@ def alert_details():
 
 
 app.register_blueprint(admin_bp)
+app.register_blueprint(meeting_bp)
 
 init_db()
 seed_people()

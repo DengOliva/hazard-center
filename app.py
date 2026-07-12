@@ -515,7 +515,71 @@ def hazard_stats():
         external_count = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND check_unit=?", params + ["工程公司"]).fetchone()[0]
         b_hazards = [dict(r) for r in conn.execute(
             f"SELECT description, checker_name, check_date FROM hazards WHERE {clause} AND hazard_level='B' ORDER BY check_date DESC", params)]
-    return jsonify(total=total, internal=internal_count, external=external_count, bHazards=b_hazards)
+        b_internal = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND hazard_level='B' AND check_unit=?", params + ["中建二局"]).fetchone()[0]
+        b_external = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND hazard_level='B' AND check_unit=?", params + ["工程公司"]).fetchone()[0]
+    return jsonify(total=total, internal=internal_count, external=external_count, bHazards=b_hazards, bInternal=b_internal, bExternal=b_external)
+
+
+@app.get("/api/hazards/category-stats")
+def hazard_category_stats():
+    start, end = range_args()
+    search = request.args.get("search", "").strip()
+    unit = request.args.get("unit", "").strip()
+    where = ["check_date BETWEEN ? AND ?"]
+    params = [start, end]
+    if search:
+        where.append("(checker_name LIKE ? OR description LIKE ? OR hazard_no LIKE ? OR area LIKE ?)")
+        params += [f"%{search}%"] * 4
+    if unit:
+        where.append("check_unit=?")
+        params.append(unit)
+    clause = " AND ".join(where)
+    with db() as conn:
+        cats = conn.execute(
+            f"SELECT hazard_category, check_unit, COUNT(*) as cnt FROM hazards WHERE {clause} AND hazard_category IS NOT NULL AND hazard_category != '' GROUP BY hazard_category, check_unit ORDER BY cnt DESC",
+            params).fetchall()
+        levels = conn.execute(
+            f"SELECT hazard_level, COUNT(*) as cnt FROM hazards WHERE {clause} AND hazard_level IS NOT NULL AND hazard_level != '' GROUP BY hazard_level ORDER BY cnt DESC",
+            params).fetchall()
+    cat_map = {}
+    for row in cats:
+        cat = row[0]
+        unit = row[1]
+        cnt = row[2]
+        if cat not in cat_map:
+            cat_map[cat] = {"category": cat, "total": 0, "internal": 0, "external": 0}
+        cat_map[cat]["total"] += cnt
+        if unit == "中建二局":
+            cat_map[cat]["internal"] += cnt
+        else:
+            cat_map[cat]["external"] += cnt
+    categories = sorted(cat_map.values(), key=lambda x: x["total"], reverse=True)
+    levels_result = [{"level": row[0], "count": row[1]} for row in levels]
+    return jsonify(categories=categories, levels=levels_result)
+
+
+@app.get("/api/hazards/category-descriptions")
+def hazard_category_descriptions():
+    start, end = range_args()
+    category = request.args.get("category", "").strip()
+    if not category:
+        return jsonify(descriptions=[])
+    search = request.args.get("search", "").strip()
+    unit = request.args.get("unit", "").strip()
+    where = ["check_date BETWEEN ? AND ?", "hazard_category=?"]
+    params = [start, end, category]
+    if search:
+        where.append("(checker_name LIKE ? OR description LIKE ? OR hazard_no LIKE ? OR area LIKE ?)")
+        params += [f"%{search}%"] * 4
+    if unit:
+        where.append("check_unit=?")
+        params.append(unit)
+    clause = " AND ".join(where)
+    with db() as conn:
+        rows = conn.execute(
+            f"SELECT description, check_date, check_unit, hazard_level FROM hazards WHERE {clause} ORDER BY check_date DESC LIMIT 100",
+            params).fetchall()
+    return jsonify(descriptions=[dict(r) for r in rows])
 
 
 @app.get("/api/people")

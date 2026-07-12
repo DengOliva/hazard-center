@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import py_compile; py_compile.compile\\('app.py', doraise=True\\); print\\('OK'\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(pip install *)",
+      "Bash(python app.py)",
+      "Bash(start *)",
+      "Bash(python -c ' *)",
+      "Bash(curl -s http://127.0.0.1:8010/api/training/schedule)",
+      "Bash(curl -s \"http://127.0.0.1:8010/api/training/schedule?start=2026-07-04&end=2026-07-05\")",
+      "Bash(curl -s \"http://127.0.0.1:8010/api/training/schedule?start=2026-07-04&end=2026-07-04\")",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /F /PID 21268)",
+      "Bash(taskkill /F /PID 3700)",
+      "Bash(taskkill /F /PID 19260)",
+      "Bash(python -c \"import subprocess,os; [os.kill\\(p,9\\) for p in [21268,3700,19260]]\")",
+      "Bash(curl -s \"http://127.0.0.1:8010/api/training/schedule?start=2026-07-05&end=2026-07-05\")",
+      "Bash(curl -s http://127.0.0.1:8010/training)",
+      "Bash(python -c \"import app; print\\('OK'\\)\")",
+      "Bash(python tools/extract_excel.py \"seed/安全隐患信息表_20260702141544.xlsx\")",
+      "Bash(sqlite3 data/hazards.db \"SELECT COUNT\\(*\\) FROM hazards; SELECT COUNT\\(*\\) FROM imports; SELECT filename, row_count, imported_at FROM imports ORDER BY id DESC LIMIT 5;\")",
+      "Bash(find . -name \"*.pyc\" -path \"*/app*\")",
+      "Bash(ls -la __pycache__/)",
+      "Bash(sqlite3 data/hazards.db \"SELECT DISTINCT hazard_category FROM hazards WHERE hazard_category<>'' ORDER BY hazard_category\")",
+      "Bash(sqlite3 data/hazards.db \"SELECT DISTINCT hazard_level FROM hazards WHERE hazard_level<>'' ORDER BY hazard_level\")",
+      "Bash(sqlite3 data/hazards.db \"SELECT COUNT\\(*\\) FROM hazards\")",
+      "Bash(sqlite3 data/hazards.db \"SELECT hazard_level,COUNT\\(*\\) FROM hazards GROUP BY hazard_level ORDER BY COUNT\\(*\\) DESC\")",
+      "Bash(sqlite3 data/hazards.db \"SELECT check_unit,COUNT\\(*\\) FROM hazards GROUP BY check_unit ORDER BY COUNT\\(*\\) DESC\")",
+      "Bash(sqlite3 data/hazards.db \"SELECT hazard_category,COUNT\\(*\\) as cnt FROM hazards WHERE hazard_category<>'' GROUP BY hazard_category ORDER BY cnt DESC LIMIT 20\")",
+      "Bash(where git *)",
+      "Read(//c/Program Files/Git/bin/**)",
+      "Read(//c/Program Files \\(x86\\)/Git/bin/**)",
+      "Read(//mnt/c/Program Files/Git/bin/**)",
+      "Bash(cmd.exe *)",
+      "Bash(\"/c/Program Files/Git/bin/git\" --version)",
+      "Bash(\"/mnt/c/Program Files/Git/bin/git\" --version)"
+    ]
+  }
+}

@@ -42,9 +42,12 @@
 
     <section id="hazards" class="page">
       <div class="filters panel"><label>开始日期<input type="date" id="hazardStartDate"></label><label>结束日期<input type="date" id="hazardEndDate"></label><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button></div>
-      <div class="panel"><div class="panel-title"><h2>中建二局：工程公司</h2></div><div class="bar-chart"><div><label>中建二局 <b id="hzInternalText"></b></label><span><i id="hzInternalBar"></i></span></div><div><label>工程公司 <b id="hzExternalText"></b></label><span><i id="hzExternalBar" class="orange"></i></span></div></div></div>
-      <div class="panel"><div class="panel-title"><h2>B 级隐患</h2><p id="hzBCount"></p></div><div class="table-wrap"><table><thead><tr><th>检查日期</th><th>录入人</th><th>隐患描述</th></tr></thead><tbody id="hzBBody"></tbody></table></div></div>
-      <div class="panel"><div class="panel-title"><div><h2>隐患列表</h2><p id="hazardTotal">共 0 条</p></div></div><div class="table-wrap"><table class="hazards-table"><thead><tr><th>检查日期</th><th>检查人</th><th>检查单位</th><th>隐患分类</th><th>隐患描述</th><th>区域</th><th>级别</th><th>状态</th></tr></thead><tbody id="hazardBody"></tbody></table></div><div class="pager"><button onclick="loadHazards(hazardPage-1)">上一页</button><span id="pageInfo"></span><button onclick="loadHazards(hazardPage+1)">下一页</button></div></div>
+      <div class="grid2">
+        <div class="panel"><div class="panel-title"><h2>隐患分类分布</h2></div><div class="pie-wrap"><div class="pie" id="hzPie"><b id="hzPieTotal">—</b><small>隐患总数</small></div><div class="pie-legend" id="hzPieLegend"></div></div></div>
+        <div class="panel" style="position:relative"><div class="panel-title"><h2>隐患分类排行</h2></div><div class="rank-bars" id="hzRankBars"></div><div class="rank-popup" id="hzPopup"></div></div>
+      </div>
+      <div class="panel"><div class="panel-title"><h2>B 级隐患</h2><p id="hzBCount"></p></div><div class="b-ratio-wrap"><div class="b-ratio-bar"><i class="rblue" id="hzBBlue"></i><i class="rred" id="hzBRed"></i></div><div class="b-ratio-legend"><span><i class="dot-blue"></i>中建二局 <b id="hzBInternal">—</b></span><span><i class="dot-red"></i>工程公司 <b id="hzBExternal">—</b></span></div></div><p id="hzBRatioText" style="font-size:13px;margin:8px 0 0;color:var(--muted)"></p><div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>检查日期</th><th>录入人</th><th>隐患描述</th></tr></thead><tbody id="hzBBody"></tbody></table></div></div>
+      <div class="panel"><div class="panel-title"><div><h2>隐患列表</h2><p id="hazardTotal">共 0 条</p></div></div><div class="table-wrap"><table class="hazards-table"><thead><tr><th>检查日期</th><th>检查人</th><th>检查单位</th><th>隐患分类</th><th>隐患描述</th><th>区域</th><th>状态</th></tr></thead><tbody id="hazardBody"></tbody></table></div><div class="pager"><button onclick="loadHazards(hazardPage-1)">上一页</button><span id="pageInfo"></span><button onclick="loadHazards(hazardPage+1)">下一页</button></div></div>
     </section>
 
     <section id="people" class="page">

@@ -21,8 +21,9 @@ TRAINING_MATERIALS_FILE = DATA_DIR / "training_materials.json"
 TRAINING_EDIT_PASSWORD = os.environ.get("TRAINING_EDIT_PASSWORD", "@q")
 MATERIAL_CATEGORIES = ["入场培训", "复训", "签到单", "三级安全教育卡", "通知目录", "其他"]
 ALERT_SEED_FILE = SEED_DIR / "01 防城港三期安全管理数据总台账.xlsx"
+ALERT_DATA_FILE = DATA_DIR / "alert_台账.xlsx"
 
-# Alert dashboard data cache (parsed once at startup)
+# Alert dashboard data cache
 _alert_data = None
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
@@ -406,15 +407,22 @@ def apply_role_rules():
 
 
 def load_alert_data():
-    """Parse the 总台账 Excel file once at startup and cache in memory."""
+    """Parse the 总台账 Excel. Tries DATA_DIR first, falls back to SEED_DIR."""
     global _alert_data
     if _alert_data is not None:
         return _alert_data
-    if not ALERT_SEED_FILE.exists():
+
+    src = None
+    if ALERT_DATA_FILE.exists():
+        src = ALERT_DATA_FILE
+    elif ALERT_SEED_FILE.exists():
+        src = ALERT_SEED_FILE
+
+    if not src:
         _alert_data = {}
         return _alert_data
 
-    wb = load_workbook(ALERT_SEED_FILE, data_only=True)
+    wb = load_workbook(src, data_only=True)
 
     def cell(ws, r, c):
         v = ws.cell(row=r, column=c).value
@@ -951,6 +959,29 @@ def alert_page():
     return send_from_directory(app.static_folder + "/alert", "index.html")
 
 
+@app.post("/api/alert/import")
+def alert_import():
+    file = request.files.get("file")
+    if not file or not file.filename:
+        return jsonify(error="请选择 Excel 文件"), 400
+    if not file.filename.lower().endswith((".xlsx", ".xls")):
+        return jsonify(error="请上传 .xlsx 或 .xls 文件"), 400
+    file.save(ALERT_DATA_FILE)
+    global _alert_data
+    _alert_data = None
+    try:
+        data = load_alert_data()
+        if not data:
+            return jsonify(error="文件解析失败，请确认上传的是防城港三期安全管理数据总台账"), 400
+        return jsonify(ok=True, updated=True,
+                       external_count=len(data.get("external", [])),
+                       internal_count=len(data.get("internal", [])))
+    except Exception as exc:
+        ALERT_DATA_FILE.unlink(missing_ok=True)
+        _alert_data = {}
+        return jsonify(error=f"文件解析失败: {exc}"), 400
+
+
 @app.get("/api/alert/summary")
 def alert_summary():
     data = load_alert_data()
@@ -1002,7 +1033,10 @@ def alert_details():
     if not sheet_name:
         return jsonify({"items": [], "total": 0})
 
-    wb = load_workbook(ALERT_SEED_FILE, data_only=True)
+    src = ALERT_DATA_FILE if ALERT_DATA_FILE.exists() else ALERT_SEED_FILE
+    if not src.exists():
+        return jsonify({"items": [], "total": 0})
+    wb = load_workbook(src, data_only=True)
     if sheet_name not in wb.sheetnames:
         wb.close()
         return jsonify({"items": [], "total": 0})

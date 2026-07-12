@@ -259,8 +259,13 @@
 
     } catch (err) {
       console.error("Failed to load alert dashboard:", err);
-      document.querySelector("main").innerHTML =
-        '<div class="panel" style="text-align:center;padding:40px;color:var(--red)">数据加载失败，请确认已导入 Excel 数据文件</div>';
+      var main = document.querySelector("main");
+      main.innerHTML =
+        '<div class="panel" style="text-align:center;padding:40px">' +
+        '<p style="font-size:16px;color:var(--red);margin-bottom:12px">暂无数据，请先导入台账文件</p>' +
+        '<p style="font-size:13px;color:var(--muted)">点击右上角 "导入台账数据" 按钮上传</p>' +
+        '<p style="font-size:13px;color:var(--muted)">文件：防城港三期安全管理数据总台账.xlsx</p>' +
+        '</div>';
     }
   }
 
@@ -274,9 +279,55 @@
     });
   }
 
+  // ── Import dialog ──
+  function showImportDialog() {
+    $("import-dialog").showModal();
+    $("import-file").value = "";
+    $("import-status").textContent = "";
+    $("import-status").className = "dialog-status";
+    $("btn-upload").disabled = true;
+  }
+
+  async function doImport() {
+    var file = $("import-file").files[0];
+    if (!file) return;
+    var status = $("import-status");
+    status.textContent = "正在上传解析...";
+    status.className = "dialog-status";
+    $("btn-upload").disabled = true;
+
+    var fd = new FormData();
+    fd.append("file", file);
+    try {
+      var r = await fetch("/api/alert/import", { method: "POST", body: fd });
+      var data = await r.json();
+      if (!r.ok) throw new Error(data.error || "上传失败");
+      status.textContent = "导入成功！外部" + data.external_count + "项，内部" + data.internal_count + "项。正在刷新...";
+      status.className = "dialog-status success";
+      setTimeout(function () {
+        $("import-dialog").close();
+        location.reload();
+      }, 800);
+    } catch (err) {
+      status.textContent = "导入失败: " + err.message;
+      status.className = "dialog-status error";
+      $("btn-upload").disabled = false;
+    }
+  }
+
   // ── Event handlers ──
   document.addEventListener("DOMContentLoaded", function () {
     init();
+
+    // Import button
+    $("btn-import").addEventListener("click", showImportDialog);
+    $("btn-cancel").addEventListener("click", function () { $("import-dialog").close(); });
+    $("btn-upload").addEventListener("click", doImport);
+    $("import-file").addEventListener("change", function () {
+      $("btn-upload").disabled = !this.files.length;
+      $("import-status").textContent = this.files.length ? "已选择: " + this.files[0].name : "";
+      $("import-status").className = "dialog-status";
+    });
 
     // Subcontractor filter
     document.addEventListener("change", function (e) {

@@ -11,9 +11,26 @@
 <header class="top-bar">
   <h1>防城港三期 内外部安全看板</h1>
   <span class="subtitle">预警刹车机制数据总览</span>
+  <div class="header-actions">
+    <button id="btn-import" class="btn-import">导入台账数据</button>
+  </div>
 </header>
 
 <main>
+  <!-- Import dialog -->
+  <dialog id="import-dialog">
+    <div class="dialog-content">
+      <h3>导入台账数据</h3>
+      <p>请上传 "防城港三期安全管理数据总台账" Excel 文件（.xlsx 或 .xls）</p>
+      <input type="file" id="import-file" accept=".xlsx,.xls">
+      <div class="dialog-status" id="import-status"></div>
+      <div class="dialog-btns">
+        <button id="btn-upload" class="btn-primary" disabled>上传并解析</button>
+        <button id="btn-cancel" class="btn-secondary">取消</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Section 1: 外部预警刹车 -->
   <section class="panel" id="sec-external">
     <h2 class="section-title">一、外部预警刹车数据统计</h2>

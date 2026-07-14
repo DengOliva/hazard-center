@@ -2,7 +2,7 @@ FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY app.py ./
+COPY app.py data_admin.py meeting.py pptx_export.py ./
 COPY public ./public
 COPY seed ./seed
 RUN mkdir -p /app/data/uploads

@@ -828,7 +828,7 @@ def hazard_stats():
             f"SELECT description, checker_name, check_date FROM hazards WHERE {clause} AND hazard_level='B' ORDER BY check_date DESC", params)]
         b_internal = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND hazard_level='B' AND check_unit=?", params + ["中建二局"]).fetchone()[0]
         b_external = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND hazard_level='B' AND check_unit=?", params + ["工程公司"]).fetchone()[0]
-        rectification_count = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND status=?", params + ["隐患整改"]).fetchone()[0]
+        rectification_count = conn.execute(f"SELECT COUNT(*) FROM hazards WHERE {clause} AND status=?", params + ["进行中"]).fetchone()[0]
         rectification_rate = round((1 - rectification_count / total) * 100, 1) if total > 0 else 0
     return jsonify(total=total, internal=internal_count, external=external_count, bHazards=b_hazards, bInternal=b_internal, bExternal=b_external, rectificationCount=rectification_count, rectificationRate=rectification_rate)
 

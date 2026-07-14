@@ -399,7 +399,7 @@ def import_hazards(path, original_name):
             str(item.get("检查单位") or "").strip(), str(item.get("检查部门") or "").strip(),
             str(item.get("项目名称") or "").strip(), str(item.get("隐患级别") or "").strip(),
             str(item.get("隐患分类") or "").strip(), str(item.get("隐患描述") or "").strip(),
-            str(item.get("区域") or "").strip(), str(item.get("状态") or item.get("流程状态") or "").strip(),
+            str(item.get("区域") or "").strip(), str(item.get("流程状态") or item.get("状态") or "").strip(),
             str(item.get("责任单位") or "").strip(), str(item.get("责任部门") or "").strip(),
             str(item.get("责任班组") or "").strip(), json.dumps(item, ensure_ascii=False), now,
         ))

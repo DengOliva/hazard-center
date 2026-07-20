@@ -21,11 +21,12 @@
     <header><div><h1 id="pageTitle">统计看板</h1><p id="pageSub">隐患录入达标情况与单位对比</p></div><button class="primary" onclick="showPage('imports')">＋ 更新隐患数据</button></header>
 
     <section id="dashboard" class="page active">
-      <div class="filters panel">
+      <div class="filters panel date-filters">
         <label>开始日期<input type="date" id="startDate"></label><label>结束日期<input type="date" id="endDate"></label>
         <label>人员种类<select id="categoryFilter"><option value="">全部种类</option></select></label>
         <label>部门 / 班组<select id="departmentFilter"><option value="">全部部门</option></select></label>
         <button class="primary" onclick="loadStatistics()">查询统计</button><span id="headerUpdateTime" class="badge" style="align-self:center;white-space:nowrap"></span><small id="updateNote" style="color:var(--red);align-self:center"></small>
+        <div class="quick-dates"><button onclick="setDateRange('today','dashboard')">今天</button><button onclick="setDateRange('yesterday','dashboard')">昨天</button><button onclick="setDateRange('week','dashboard')">本周</button><button onclick="setDateRange('month','dashboard')">本月</button></div>
       </div>
       <div class="cards">
         <article><small>中建二局录入</small><strong id="internalCount">—</strong><em>条隐患</em></article>
@@ -37,11 +38,11 @@
         <div class="panel"><div class="panel-title"><div><h2>单位录入对比</h2><p>按“检查单位”统计</p></div><span id="ratioBadge" class="badge">—</span></div><div class="bar-chart"><div><label>中建二局 <b id="internalBarText"></b></label><span><i id="internalBar"></i></span></div><div><label>工程公司 <b id="externalBarText"></b></label><span><i id="externalBar" class="orange"></i></span></div></div></div>
         <div class="panel"><div class="panel-title"><div><h2>达标概览</h2><p>按当前筛选与时间区间</p></div></div><div class="donut-wrap"><div class="donut" id="donut"><b id="donutText">—</b><small>达标率</small></div><div class="legend"><span><i class="green"></i>已达标 <b id="metCount">0</b></span><span><i class="red"></i>未达标 <b id="unmetCount">0</b></span></div></div></div>
       </div>
-      <div class="panel"><div class="panel-title"><div><h2>人员隐患录入得分</h2><p>安全员、领导、班组长与驻场代表分板块展示</p></div><button onclick="downloadStats()">导出 CSV</button></div><div id="statsGroups" class="score-groups"></div></div>
+      <div class="panel"><div class="panel-title"><div><h2>人员隐患录入得分</h2><p>安全员、班组长和驻场代表、执行岗以上分三个板块展示</p></div><button onclick="downloadStats()">导出 CSV</button></div><div id="statsGroups" class="score-groups"></div></div>
     </section>
 
     <section id="hazards" class="page">
-      <div class="filters panel"><label>开始日期<input type="date" id="hazardStartDate"></label><label>结束日期<input type="date" id="hazardEndDate"></label><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button></div>
+      <div class="filters panel date-filters"><label>开始日期<input type="date" id="hazardStartDate"></label><label>结束日期<input type="date" id="hazardEndDate"></label><label>关键词<input id="hazardSearch" placeholder="姓名、隐患单号、描述、区域"></label><label>检查单位<select id="unitFilter"><option value="">全部单位</option></select></label><button class="primary" onclick="loadHazards(1)">筛选</button><div class="quick-dates"><button onclick="setDateRange('today','hazards')">今天</button><button onclick="setDateRange('yesterday','hazards')">昨天</button><button onclick="setDateRange('week','hazards')">本周</button><button onclick="setDateRange('month','hazards')">本月</button></div></div>
       <div class="grid2">
         <div class="panel"><div class="panel-title"><h2>隐患分类分布</h2></div><div class="pie-wrap"><div class="pie" id="hzPie"><b id="hzPieTotal">—</b><small>隐患总数</small></div><div class="pie-legend" id="hzPieLegend"></div></div></div>
         <div class="panel" style="position:relative"><div class="panel-title"><h2>隐患分类排行</h2></div><div class="rank-bars" id="hzRankBars"></div><div class="rank-popup" id="hzPopup"></div></div>
@@ -51,6 +52,15 @@
     </section>
 
     <section id="people" class="page">
+      <div class="panel people-import-panel">
+        <div class="panel-title"><div><h2>批量导入人员</h2><p>识别 Excel 表头：姓名、部门、类型。类型支持：安全员、执行岗以上、班组长、驻场代表。</p></div></div>
+        <div class="people-import-row">
+          <label>导入方式<select id="peopleImportMode"><option value="append">去重追加导入（按姓名新增/更新）</option><option value="overwrite">覆盖导入（清空后重建）</option></select></label>
+          <input type="file" id="peopleImportInput" accept=".xlsx" hidden>
+          <button class="primary" onclick="peopleImportInput.click()">选择人员 Excel</button>
+          <span id="peopleImportResult" class="notice-inline">示例：汪宇雄　经理部　执行岗以上</span>
+        </div>
+      </div>
       <div class="panel"><div class="panel-title"><div><h2>人员与录入标准</h2><p>人员姓名需与 Excel “检查人姓名”中的姓名一致</p></div><button class="primary" onclick="openPerson()">＋ 添加人员</button></div><div class="table-wrap"><table><thead><tr><th>人员种类</th><th>部门/班组</th><th>姓名</th><th>标准</th><th>启用</th><th>操作</th></tr></thead><tbody id="peopleBody"></tbody></table></div></div>
     </section>
 

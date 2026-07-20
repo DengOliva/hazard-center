@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>培训资料收集 — GXAJB</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e2e4e9;
+      --accent: #2563eb;
+      --danger: #dc2626;
+      --ok: #16a34a;
+      --warn: #f59e0b;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .site {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+
+    header.top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    header.top .brand small {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    header.top .brand h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    header.top .brand p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* tabs */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      background: var(--border);
+      border-radius: var(--radius);
+      padding: 3px;
+    }
+
+    .tabs button {
+      padding: 8px 22px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: .2s;
+    }
+
+    .tabs button.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+
+    /* panel */
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+
+    .panel h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* forms */
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .form-group select,
+    .form-group input[type="text"],
+    .form-group input[type="date"],
+    .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      min-width: 180px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .form-group select:focus,
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group textarea {
+      min-width: 300px;
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    /* buttons */
+    .btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--card);
+      font-family: inherit;
+      transition: .2s;
+    }
+
+    .btn:hover { background: #f0f1f4; }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn.primary:hover { background: #1d4ed8; }
+
+    .btn.danger {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    .btn.danger:hover { background: #b91c1c; }
+
+    .btn.small {
+      padding: 4px 12px;
+      font-size: 12px;
+    }
+
+    /* file inputs */
+    .file-input-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .file-input-wrap input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+    }
+
+    .file-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: .2s;
+      background: #fafbfc;
+    }
+
+    .file-label:hover { border-color: var(--accent); color: var(--accent); }
+    .file-label.has-file { border-style: solid; border-color: var(--ok); color: var(--ok); }
+
+    .file-names {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      max-width: 300px;
+      word-break: break-all;
+    }
+
+    /* table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: #f8f9fb;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    td { white-space: nowrap; }
+
+    .matrix-wrap {
+      overflow-x: auto;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .matrix-wrap thead th:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: #f0f2f5;
+    }
+
+    .matrix-wrap tbody td:first-child {
+      position: sticky;
+      left: 0;
+      background: var(--card);
+      font-weight: 500;
+    }
+
+    .cell-ok { color: var(--ok); font-weight: bold; font-size: 16px; }
+    .cell-no { color: #d1d5db; font-size: 16px; }
+
+    /* modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.show { display: flex; }
+
+    .modal-box {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      width: 90%;
+      max-width: 520px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
+    }
+
+    .modal-box h3 { margin-bottom: 12px; }
+
+    .modal-box .form-group { margin-bottom: 12px; }
+    .modal-box .form-group select,
+    .modal-box .form-group input,
+    .modal-box .form-group textarea {
+      width: 100%;
+      min-width: auto;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    /* toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f2937;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+
+    #toast.show { opacity: 1; }
+
+    /* admin header */
+    .admin-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .catalog-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .catalog-card .info h4 { font-size: 15px; margin-bottom: 2px; }
+    .catalog-card .info span { font-size: 12px; color: var(--muted); }
+    .catalog-card .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge.ok { background: #dcfce7; color: #166534; }
+    .badge.warn { background: #fef3c7; color: #92400e; }
+    .badge.info { background: #dbeafe; color: #1e40af; }
+
+    .stats-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .stat-item {
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #f8f9fb;
+      font-size: 13px;
+    }
+
+    .stat-item b { color: var(--accent); }
+
+    .section-divider {
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    .submission-detail {
+      font-size: 13px;
+    }
+
+    .submission-detail table td { white-space: normal; }
+
+    .notice {
+      padding: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* responsive */
+    @media (max-width: 768px) {
+      .site { padding: 12px; }
+      header.top { flex-direction: column; align-items: flex-start; }
+      .form-row { flex-direction: column; }
+      .form-group select, .form-group input[type="text"], .form-group input[type="date"], .form-group textarea { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site">
+    <header class="top">
+      <div class="brand">
+        <small>GXAJB COLLECTION</small>
+        <h1>培训资料收集</h1>
+        <p>名录管理与资料提交</p>
+      </div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="submit">提交资料</button>
+        <button class="tab" data-tab="admin">管理名录</button>
+      </nav>
+    </header>
+
+    <!-- ========== 提交资料 tab ========== -->
+    <div id="tabSubmit" class="tab-panel active">
+      <section class="panel">
+        <h2>提交培训资料</h2>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">选择培训名录和部门，上传签到单和照片</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>培训名录 <span style="color:var(--danger)">*</span></label>
+            <select id="submitCatalog" style="min-width:260px">
+              <option value="">-- 请选择 --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>部门/班组 <span style="color:var(--danger)">*</span></label>
+            <select id="submitDept">
+              <option value="">-- 请选择 --</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div class="form-group">
+            <label>签到单 <span style="color:var(--danger)">*</span></label>
+            <span class="file-input-wrap">
+              <span class="file-label" id="signInLabel">选择文件</span>
+              <input type="file" id="signInFile" accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.doc,.docx">
+            </span>
+            <div class="file-names" id="signInName"></div>
+          </div>
+          <div class="form-group">
+            <label>照片（可多选，最多10张）</label>
+            <span class="file-input-wrap">
+              <span class="file-label" id="photosLabel">选择照片</span>
+              <input type="file" id="photosFile" accept=".jpg,.jpeg,.png" multiple>
+            </span>
+            <div class="file-names" id="photosName"></div>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div class="form-group" style="flex:1">
+            <label>备注</label>
+            <textarea id="submitNotes" placeholder="其他需要说明的信息" style="min-width:100%"></textarea>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn primary" onclick="doSubmit()">提交</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== 管理名录 tab ========== -->
+    <div id="tabAdmin" class="tab-panel">
+      <!-- locked -->
+      <section class="panel" id="adminLocked">
+        <p style="text-align:center;padding:20px;color:var(--muted)">此区域需要管理员密码才能访问。</p>
+        <div style="display:flex;gap:8px;justify-content:center">
+          <input type="password" id="adminPassword" placeholder="请输入管理密码" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;width:200px">
+          <button class="btn primary" onclick="unlockAdmin()">解锁</button>
+        </div>
+      </section>
+
+      <!-- unlocked content -->
+      <div id="adminContent" style="display:none">
+        <!-- overview -->
+        <section class="panel">
+          <div class="admin-bar">
+            <h2 style="margin:0">培训名录管理</h2>
+            <button class="btn primary" onclick="openCatalogEdit()">＋ 新增名录</button>
+          </div>
+          <div id="catalogList"></div>
+        </section>
+
+        <!-- matrix -->
+        <section class="panel">
+          <h2>提交情况总览</h2>
+          <div id="matrixSummary" class="stats-row"></div>
+          <div class="matrix-wrap" id="matrixTable"></div>
+        </section>
+
+        <!-- submissions detail -->
+        <section class="panel" id="submissionDetailSection" style="display:none">
+          <div class="admin-bar">
+            <h2 style="margin:0" id="submissionDetailTitle">提交详情</h2>
+            <button class="btn small" onclick="closeSubmissionDetail()">关闭</button>
+          </div>
+          <div class="submission-detail" id="submissionDetailContent"></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ========== Catalog edit modal ========== -->
+    <div class="modal-overlay" id="catalogModal">
+      <div class="modal-box">
+        <h3 id="catalogModalTitle">新增名录</h3>
+        <input type="hidden" id="catalogEditId">
+        <div class="form-group">
+          <label>培训名称 <span style="color:var(--danger)">*</span></label>
+          <input type="text" id="catalogName" placeholder="如：2026年7月安全培训">
+        </div>
+        <div class="form-group">
+          <label>描述</label>
+          <input type="text" id="catalogDesc" placeholder="补充说明">
+        </div>
+        <div class="form-group">
+          <label>授权部门（留空=全部部门）</label>
+          <input type="text" id="catalogDepts" placeholder="逗号分隔，如：安监部,技术部">
+        </div>
+        <div class="form-group">
+          <label>截止日期</label>
+          <input type="date" id="catalogDeadline">
+        </div>
+        <div class="modal-actions">
+          <button class="btn danger small" id="catalogDeleteBtn" style="display:none;margin-right:auto" onclick="deleteCatalog()">删除名录</button>
+          <button class="btn" onclick="closeCatalogEdit()">取消</button>
+          <button class="btn primary" onclick="saveCatalog()">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    async function api(url, opts) {
+      const r = await fetch(url, opts);
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || '请求失败');
+      return data;
+    }
+
+    function toast(msg) {
+      $('toast').textContent = msg;
+      $('toast').classList.add('show');
+      setTimeout(() => $('toast').classList.remove('show'), 2600);
+    }
+
+    let adminPassword = '';
+    let departments = [];
+    let catalogs = [];
+    let submissions = [];
+
+    // ── tab switching ──
+    document.querySelectorAll('.tabs .tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tabs .tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        $('tab' + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1)).classList.add('active');
+        if (btn.dataset.tab === 'admin') refreshAdmin();
+      });
+    });
+
+    // ── file input display ──
+    $('signInFile').addEventListener('change', function () {
+      const label = $('signInLabel');
+      const name = $('signInName');
+      if (this.files.length) {
+        label.textContent = this.files[0].name;
+        label.classList.add('has-file');
+        name.textContent = '';
+      } else {
+        label.textContent = '选择文件';
+        label.classList.remove('has-file');
+      }
+    });
+
+    $('photosFile').addEventListener('change', function () {
+      const label = $('photosLabel');
+      const name = $('photosName');
+      if (this.files.length) {
+        const names = Array.from(this.files).map(f => f.name);
+        label.textContent = `已选 ${this.files.length} 张`;
+        label.classList.add('has-file');
+        name.textContent = names.join('、');
+      } else {
+        label.textContent = '选择照片';
+        label.classList.remove('has-file');
+        name.textContent = '';
+      }
+    });
+
+    // ── submit ──
+    async function doSubmit() {
+      const catalogId = $('submitCatalog').value;
+      const dept = $('submitDept').value;
+      const signFile = $('signInFile').files[0];
+      const photoFiles = $('photosFile').files;
+
+      if (!catalogId) { toast('请选择培训名录'); return; }
+      if (!dept) { toast('请选择部门/班组'); return; }
+      if (!signFile) { toast('请上传签到单'); return; }
+
+      const fd = new FormData();
+      fd.append('collection_id', catalogId);
+      fd.append('department', dept);
+      fd.append('sign_in_file', signFile);
+      for (const f of photoFiles) fd.append('photos', f);
+      fd.append('notes', $('submitNotes').value.trim());
+
+      try {
+        await api('/api/collection/submit', { method: 'POST', body: fd });
+        toast('提交成功！');
+        $('submitNotes').value = '';
+        $('signInFile').value = '';
+        $('photosFile').value = '';
+        $('signInLabel').textContent = '选择文件';
+        $('signInLabel').classList.remove('has-file');
+        $('signInName').textContent = '';
+        $('photosLabel').textContent = '选择照片';
+        $('photosLabel').classList.remove('has-file');
+        $('photosName').textContent = '';
+      } catch (e) { toast(e.message); }
+    }
+
+    // ── admin unlock ──
+    $('adminPassword').addEventListener('keydown', e => {
+      if (e.key === 'Enter') unlockAdmin();
+    });
+
+    async function unlockAdmin() {
+      const pwd = $('adminPassword').value;
+      if (!pwd) { toast('请输入密码'); return; }
+      try {
+        await api('/api/collection/verify-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwd }),
+        });
+        adminPassword = pwd;
+        $('adminLocked').style.display = 'none';
+        $('adminContent').style.display = '';
+        await refreshAdmin();
+      } catch (e) { toast(e.message); }
+    }
+
+    // ── admin data ──
+    async function refreshAdmin() {
+      if (!adminPassword) return;
+      try {
+        catalogs = await api('/api/collection/catalogs');
+        submissions = await api('/api/collection/submissions');
+        departments = await api('/api/collection/departments');
+      } catch (e) { toast(e.message); return; }
+      renderCatalogList();
+      renderMatrix();
+    }
+
+    function renderCatalogList() {
+      if (!catalogs.length) {
+        $('catalogList').innerHTML = '<div class="notice">暂无培训名录，点击「新增名录」创建。</div>';
+        return;
+      }
+      $('catalogList').innerHTML = catalogs.map(c => {
+        const count = submissions.filter(s => s.collection_id === c.id).length;
+        const deptStr = c.departments || '全部部门';
+        return `<div class="catalog-card">
+          <div class="info">
+            <h4>${esc(c.name)}</h4>
+            <span>${esc(deptStr)} · 截止：${c.deadline || '不限'} · 已提交 ${count} 个部门 · ${c.active ? '<span class="badge ok">启用</span>' : '<span class="badge warn">停用</span>'}</span>
+          </div>
+          <div class="actions">
+            <button class="btn small" onclick="viewSubmissions(${c.id})">查看提交</button>
+            <button class="btn small" onclick="generateZip(${c.id})">生成台账</button>
+            <button class="btn small" onclick="openCatalogEdit(${c.id})">编辑</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderMatrix() {
+      const activeCatalogs = catalogs.filter(c => c.active);
+      if (!activeCatalogs.length) {
+        $('matrixTable').innerHTML = '<div class="notice">暂无启用的培训名录。</div>';
+        $('matrixSummary').innerHTML = '';
+        return;
+      }
+
+      // collect all departments referenced across catalogs
+      let allDepts = new Set();
+      for (const c of activeCatalogs) {
+        const depts = c.departments ? c.departments.split(',').map(d => d.trim()).filter(Boolean) : departments;
+        depts.forEach(d => allDepts.add(d));
+      }
+      const deptList = [...allDepts].sort((a, b) => departments.indexOf(a) - departments.indexOf(b));
+
+      let totalSubs = 0;
+      let totalCells = activeCatalogs.length * deptList.length;
+
+      let html = '<table><thead><tr><th>培训名录</th>';
+      for (const d of deptList) html += `<th>${esc(d)}</th>`;
+      html += '<th>进度</th></tr></thead><tbody>';
+
+      for (const c of activeCatalogs) {
+        const catSubs = submissions.filter(s => s.collection_id === c.id);
+        const catDepts = new Set(catSubs.map(s => s.department));
+        html += `<tr><td>${esc(c.name)}</td>`;
+        for (const d of deptList) {
+          if (catDepts.has(d)) {
+            html += '<td class="cell-ok">✓</td>';
+            totalSubs++;
+          } else {
+            html += '<td class="cell-no">—</td>';
+          }
+        }
+        const pct = deptList.length ? Math.round(catDepts.size / deptList.length * 100) : 0;
+        html += `<td><span class="badge ${pct === 100 ? 'ok' : pct > 0 ? 'warn' : 'info'}">${catDepts.size}/${deptList.length} (${pct}%)</span></td>`;
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      $('matrixTable').innerHTML = html;
+      $('matrixSummary').innerHTML = `
+        <div class="stat-item">名录数：<b>${activeCatalogs.length}</b></div>
+        <div class="stat-item">部门数：<b>${deptList.length}</b></div>
+        <div class="stat-item">总提交：<b>${totalSubs}</b> / ${totalCells}</div>
+      `;
+    }
+
+    // ── catalog CRUD ──
+    function openCatalogEdit(id) {
+      if (id) {
+        const c = catalogs.find(x => x.id === id);
+        if (!c) return;
+        $('catalogModalTitle').textContent = '编辑名录';
+        $('catalogEditId').value = c.id;
+        $('catalogName').value = c.name;
+        $('catalogDesc').value = c.description || '';
+        $('catalogDepts').value = c.departments || '';
+        $('catalogDeadline').value = c.deadline || '';
+        $('catalogDeleteBtn').style.display = '';
+      } else {
+        $('catalogModalTitle').textContent = '新增名录';
+        $('catalogEditId').value = '';
+        $('catalogName').value = '';
+        $('catalogDesc').value = '';
+        $('catalogDepts').value = '';
+        $('catalogDeadline').value = '';
+        $('catalogDeleteBtn').style.display = 'none';
+      }
+      $('catalogModal').classList.add('show');
+    }
+
+    function closeCatalogEdit() {
+      $('catalogModal').classList.remove('show');
+    }
+
+    async function saveCatalog() {
+      const id = $('catalogEditId').value;
+      const body = {
+        password: adminPassword,
+        name: $('catalogName').value.trim(),
+        description: $('catalogDesc').value.trim(),
+        departments: $('catalogDepts').value.trim(),
+        deadline: $('catalogDeadline').value,
+      };
+      if (!body.name) { toast('请输入培训名称'); return; }
+      try {
+        if (id) {
+          await api(`/api/collection/catalogs/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+        } else {
+          await api('/api/collection/catalogs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+        }
+        closeCatalogEdit();
+        await refreshAdmin();
+        toast(id ? '已保存' : '已创建');
+      } catch (e) { toast(e.message); }
+    }
+
+    async function deleteCatalog() {
+      const id = $('catalogEditId').value;
+      if (!id || !confirm('确定要删除这个名录及其所有提交记录吗？此操作不可恢复。')) return;
+      try {
+        await api(`/api/collection/catalogs/${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: adminPassword }),
+        });
+        closeCatalogEdit();
+        await refreshAdmin();
+        toast('已删除');
+      } catch (e) { toast(e.message); }
+    }
+
+    // ── view submissions ──
+    function viewSubmissions(catalogId) {
+      const c = catalogs.find(x => x.id === catalogId);
+      if (!c) return;
+      const catSubs = submissions.filter(s => s.collection_id === catalogId);
+      $('submissionDetailTitle').textContent = `提交详情 — ${c.name}`;
+      $('submissionDetailSection').style.display = '';
+
+      if (!catSubs.length) {
+        $('submissionDetailContent').innerHTML = '<div class="notice">暂无部门提交。</div>';
+        return;
+      }
+
+      let html = '<table><thead><tr><th>部门</th><th>签到单</th><th>照片</th><th>备注</th><th>提交时间</th><th>操作</th></tr></thead><tbody>';
+      for (const s of catSubs) {
+        const photos = Array.isArray(s.photos) ? s.photos : [];
+        html += `<tr>
+          <td>${esc(s.department)}</td>
+          <td>${s.sign_in_file ? `<a href="/uploads/collections/${esc(s.sign_in_file)}" target="_blank">查看</a>` : '—'}</td>
+          <td>${photos.length ? photos.map((p, i) => `<a href="/uploads/collections/${esc(p)}" target="_blank">照片${i + 1}</a>`).join(' ') : '—'}</td>
+          <td>${esc(s.notes || '—')}</td>
+          <td>${esc(s.submitted_at)}</td>
+          <td><button class="btn danger small" onclick="deleteSubmission(${s.id})">删除</button></td>
+        </tr>`;
+      }
+      html += '</tbody></table>';
+      $('submissionDetailContent').innerHTML = html;
+      $('submissionDetailSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeSubmissionDetail() {
+      $('submissionDetailSection').style.display = 'none';
+    }
+
+    async function deleteSubmission(id) {
+      if (!confirm('确定删除此提交记录吗？')) return;
+      try {
+        await api(`/api/collection/submissions/${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: adminPassword }),
+        });
+        await refreshAdmin();
+        closeSubmissionDetail();
+        toast('已删除');
+      } catch (e) { toast(e.message); }
+    }
+
+    // ── generate ZIP ──
+    async function generateZip(catalogId) {
+      try {
+        toast('正在生成台账…');
+        const result = await api(`/api/collection/generate/${catalogId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: adminPassword }),
+        });
+        // trigger download
+        window.open(`/api/collection/download/${catalogId}?password=${encodeURIComponent(adminPassword)}&filename=${encodeURIComponent(result.filename)}`, '_blank');
+        toast('台账已生成，正在下载');
+      } catch (e) { toast(e.message); }
+    }
+
+    // ── init ──
+    async function init() {
+      try {
+        departments = await api('/api/collection/departments');
+        catalogs = await api('/api/collection/catalogs');
+        // populate dropdowns
+        const activeCatalogs = catalogs.filter(c => c.active);
+        $('submitCatalog').innerHTML = '<option value="">-- 请选择 --</option>' +
+          activeCatalogs.map(c => `<option value="${c.id}">${esc(c.name)}${c.deadline ? '（截止：' + c.deadline + '）' : ''}</option>`).join('');
+        $('submitDept').innerHTML = '<option value="">-- 请选择 --</option>' +
+          departments.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+      } catch (e) { /* page loads fine even if DB init fails */ }
+    }
+
+    init();
+  </script>
+</body>
+</html>

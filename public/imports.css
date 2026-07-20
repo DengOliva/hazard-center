@@ -12,3 +12,18 @@
 .score-heading h3 { margin: 0 0 2px; font-size: 15px; }
 .score-heading small { color: var(--muted); }
 .score-heading > b { color: var(--green); font-size: 13px; }
+.date-filters { align-items: stretch; }
+.date-filters label:has(input[type="date"]) { min-width: 210px !important; }
+.date-filters input[type="date"] { min-height: 46px; font-size: 17px; padding: 10px 13px; cursor: pointer; }
+.quick-dates { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; }
+.quick-dates button { min-height: 46px; padding: 10px 16px; border-radius: 12px; }
+.people-import-panel { border-left: 4px solid var(--green); }
+.people-import-row { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; }
+.people-import-row label { min-width: 260px; color: var(--muted); font-size: 12px; }
+.people-import-row button { min-height: 44px; }
+.notice-inline { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 10px; background: #f5f9f8; color: #526764; }
+.drag-handle { cursor: grab; color: var(--muted); text-align: center; font-weight: 700; letter-spacing: -2px; user-select: none; }
+tr.dragging { opacity: .55; outline: 2px dashed var(--green); outline-offset: -2px; }
+tbody[data-group] tr[draggable="true"] { transition: transform .12s ease, opacity .12s ease; }
+tbody[data-group] tr[draggable="true"]:hover .drag-handle { color: var(--green); }
+@media(max-width:650px){.quick-dates,.people-import-row{width:100%}.quick-dates button{flex:1}.people-import-row label,.people-import-row button,.notice-inline{width:100%}}

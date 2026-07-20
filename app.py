@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 
 from data_admin import bp as admin_bp
 from meeting import bp as meeting_bp
+from collection import bp as collection_bp
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
@@ -116,12 +117,28 @@ LEADER_DEPARTMENTS = {
     "经理部", "物资部", "技术部", "工程部", "质控部", "机械设备管理部",
     "核岛一队", "搅拌站", "水电队", "综合车间", "金属试验室", "钢结构队", "机械队", "测量队",
 }
-ROLE_RULES_VERSION = "2026-07-02-v1"
+ROLE_RULES_VERSION = "2026-07-19-v4"
 ROLE_STANDARDS = {
+    "执行岗及以上": (5, "week"),
     "安全员": (10, "day"),
-    "领导": (5, "week"),
     "班组长": (2, "day"),
     "驻场代表": (3, "week"),
+}
+ROLE_ALIASES = {
+    "执行岗及以上": "执行岗及以上",
+    "执行岗以上": "执行岗及以上",
+    "执行岗": "执行岗及以上",
+    "安全员": "安全员",
+    "安监部": "安全员",
+    "班组长": "班组长",
+    "班组": "班组长",
+    "驻场代表": "驻场代表",
+    "驻场": "驻场代表",
+}
+PEOPLE_HEADER_ALIASES = {
+    "name": {"姓名", "人员", "人员姓名", "检查人姓名", "名字", "姓名/人员", "人员名称"},
+    "department": {"部门", "单位", "所属部门", "部门/班组", "班组", "队伍", "组织", "科室"},
+    "category": {"类型", "类别", "人员类型", "人员类别", "人员种类", "身份", "角色"},
 }
 
 
@@ -175,6 +192,25 @@ def init_db():
             min_date TEXT,
             max_date TEXT
         );
+        CREATE TABLE IF NOT EXISTS training_collections (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT DEFAULT '',
+            departments TEXT NOT NULL DEFAULT '',
+            deadline TEXT DEFAULT '',
+            active INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS training_submissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            collection_id INTEGER NOT NULL REFERENCES training_collections(id),
+            department TEXT NOT NULL,
+            sign_in_file TEXT DEFAULT '',
+            photos TEXT DEFAULT '[]',
+            notes TEXT DEFAULT '',
+            submitted_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_submissions_collection ON training_submissions(collection_id);
         """)
         defaults = {"internal_unit": "中建二局", "ratio_target": "5"}
         for key, value in defaults.items():
@@ -184,6 +220,115 @@ def init_db():
 def clean_name(value):
     text = str(value or "").strip()
     return re.sub(r"^\[[^\]]+\]", "", text).strip()
+
+
+def clean_header(value):
+    return re.sub(r"[\s　：:（）()\[\]【】/\\]+", "", str(value or "")).strip()
+
+
+def normalize_person_role(value):
+    text = str(value or "").strip()
+    compact = clean_header(text)
+    for key, role in ROLE_ALIASES.items():
+        if clean_header(key) in compact or compact in clean_header(key):
+            return role
+    return ""
+
+
+def role_standard(role):
+    return ROLE_STANDARDS.get(role, (0, "week"))
+
+
+def find_people_sheet(workbook):
+    alias_map = {field: {clean_header(x) for x in aliases} for field, aliases in PEOPLE_HEADER_ALIASES.items()}
+    best = None
+    for sheet in workbook.worksheets:
+        max_rows = min(sheet.max_row, 30)
+        max_cols = min(sheet.max_column, 30)
+        for row_index in range(1, max_rows + 1):
+            mapping = {}
+            for col_index in range(1, max_cols + 1):
+                header = clean_header(sheet.cell(row=row_index, column=col_index).value)
+                if not header:
+                    continue
+                for field, aliases in alias_map.items():
+                    if header in aliases and field not in mapping:
+                        mapping[field] = col_index - 1
+            score = len(mapping)
+            if score >= 2 and ("name" in mapping and ("department" in mapping or "category" in mapping)):
+                if score == 3:
+                    return sheet, row_index, mapping
+                if not best:
+                    best = (sheet, row_index, mapping)
+    if best:
+        return best
+    raise ValueError("未找到人员表头。至少需要识别“姓名”，并包含“部门”或“类型”；推荐表头：姓名、部门、类型。")
+
+
+def parse_people_import(path):
+    workbook = load_workbook(path, read_only=True, data_only=True)
+    sheet, header_row, mapping = find_people_sheet(workbook)
+    items = {}
+    for row in sheet.iter_rows(min_row=header_row + 1, values_only=True):
+        raw_name = row[mapping["name"]] if mapping.get("name", -1) < len(row) else ""
+        name = clean_name(raw_name)
+        if not name or name in {"姓名", "人员", "检查人姓名"}:
+            continue
+        department = ""
+        if "department" in mapping and mapping["department"] < len(row):
+            department = str(row[mapping["department"]] or "").strip()
+        raw_role = row[mapping["category"]] if "category" in mapping and mapping["category"] < len(row) else ""
+        if "班组长" in str(raw_role or "") and "驻场" in str(raw_role or ""):
+            role = "驻场代表" if "驻场" in department else "班组长"
+        else:
+            role = normalize_person_role(raw_role)
+        if not role:
+            role = normalize_person_role(department)
+        if not role:
+            continue
+        target, period = role_standard(role)
+        items[name] = {
+            "name": name,
+            "category": role,
+            "department": department,
+            "target_count": target,
+            "target_period": period,
+            "active": 1,
+        }
+    if not items:
+        raise ValueError("没有识别到可导入人员。请确认表中有“姓名、部门、类型”，类型为：安全员、执行岗及以上、班组长、驻场代表。")
+    return list(items.values()), {"sheet": sheet.title, "headerRow": header_row, "columns": mapping}
+
+
+def import_people(path, original_name, mode="append"):
+    mode = "overwrite" if mode == "overwrite" else "append"
+    items, source = parse_people_import(path)
+    now = datetime.now().isoformat(timespec="seconds")
+    with db() as conn:
+        if mode == "overwrite":
+            conn.execute("DELETE FROM people")
+        inserted = updated = 0
+        for item in items:
+            existing = conn.execute("SELECT id FROM people WHERE name=?", (item["name"],)).fetchone()
+            values = (item["name"], item["category"], item["department"], item["target_count"], item["target_period"], item["active"])
+            if existing:
+                conn.execute("UPDATE people SET name=?,category=?,department=?,target_count=?,target_period=?,active=? WHERE id=?",
+                             values + (existing["id"],))
+                updated += 1
+            else:
+                conn.execute("INSERT INTO people(name,category,department,target_count,target_period,active) VALUES (?,?,?,?,?,?)", values)
+                inserted += 1
+        conn.execute("INSERT INTO imports(filename,imported_at,row_count,min_date,max_date) VALUES (?,?,?,?,?)",
+                     (f"人员导入[{mode}]_{original_name}", now, len(items), None, None))
+    return {
+        "ok": True,
+        "mode": mode,
+        "count": len(items),
+        "inserted": inserted,
+        "updated": updated,
+        "source": source,
+        "filename": original_name,
+    }
 
 
 def detect_dataset_type(filename):
@@ -451,17 +596,18 @@ def apply_role_rules():
             department = str(person["department"] or "").strip()
             role = None
             if person["name"] == "赵强强":
-                role = "领导"
-            elif legacy_category in ("安全员", "安监部"):
+                role = "执行岗及以上"
+            elif legacy_category in ("安全员", "安监部") or department == "安监部":
                 role = "安全员"
                 department = department or "安监部"
             elif "班组长" in legacy_category:
                 role = "班组长"
             elif legacy_category == "驻场代表":
                 role = "驻场代表"
-            elif legacy_category == "领导" or legacy_category in LEADER_DEPARTMENTS:
-                role = "领导"
-                department = department or legacy_category
+            elif legacy_category in ("执行岗及以上", "执行岗以上"):
+                role = None
+            else:
+                role = normalize_person_role(legacy_category)
             if role:
                 target, period = ROLE_STANDARDS[role]
                 conn.execute("UPDATE people SET category=?,department=?,target_count=?,target_period=?,active=1 WHERE id=?",
@@ -752,6 +898,7 @@ def meta():
         departments = [r[0] for r in conn.execute("SELECT DISTINCT department FROM people WHERE department<>'' ORDER BY department")]
         last_import = conn.execute("SELECT * FROM imports ORDER BY id DESC LIMIT 1").fetchone()
         bounds = conn.execute("SELECT MIN(check_date),MAX(check_date),COUNT(*) FROM hazards").fetchone()
+    categories = sorted(set(categories) | set(ROLE_STANDARDS.keys()))
     return jsonify(categories=categories, departments=departments, defaultDepartments=DEFAULT_DEPARTMENTS,
                    datasetTypes=[{k: v for k, v in item.items() if k != "filenamePattern"} for item in DATASET_TYPES],
                    lastImport=dict(last_import) if last_import else None,
@@ -900,6 +1047,25 @@ def people():
     with db() as conn:
         rows = conn.execute("SELECT * FROM people ORDER BY category,department,name").fetchall()
     return jsonify(items=[dict(r) for r in rows])
+
+
+@app.post("/api/people/import")
+def people_import():
+    file = request.files.get("file")
+    if not file or not file.filename:
+        return jsonify(error="请选择人员 Excel 文件"), 400
+    if not file.filename.lower().endswith(".xlsx"):
+        return jsonify(error="目前只支持 .xlsx 文件"), 400
+    mode = request.form.get("mode", "append")
+    if mode not in ("append", "overwrite"):
+        return jsonify(error="导入模式只能是 append 或 overwrite"), 400
+    target = UPLOAD_DIR / f"{datetime.now():%Y%m%d%H%M%S%f}_people.xlsx"
+    file.save(target)
+    try:
+        return jsonify(import_people(target, file.filename, mode))
+    except Exception as exc:
+        target.unlink(missing_ok=True)
+        return jsonify(error=str(exc)), 400
 
 
 @app.post("/api/people")
@@ -1401,6 +1567,7 @@ def alert_details():
 
 app.register_blueprint(admin_bp)
 app.register_blueprint(meeting_bp)
+app.register_blueprint(collection_bp)
 
 init_db()
 seed_people()

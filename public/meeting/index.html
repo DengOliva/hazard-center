@@ -196,7 +196,7 @@ function slide7(d) {
 
   let h = `<div class="stat-row">
     <div class="stat-item"><small>内部行为偏差</small><b>${isum}</b> 项</div>
-    <div class="stat-item"><small>外部行为偏差（工程公司）</small><b>${esum}</b> 项</div>
+    <div class="stat-item"><small>外部行为偏差（中建二局）</small><b>${esum}</b> 项</div>
   </div>`;
   if (!isum && !esum) return h+'<div class="empty-note">本周无行为偏差记录</div>';
 
@@ -209,7 +209,7 @@ function slide7(d) {
   h += `<tr class="subtotal"><td></td><td>合计</td><td>${isum}</td><td></td></tr></tbody></table></div>`;
 
   // external
-  h += '<div><div class="sub-heading">外部行为偏差（工程公司）</div>';
+  h += '<div><div class="sub-heading">外部行为偏差（中建二局）</div>';
   h += '<table class="data-table"><thead><tr><th>序号</th><th>行为偏差类别</th><th>违章数量</th><th>备注</th></tr></thead><tbody>';
   if (et.length) et.forEach((x,i)=>h+=`<tr><td>${i+1}</td><td class="left">${x.type}</td><td>${x.count}</td><td></td></tr>`);
   else h += '<tr><td colspan="4" class="empty-note">—</td></tr>';
@@ -256,7 +256,7 @@ function slide11(d) {
   const intN = (da.int_types||[]).length, extN = (da.ext_types||[]).length;
 
   h += '<table class="data-table"><thead><tr><th rowspan="2">单位</th>';
-  h += `<th colspan="${intN}">内部</th><th colspan="${extN}">工程公司</th></tr><tr>`;
+  h += `<th colspan="${intN}">内部</th><th colspan="${extN}">中建二局</th></tr><tr>`;
   da.int_types.forEach(t=>h+=`<th>${t}</th>`);
   da.ext_types.forEach(t=>h+=`<th>${t}</th>`);
   h += '</tr></thead><tbody>';

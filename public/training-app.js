@@ -37,6 +37,7 @@ function openEditModal(event) {
   $('editPeriod').value = event.period || '';
   $('editTitle').value = event.title || '';
   $('editItems').value = (event.items || []).join('、');
+  $('editResetBtn').style.display = event.linked ? 'none' : '';
   $('editModal').classList.add('show');
 }
 
@@ -111,6 +112,48 @@ $('editPassword').addEventListener('keydown', e => {
 });
 
 let allEvents = [];
+
+async function openCreateTraining() {
+  if (!await ensureMaterialsAdmin()) return;
+  $('createTrainingDate').value = new Date().toISOString().slice(0, 10);
+  $('createTrainingName').value = '';
+  $('createTrainingTime').value = '19:30-21:00';
+  $('createTrainingDescription').value = '';
+  $('createTrainingModal').classList.add('show');
+  $('createTrainingName').focus();
+}
+
+function closeCreateTraining() {
+  $('createTrainingModal').classList.remove('show');
+}
+
+async function saveNewTraining() {
+  const name = $('createTrainingName').value.trim();
+  const trainingDate = $('createTrainingDate').value;
+  if (!name) { toast('请输入培训名称'); return; }
+  if (!trainingDate) { toast('请选择培训日期'); return; }
+  try {
+    await api('/api/training-ledger/events', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        password: editingPassword,
+        name,
+        training_date: trainingDate,
+        description: $('createTrainingDescription').value.trim(),
+        schedule_time: $('createTrainingTime').value.trim() || '19:30-21:00',
+        schedule_period: '晚上',
+      }),
+    });
+    closeCreateTraining();
+    $('trainingStart').value = trainingDate;
+    $('trainingEnd').value = trainingDate;
+    await loadTraining();
+    toast('培训已新增，并同步到培训台账');
+  } catch (e) {
+    toast(e.message);
+  }
+}
 
 async function loadTraining(){
   const q=`start=${$('trainingStart').value}&end=${$('trainingEnd').value}&keyword=${encodeURIComponent($('trainingKeyword').value)}`;

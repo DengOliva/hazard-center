@@ -28,11 +28,12 @@
         <label>关键词<input id="trainingKeyword" placeholder="公司级、项目级、焊工、电工…"></label>
         <button class="primary" onclick="loadTraining()">查询安排</button>
         <button onclick="setTrainingThisWeek()">本周</button>
+        <button class="primary" onclick="openCreateTraining()">＋ 新增培训</button>
       </section>
 
       <section class="panel training-hero">
         <div><h2>本周培训 / 考试安排</h2><p id="trainingSummary">正在读取培训安排…</p></div>
-        <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span><span><i></i>晚上 19:00-20:30</span></div>
+        <div class="training-legend"><span><i></i>上午第一场 08:00-10:00</span><span><i></i>上午第二场 10:00-11:30</span><span><i></i>下午 14:00-17:30</span><span><i></i>晚上 19:30-21:00</span></div>
       </section>
 
       <section id="trainingList" class="training-list"></section>
@@ -72,6 +73,21 @@
         <button class="danger" id="editResetBtn">恢复默认</button>
         <button onclick="closeEditModal()">取消</button>
         <button class="primary" onclick="saveEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="createTrainingModal">
+    <div class="modal-box modal-wide">
+      <h3>新增培训</h3>
+      <p>新增后会同步出现在培训台账共享页面。</p>
+      <label>培训日期<input type="date" id="createTrainingDate"></label>
+      <label>培训名称<input id="createTrainingName" placeholder="例如：高处作业安全培训"></label>
+      <label>时间段<input id="createTrainingTime" value="19:30-21:00"></label>
+      <label>备注（选填）<textarea id="createTrainingDescription" rows="3" placeholder="地点、参训单位等"></textarea></label>
+      <div class="modal-actions">
+        <button onclick="closeCreateTraining()">取消</button>
+        <button class="primary" onclick="saveNewTraining()">保存并同步</button>
       </div>
     </div>
   </div>

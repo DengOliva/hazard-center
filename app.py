@@ -218,6 +218,8 @@ def init_db():
             name TEXT NOT NULL,
             training_date TEXT NOT NULL,
             description TEXT NOT NULL DEFAULT '',
+            schedule_time TEXT NOT NULL DEFAULT '19:30-21:00',
+            schedule_period TEXT NOT NULL DEFAULT '晚上',
             created_at TEXT NOT NULL
         );
         CREATE TABLE IF NOT EXISTS training_ledger_files (
@@ -233,6 +235,11 @@ def init_db():
         );
         CREATE INDEX IF NOT EXISTS idx_training_ledger_event ON training_ledger_files(event_id);
         """)
+        ledger_columns = {row[1] for row in conn.execute("PRAGMA table_info(training_ledger_events)")}
+        if "schedule_time" not in ledger_columns:
+            conn.execute("ALTER TABLE training_ledger_events ADD COLUMN schedule_time TEXT NOT NULL DEFAULT '19:30-21:00'")
+        if "schedule_period" not in ledger_columns:
+            conn.execute("ALTER TABLE training_ledger_events ADD COLUMN schedule_period TEXT NOT NULL DEFAULT '晚上'")
         defaults = {"internal_unit": "中建二局", "ratio_target": "5"}
         for key, value in defaults.items():
             conn.execute("INSERT OR IGNORE INTO settings(key,value) VALUES (?,?)", (key, value))
@@ -465,47 +472,62 @@ def add_annual_retraining(events):
 
 
 def read_training_schedule():
-    if not TRAINING_SCHEDULE_FILE.exists():
-        return []
-    workbook = load_workbook(TRAINING_SCHEDULE_FILE, read_only=True, data_only=True)
-    sheet = workbook[workbook.sheetnames[0]]
     events = []
-    for row in sheet.iter_rows(min_row=3, values_only=True):
-        schedule_date, weekday = parse_training_date(row[0] if len(row) > 0 else "")
-        if not schedule_date:
-            continue
-        day_index = len([event for event in events if event["date"] == schedule_date])
-        morning_text = row[1] if len(row) > 1 else None
-        morning_lines = [line.strip() for line in re.split(r"[\n\r]+", str(morning_text or "").strip()) if line.strip()]
-        if morning_lines:
-            events.append(training_event(
-                f"base:{schedule_date}:morning1", schedule_date, weekday, "08:00-10:00",
-                "上午第一场", morning_lines[0], order=10 + day_index,
-            ))
-        if len(morning_lines) > 1:
-            second_text = "\n".join(morning_lines[1:])
-            events.append(training_event(
-                f"base:{schedule_date}:morning2", schedule_date, weekday, "10:00-11:30",
-                "上午第二场", second_text, order=20 + day_index,
-            ))
-        afternoon_parts = []
-        for col_index in (3, 4):
-            if len(row) > col_index and row[col_index]:
-                afternoon_parts.append(str(row[col_index]).strip())
-        if afternoon_parts:
-            text = "、".join(afternoon_parts)
-            events.append(training_event(
-                f"base:{schedule_date}:afternoon", schedule_date, weekday, "14:00-17:30",
-                "下午", text, order=30 + day_index,
-            ))
-        if len(row) > 5 and row[5]:
-            text = str(row[5]).strip()
-            events.append(training_event(
-                f"base:{schedule_date}:night", schedule_date, weekday, "19:00-20:30",
-                "晚上", text, order=90 + day_index,
-            ))
+    if TRAINING_SCHEDULE_FILE.exists():
+        workbook = load_workbook(TRAINING_SCHEDULE_FILE, read_only=True, data_only=True)
+        sheet = workbook[workbook.sheetnames[0]]
+        for row in sheet.iter_rows(min_row=3, values_only=True):
+            schedule_date, weekday = parse_training_date(row[0] if len(row) > 0 else "")
+            if not schedule_date:
+                continue
+            day_index = len([event for event in events if event["date"] == schedule_date])
+            morning_text = row[1] if len(row) > 1 else None
+            morning_lines = [line.strip() for line in re.split(r"[\n\r]+", str(morning_text or "").strip()) if line.strip()]
+            if morning_lines:
+                events.append(training_event(
+                    f"base:{schedule_date}:morning1", schedule_date, weekday, "08:00-10:00",
+                    "上午第一场", morning_lines[0], order=10 + day_index,
+                ))
+            if len(morning_lines) > 1:
+                second_text = "\n".join(morning_lines[1:])
+                events.append(training_event(
+                    f"base:{schedule_date}:morning2", schedule_date, weekday, "10:00-11:30",
+                    "上午第二场", second_text, order=20 + day_index,
+                ))
+            afternoon_parts = []
+            for col_index in (3, 4):
+                if len(row) > col_index and row[col_index]:
+                    afternoon_parts.append(str(row[col_index]).strip())
+            if afternoon_parts:
+                text = "、".join(afternoon_parts)
+                events.append(training_event(
+                    f"base:{schedule_date}:afternoon", schedule_date, weekday, "14:00-17:30",
+                    "下午", text, order=30 + day_index,
+                ))
+            if len(row) > 5 and row[5]:
+                text = str(row[5]).strip()
+                events.append(training_event(
+                    f"base:{schedule_date}:night", schedule_date, weekday, "19:00-20:30",
+                    "晚上", text, order=90 + day_index,
+                ))
+        workbook.close()
     add_annual_retraining(events)
     apply_training_overrides(events)
+    weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+    with db() as conn:
+        linked_events = conn.execute("""
+            SELECT id,name,training_date,description,schedule_time,schedule_period
+            FROM training_ledger_events
+        """).fetchall()
+    for row in linked_events:
+        current = date.fromisoformat(row["training_date"])
+        event = training_event(
+            f"ledger:{row['id']}", row["training_date"], weekday_names[current.weekday()],
+            row["schedule_time"], row["schedule_period"], row["name"], [row["name"]], 95,
+        )
+        event["linked"] = True
+        event["description"] = row["description"]
+        events.append(event)
     return sorted(events, key=lambda item: (item["date"], item.get("order", 0), item["time"], item["period"]))
 
 
@@ -905,6 +927,11 @@ def training_page():
     return send_from_directory(app.static_folder, "training.html")
 
 
+@app.get("/train")
+def train_page():
+    return send_from_directory(app.static_folder, "training.html")
+
+
 @app.get("/training-ledger")
 def training_ledger_page():
     return send_from_directory(app.static_folder, "training-ledger.html")
@@ -1196,6 +1223,20 @@ def training_save():
     event_id = str(body.get("id") or "").strip()
     if not event_id:
         return jsonify(error="缺少事件 ID"), 400
+    if event_id.startswith("ledger:"):
+        ledger_id = event_id.split(":", 1)[1]
+        updates = []
+        params = []
+        field_map = {"title": "name", "time": "schedule_time", "period": "schedule_period"}
+        for source, target in field_map.items():
+            if source in body and body[source] is not None:
+                updates.append(f"{target}=?")
+                params.append(str(body[source]).strip())
+        if updates:
+            params.append(ledger_id)
+            with db() as conn:
+                conn.execute(f"UPDATE training_ledger_events SET {','.join(updates)} WHERE id=?", params)
+        return jsonify(ok=True, id=event_id)
     overrides = load_training_overrides()
     entry = overrides.get(event_id, {})
     for key in ("time", "period", "title", "items"):
@@ -1281,6 +1322,8 @@ def training_ledger_create_event():
     name = str(body.get("name") or "").strip()
     training_date = str(body.get("training_date") or "").strip()
     description = str(body.get("description") or "").strip()
+    schedule_time = str(body.get("schedule_time") or "19:30-21:00").strip()
+    schedule_period = str(body.get("schedule_period") or "晚上").strip()
     if not name:
         return jsonify(error="请输入培训名目"), 400
     try:
@@ -1290,9 +1333,10 @@ def training_ledger_create_event():
     now = datetime.now().isoformat(timespec="seconds")
     with db() as conn:
         cursor = conn.execute("""
-            INSERT INTO training_ledger_events(name,training_date,description,created_at)
-            VALUES (?,?,?,?)
-        """, (name, training_date, description, now))
+            INSERT INTO training_ledger_events
+            (name,training_date,description,schedule_time,schedule_period,created_at)
+            VALUES (?,?,?,?,?,?)
+        """, (name, training_date, description, schedule_time, schedule_period, now))
     return jsonify(ok=True, id=cursor.lastrowid)
 
 

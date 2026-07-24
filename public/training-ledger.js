@@ -72,8 +72,8 @@ function eventCard(event) {
     <div class="date-block"><strong>${esc(event.training_date.slice(8, 10))}</strong><span>${esc(event.training_date.slice(0, 7))}</span></div>
     <div class="event-main">
       <div class="event-heading">
-        <div><h3>${esc(event.name)}</h3>${event.description ? `<p>${esc(event.description)}</p>` : ''}<div class="event-meta">${meta}</div></div>
-        <div class="event-actions"><span>${event.files.length} 个文件</span>${adminPassword ? `<button onclick="editEvent(${event.id})">修改信息</button>` : ''}</div>
+        <div class="${adminPassword ? 'event-info-edit' : ''}" ${adminPassword ? `onclick="editEvent(${event.id})" title="点击修改培训信息"` : ''}><h3>${esc(event.name)}</h3>${event.description ? `<p>${esc(event.description)}</p>` : ''}<div class="event-meta">${meta}</div></div>
+        <div class="event-actions"><span>${event.files.length} 个文件</span>${adminPassword ? `<button class="delete-event" onclick="deleteEvent(${event.id}, event)">删除</button>` : ''}</div>
       </div>
       ${adminPassword ? `<label class="inline-dropzone" data-event-id="${event.id}">
         <input type="file" multiple>
@@ -189,6 +189,25 @@ function editEvent(id) {
   $('eventDescription').value = event.description || '';
   openModal('eventModal');
   $('eventName').focus();
+}
+
+async function deleteEvent(id, clickEvent) {
+  clickEvent?.stopPropagation();
+  const event = loadedEvents.find(item => item.id === id);
+  if (!event) return;
+  const fileNotice = event.files.length ? `，以及其中 ${event.files.length} 个已上传文件` : '';
+  if (!confirm(`确定删除“${event.name}”${fileNotice}吗？此操作无法撤销。`)) return;
+  try {
+    await api(`/api/training-ledger/events/${id}`, {
+      method:'DELETE',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:adminPassword}),
+    });
+    await loadEvents();
+    toast('培训名录已删除');
+  } catch (error) {
+    toast(error.message);
+  }
 }
 $('batchImportBtn').onclick = () => {
   batchQueue = [];

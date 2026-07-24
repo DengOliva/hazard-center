@@ -1427,6 +1427,26 @@ def training_ledger_update_event(event_id):
     return jsonify(ok=True, id=event_id)
 
 
+@app.delete("/api/training-ledger/events/<int:event_id>")
+def training_ledger_delete_event(event_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        event = conn.execute("SELECT id FROM training_ledger_events WHERE id=?", (event_id,)).fetchone()
+        if not event:
+            return jsonify(error="培训名目不存在"), 404
+        stored_names = [
+            row["stored_name"]
+            for row in conn.execute("SELECT stored_name FROM training_ledger_files WHERE event_id=?", (event_id,))
+        ]
+        conn.execute("DELETE FROM training_ledger_events WHERE id=?", (event_id,))
+    for stored_name in stored_names:
+        target = TRAINING_LEDGER_DIR / stored_name
+        if target.parent == TRAINING_LEDGER_DIR and target.is_file():
+            target.unlink()
+    return jsonify(ok=True, id=event_id)
+
+
 @app.post("/api/training-ledger/events/<int:event_id>/files")
 def training_ledger_upload(event_id):
     if not ledger_password_ok():

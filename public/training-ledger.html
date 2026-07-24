@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>培训台账共享中心</title>
+  <link rel="stylesheet" href="/training-ledger.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/training-ledger">
+      <span class="brand-mark">训</span>
+      <span><b>培训台账</b><small>共享中心</small></span>
+    </a>
+    <div class="top-actions">
+      <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索培训名目、日期"></label>
+      <button class="ghost" id="adminBtn">管理上传</button>
+      <button class="primary hidden" id="newEventBtn">＋ 新增培训</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">TRAINING ARCHIVE</p>
+        <h1>每场培训，一处归档</h1>
+        <p>签到单、培训照片和相关文件统一保存。打开即可查看，点击即可下载。</p>
+      </div>
+      <div class="stats">
+        <div><strong id="eventCount">0</strong><span>培训名目</span></div>
+        <div><strong id="fileCount">0</strong><span>归档文件</span></div>
+      </div>
+    </section>
+
+    <section class="section-head">
+      <div><h2>培训记录</h2><p id="resultText">正在读取台账…</p></div>
+      <button class="text-button" id="refreshBtn">刷新</button>
+    </section>
+    <section id="eventList" class="event-list"></section>
+  </main>
+
+  <div class="modal" id="passwordModal" aria-hidden="true">
+    <form class="dialog" id="passwordForm">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">ADMIN ACCESS</p><h2>进入管理模式</h2>
+      <p>验证后可新增培训名目并上传资料。</p>
+      <label>管理密码<input id="passwordInput" type="password" autocomplete="current-password" required></label>
+      <button class="primary wide">验证并进入</button>
+    </form>
+  </div>
+
+  <div class="modal" id="eventModal" aria-hidden="true">
+    <form class="dialog" id="eventForm">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">NEW TRAINING</p><h2>新增培训名目</h2>
+      <label>培训名称<input id="eventName" placeholder="例如：高处作业安全培训" required></label>
+      <label>培训日期<input id="eventDate" type="date" required></label>
+      <label>备注（选填）<textarea id="eventDescription" rows="3" placeholder="参训单位、地点或其他说明"></textarea></label>
+      <button class="primary wide">创建培训</button>
+    </form>
+  </div>
+
+  <div class="modal" id="uploadModal" aria-hidden="true">
+    <div class="dialog upload-dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">UPLOAD FILES</p><h2 id="uploadTitle">上传培训资料</h2>
+      <p>可同时选择签到单、照片和其他文件，上传后自动加上培训日期。</p>
+      <label class="dropzone" id="dropzone">
+        <input id="fileInput" type="file" multiple>
+        <span class="upload-icon">⇧</span>
+        <b>拖拽文件到这里</b>
+        <small>或点击选择文件 · 单个文件不超过 30MB</small>
+      </label>
+      <div id="fileQueue" class="file-queue"></div>
+      <button class="primary wide" id="uploadBtn" disabled>开始上传</button>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="/training-ledger.js"></script>
+</body>
+</html>

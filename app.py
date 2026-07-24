@@ -7,7 +7,7 @@ import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_file, send_from_directory
 from openpyxl import load_workbook
 
 from data_admin import bp as admin_bp
@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parent
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
 DB_PATH = DATA_DIR / "hazards.db"
 UPLOAD_DIR = DATA_DIR / "uploads"
+TRAINING_LEDGER_DIR = DATA_DIR / "training_ledger"
 SEED_DIR = ROOT / "seed"
 TRAINING_SCHEDULE_FILE = SEED_DIR / "2026年7月安全培训安排表.xlsx"
 TRAINING_OVERRIDES_FILE = DATA_DIR / "training_overrides.json"
@@ -94,6 +95,7 @@ def clean_problem_type(raw):
 _alert_data = None
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+TRAINING_LEDGER_DIR.mkdir(parents=True, exist_ok=True)
 
 app = Flask(__name__, static_folder="public", static_url_path="")
 app.config["MAX_CONTENT_LENGTH"] = 30 * 1024 * 1024
@@ -211,6 +213,25 @@ def init_db():
             submitted_at TEXT NOT NULL
         );
         CREATE INDEX IF NOT EXISTS idx_submissions_collection ON training_submissions(collection_id);
+        CREATE TABLE IF NOT EXISTS training_ledger_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            training_date TEXT NOT NULL,
+            description TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS training_ledger_files (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_id INTEGER NOT NULL REFERENCES training_ledger_events(id) ON DELETE CASCADE,
+            original_name TEXT NOT NULL,
+            stored_name TEXT NOT NULL UNIQUE,
+            display_name TEXT NOT NULL,
+            kind TEXT NOT NULL DEFAULT 'file',
+            content_type TEXT NOT NULL DEFAULT 'application/octet-stream',
+            size INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_training_ledger_event ON training_ledger_files(event_id);
         """)
         defaults = {"internal_unit": "中建二局", "ratio_target": "5"}
         for key, value in defaults.items():
@@ -884,6 +905,11 @@ def training_page():
     return send_from_directory(app.static_folder, "training.html")
 
 
+@app.get("/training-ledger")
+def training_ledger_page():
+    return send_from_directory(app.static_folder, "training-ledger.html")
+
+
 @app.get("/api/health")
 def health():
     with db() as conn:
@@ -1202,6 +1228,128 @@ def training_verify():
     if str(body.get("password") or "") == TRAINING_EDIT_PASSWORD:
         return jsonify(ok=True)
     return jsonify(error="密码错误"), 403
+
+
+def ledger_password_ok():
+    password = request.form.get("password") if request.form else ""
+    if not password and request.is_json:
+        password = (request.get_json(silent=True) or {}).get("password", "")
+    return str(password or "") == TRAINING_EDIT_PASSWORD
+
+
+def ledger_file_dict(row):
+    item = dict(row)
+    item["download_url"] = f"/api/training-ledger/files/{item['id']}/download"
+    item["preview_url"] = f"/api/training-ledger/files/{item['id']}/preview"
+    return item
+
+
+@app.get("/api/training-ledger/events")
+def training_ledger_events():
+    keyword = (request.args.get("keyword") or "").strip()
+    where = ""
+    params = []
+    if keyword:
+        where = "WHERE e.name LIKE ? OR e.description LIKE ? OR e.training_date LIKE ?"
+        params = [f"%{keyword}%"] * 3
+    with db() as conn:
+        events = conn.execute(f"""
+            SELECT e.*, COUNT(f.id) AS file_count
+            FROM training_ledger_events e
+            LEFT JOIN training_ledger_files f ON f.event_id=e.id
+            {where}
+            GROUP BY e.id
+            ORDER BY e.training_date DESC, e.id DESC
+        """, params).fetchall()
+        result = []
+        for event in events:
+            files = conn.execute("""
+                SELECT id,event_id,original_name,display_name,kind,content_type,size,created_at
+                FROM training_ledger_files WHERE event_id=? ORDER BY id DESC
+            """, (event["id"],)).fetchall()
+            entry = dict(event)
+            entry["files"] = [ledger_file_dict(row) for row in files]
+            result.append(entry)
+    return jsonify(items=result)
+
+
+@app.post("/api/training-ledger/events")
+def training_ledger_create_event():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    name = str(body.get("name") or "").strip()
+    training_date = str(body.get("training_date") or "").strip()
+    description = str(body.get("description") or "").strip()
+    if not name:
+        return jsonify(error="请输入培训名目"), 400
+    try:
+        date.fromisoformat(training_date)
+    except ValueError:
+        return jsonify(error="请选择正确的培训日期"), 400
+    now = datetime.now().isoformat(timespec="seconds")
+    with db() as conn:
+        cursor = conn.execute("""
+            INSERT INTO training_ledger_events(name,training_date,description,created_at)
+            VALUES (?,?,?,?)
+        """, (name, training_date, description, now))
+    return jsonify(ok=True, id=cursor.lastrowid)
+
+
+@app.post("/api/training-ledger/events/<int:event_id>/files")
+def training_ledger_upload(event_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    files = [item for item in request.files.getlist("files") if item and item.filename]
+    if not files:
+        return jsonify(error="请选择要上传的文件"), 400
+    with db() as conn:
+        event = conn.execute("SELECT * FROM training_ledger_events WHERE id=?", (event_id,)).fetchone()
+        if not event:
+            return jsonify(error="培训名目不存在"), 404
+        saved = []
+        for upload_file in files:
+            original = Path(upload_file.filename).name
+            safe_original = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", original).strip(" .") or "文件"
+            display_name = f"{event['training_date']}_{safe_original}"
+            suffix = Path(safe_original).suffix.lower()
+            stored_name = f"{event_id}_{uuid.uuid4().hex}{suffix}"
+            target = TRAINING_LEDGER_DIR / stored_name
+            upload_file.save(target)
+            content_type = upload_file.mimetype or "application/octet-stream"
+            kind = "image" if content_type.startswith("image/") else "file"
+            now = datetime.now().isoformat(timespec="seconds")
+            cursor = conn.execute("""
+                INSERT INTO training_ledger_files
+                (event_id,original_name,stored_name,display_name,kind,content_type,size,created_at)
+                VALUES (?,?,?,?,?,?,?,?)
+            """, (event_id, original, stored_name, display_name, kind, content_type, target.stat().st_size, now))
+            saved.append({"id": cursor.lastrowid, "display_name": display_name})
+    return jsonify(ok=True, items=saved)
+
+
+@app.get("/api/training-ledger/files/<int:file_id>/download")
+def training_ledger_download(file_id):
+    with db() as conn:
+        item = conn.execute("SELECT * FROM training_ledger_files WHERE id=?", (file_id,)).fetchone()
+    if not item:
+        return jsonify(error="文件不存在"), 404
+    target = TRAINING_LEDGER_DIR / item["stored_name"]
+    if not target.is_file():
+        return jsonify(error="文件已丢失"), 404
+    return send_file(target, as_attachment=True, download_name=item["display_name"], mimetype=item["content_type"])
+
+
+@app.get("/api/training-ledger/files/<int:file_id>/preview")
+def training_ledger_preview(file_id):
+    with db() as conn:
+        item = conn.execute("SELECT * FROM training_ledger_files WHERE id=?", (file_id,)).fetchone()
+    if not item or item["kind"] != "image":
+        return jsonify(error="图片不存在"), 404
+    target = TRAINING_LEDGER_DIR / item["stored_name"]
+    if not target.is_file():
+        return jsonify(error="文件已丢失"), 404
+    return send_file(target, mimetype=item["content_type"], conditional=True)
 
 
 @app.get("/api/training/materials")

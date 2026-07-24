@@ -168,14 +168,14 @@ $('passwordForm').onsubmit = async e => {
 $('eventForm').onsubmit = async e => {
   e.preventDefault();
   try {
-    const result = await api('/api/training-ledger/events', {
+    await api('/api/training-ledger/events', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({password:adminPassword, name:$('eventName').value.trim(), training_date:$('eventDate').value, description:$('eventDescription').value.trim()})
     });
     closeModals();
     $('eventForm').reset();
     await loadEvents();
-    openUpload(result.id, '新建培训');
+    toast('培训名录已新增');
   } catch (error) { toast(error.message); }
 };
 $('fileInput').onchange = e => addFiles(e.target.files);

@@ -220,6 +220,10 @@ def init_db():
             description TEXT NOT NULL DEFAULT '',
             schedule_time TEXT NOT NULL DEFAULT '19:30-21:00',
             schedule_period TEXT NOT NULL DEFAULT '晚上',
+            training_location TEXT NOT NULL DEFAULT '',
+            instructor TEXT NOT NULL DEFAULT '',
+            audience TEXT NOT NULL DEFAULT '',
+            participant_count INTEGER NOT NULL DEFAULT 0,
             created_at TEXT NOT NULL
         );
         CREATE TABLE IF NOT EXISTS training_ledger_files (
@@ -240,6 +244,14 @@ def init_db():
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN schedule_time TEXT NOT NULL DEFAULT '19:30-21:00'")
         if "schedule_period" not in ledger_columns:
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN schedule_period TEXT NOT NULL DEFAULT '晚上'")
+        if "training_location" not in ledger_columns:
+            conn.execute("ALTER TABLE training_ledger_events ADD COLUMN training_location TEXT NOT NULL DEFAULT ''")
+        if "instructor" not in ledger_columns:
+            conn.execute("ALTER TABLE training_ledger_events ADD COLUMN instructor TEXT NOT NULL DEFAULT ''")
+        if "audience" not in ledger_columns:
+            conn.execute("ALTER TABLE training_ledger_events ADD COLUMN audience TEXT NOT NULL DEFAULT ''")
+        if "participant_count" not in ledger_columns:
+            conn.execute("ALTER TABLE training_ledger_events ADD COLUMN participant_count INTEGER NOT NULL DEFAULT 0")
         existing_ledger_files = conn.execute("""
             SELECT f.id,f.original_name,f.kind,e.name,e.training_date
             FROM training_ledger_files f
@@ -527,7 +539,8 @@ def read_training_schedule():
     weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
     with db() as conn:
         linked_events = conn.execute("""
-            SELECT id,name,training_date,description,schedule_time,schedule_period
+            SELECT id,name,training_date,description,schedule_time,schedule_period,
+                   training_location,instructor,audience,participant_count
             FROM training_ledger_events
         """).fetchall()
     for row in linked_events:
@@ -538,6 +551,10 @@ def read_training_schedule():
         )
         event["linked"] = True
         event["description"] = row["description"]
+        event["training_location"] = row["training_location"]
+        event["instructor"] = row["instructor"]
+        event["audience"] = row["audience"]
+        event["participant_count"] = row["participant_count"]
         events.append(event)
     return sorted(events, key=lambda item: (item["date"], item.get("order", 0), item["time"], item["period"]))
 
@@ -1302,8 +1319,9 @@ def training_ledger_events():
     where = ""
     params = []
     if keyword:
-        where = "WHERE e.name LIKE ? OR e.description LIKE ? OR e.training_date LIKE ?"
-        params = [f"%{keyword}%"] * 3
+        where = """WHERE e.name LIKE ? OR e.description LIKE ? OR e.training_date LIKE ?
+                   OR e.training_location LIKE ? OR e.instructor LIKE ? OR e.audience LIKE ?"""
+        params = [f"%{keyword}%"] * 6
     with db() as conn:
         events = conn.execute(f"""
             SELECT e.*, COUNT(f.id) AS file_count
@@ -1335,6 +1353,13 @@ def training_ledger_create_event():
     description = str(body.get("description") or "").strip()
     schedule_time = str(body.get("schedule_time") or "19:30-21:00").strip()
     schedule_period = str(body.get("schedule_period") or "晚上").strip()
+    training_location = str(body.get("training_location") or "").strip()
+    instructor = str(body.get("instructor") or "").strip()
+    audience = str(body.get("audience") or "").strip()
+    try:
+        participant_count = max(0, int(body.get("participant_count") or 0))
+    except (TypeError, ValueError):
+        return jsonify(error="培训人数必须是数字"), 400
     if not name:
         return jsonify(error="请输入培训名目"), 400
     try:
@@ -1345,10 +1370,61 @@ def training_ledger_create_event():
     with db() as conn:
         cursor = conn.execute("""
             INSERT INTO training_ledger_events
-            (name,training_date,description,schedule_time,schedule_period,created_at)
-            VALUES (?,?,?,?,?,?)
-        """, (name, training_date, description, schedule_time, schedule_period, now))
+            (name,training_date,description,schedule_time,schedule_period,
+             training_location,instructor,audience,participant_count,created_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?)
+        """, (name, training_date, description, schedule_time, schedule_period,
+              training_location, instructor, audience, participant_count, now))
     return jsonify(ok=True, id=cursor.lastrowid)
+
+
+@app.patch("/api/training-ledger/events/<int:event_id>")
+def training_ledger_update_event(event_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    fields = {}
+    for key in ("name", "training_date", "description", "training_location", "instructor", "audience"):
+        if key in body:
+            fields[key] = str(body.get(key) or "").strip()
+    if "name" in fields and not fields["name"]:
+        return jsonify(error="请输入培训名称"), 400
+    if "training_date" in fields:
+        try:
+            date.fromisoformat(fields["training_date"])
+        except ValueError:
+            return jsonify(error="请选择正确的培训日期"), 400
+    try:
+        if "participant_count" in body:
+            fields["participant_count"] = max(0, int(body.get("participant_count") or 0))
+    except (TypeError, ValueError):
+        return jsonify(error="培训人数必须是数字"), 400
+    if not fields:
+        return jsonify(ok=True, id=event_id)
+    assignments = ",".join(f"{key}=?" for key in fields)
+    with db() as conn:
+        cursor = conn.execute(
+            f"UPDATE training_ledger_events SET {assignments} WHERE id=?",
+            [*fields.values(), event_id],
+        )
+        event = conn.execute("SELECT name,training_date FROM training_ledger_events WHERE id=?", (event_id,)).fetchone()
+        if event:
+            files = conn.execute(
+                "SELECT id,original_name,kind FROM training_ledger_files WHERE event_id=?",
+                (event_id,),
+            ).fetchall()
+            year, month, day = map(int, event["training_date"].split("-"))
+            for item in files:
+                suffix = Path(item["original_name"]).suffix.lower()
+                file_label = "照片" if item["kind"] == "image" else "签到单"
+                display_name = f"{year}年{month}月{day}日{event['name']}{file_label}{suffix}"
+                conn.execute(
+                    "UPDATE training_ledger_files SET display_name=? WHERE id=?",
+                    (display_name, item["id"]),
+                )
+    if not cursor.rowcount:
+        return jsonify(error="培训名目不存在"), 404
+    return jsonify(ok=True, id=event_id)
 
 
 @app.post("/api/training-ledger/events/<int:event_id>/files")

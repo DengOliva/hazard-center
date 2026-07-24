@@ -15,6 +15,7 @@
     <div class="top-actions">
       <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索培训名目、日期"></label>
       <button class="ghost" id="adminBtn">管理上传</button>
+      <button class="ghost hidden" id="batchImportBtn">批量导入</button>
       <button class="primary hidden" id="newEventBtn">＋ 新增培训</button>
     </div>
   </header>
@@ -52,12 +53,56 @@
   <div class="modal" id="eventModal" aria-hidden="true">
     <form class="dialog" id="eventForm">
       <button type="button" class="close" data-close>×</button>
-      <p class="eyebrow">NEW TRAINING</p><h2>新增培训名目</h2>
+      <input id="eventEditId" type="hidden">
+      <p class="eyebrow">TRAINING INFO</p><h2 id="eventFormTitle">新增培训名目</h2>
       <label>培训名称<input id="eventName" placeholder="例如：高处作业安全培训" required></label>
       <label>培训日期<input id="eventDate" type="date" required></label>
-      <label>备注（选填）<textarea id="eventDescription" rows="3" placeholder="参训单位、地点或其他说明"></textarea></label>
-      <button class="primary wide">创建培训</button>
+      <div class="form-grid">
+        <label>培训地点<input id="eventLocation" placeholder="例如：项目部会议室"></label>
+        <label>培训讲师<input id="eventInstructor" placeholder="讲师姓名"></label>
+        <label>培训对象<input id="eventAudience" placeholder="例如：全体管理人员"></label>
+        <label>培训人数<input id="eventParticipantCount" type="number" min="0" placeholder="0"></label>
+      </div>
+      <label>备注（选填）<textarea id="eventDescription" rows="3" placeholder="其他补充说明"></textarea></label>
+      <button class="primary wide" id="eventSubmitBtn">创建培训</button>
     </form>
+  </div>
+
+  <div class="modal" id="batchModal" aria-hidden="true">
+    <div class="dialog batch-dialog">
+      <button type="button" class="close" data-close>×</button>
+      <div class="batch-head">
+        <div><p class="eyebrow">BATCH IMPORT</p><h2>批量导入培训资料</h2></div>
+        <span id="batchProgress">尚未选择文件</span>
+      </div>
+      <label class="batch-picker" id="batchPicker">
+        <input id="batchFiles" type="file" accept="image/*,.pdf,application/pdf" multiple>
+        <span>＋</span><b>选择或拖入大量 PDF 和照片</b><small>导入后将按顺序逐个确认归档</small>
+      </label>
+      <div id="batchWorkspace" class="batch-workspace hidden">
+        <section class="batch-preview">
+          <div class="preview-title"><b id="batchFileName"></b><small id="batchFileSize"></small></div>
+          <div id="batchPreviewContent" class="preview-content"></div>
+        </section>
+        <section class="batch-form">
+          <label>培训日期<input id="batchDate" type="date"></label>
+          <label>选择当天培训名录
+            <select id="batchEventSelect"></select>
+          </label>
+          <label id="batchNewNameWrap">新培训名称<input id="batchNewName" placeholder="输入新培训名目"></label>
+          <div class="form-grid">
+            <label>培训地点<input id="batchLocation" placeholder="培训地点"></label>
+            <label>培训讲师<input id="batchInstructor" placeholder="讲师姓名"></label>
+            <label>培训对象<input id="batchAudience" placeholder="培训对象"></label>
+            <label>培训人数<input id="batchParticipantCount" type="number" min="0" placeholder="0"></label>
+          </div>
+          <div class="batch-actions">
+            <button class="ghost" id="batchSkipBtn">跳过此文件</button>
+            <button class="primary" id="batchSaveBtn">归档并查看下一个</button>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 
   <div class="modal" id="uploadModal" aria-hidden="true">

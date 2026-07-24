@@ -118,6 +118,10 @@ async function openCreateTraining() {
   $('createTrainingDate').value = new Date().toISOString().slice(0, 10);
   $('createTrainingName').value = '';
   $('createTrainingTime').value = '19:30-21:00';
+  $('createTrainingLocation').value = '';
+  $('createTrainingInstructor').value = '';
+  $('createTrainingAudience').value = '';
+  $('createTrainingParticipantCount').value = '';
   $('createTrainingDescription').value = '';
   $('createTrainingModal').classList.add('show');
   $('createTrainingName').focus();
@@ -141,6 +145,10 @@ async function saveNewTraining() {
         name,
         training_date: trainingDate,
         description: $('createTrainingDescription').value.trim(),
+        training_location: $('createTrainingLocation').value.trim(),
+        instructor: $('createTrainingInstructor').value.trim(),
+        audience: $('createTrainingAudience').value.trim(),
+        participant_count: parseInt($('createTrainingParticipantCount').value) || 0,
         schedule_time: $('createTrainingTime').value.trim() || '19:30-21:00',
         schedule_period: '晚上',
       }),
@@ -162,7 +170,7 @@ async function loadTraining(){
   allEvents = data.items;
   const groups=Object.values(groupTraining(data.items));
   $('trainingSummary').textContent=`${data.start} 至 ${data.end} · 共 ${data.items.length} 场 · 来源：${data.bounds.source||'未找到排班表'}`;
-  $('trainingList').innerHTML=groups.length?groups.map(day=>`<section class="training-day"><div class="training-date"><b>${day.date}</b><span>${esc(day.weekday)}</span></div><div class="training-events">${day.items.map(x=>`<article class="${x.edited?'training-edited':''}"><div class="training-time">${esc(x.time)}<small>${esc(x.period)}</small></div><div><h3>${esc(x.title)}</h3><p>${x.items.map(i=>`<span>${esc(i)}</span>`).join('')}</p></div><button class="training-edit-btn" onclick="openPasswordModal('${esc(x.id)}')" title="编辑">&#9998;</button></article>`).join('')}</div></section>`).join(''):`<div class="panel notice">当前日期范围没有培训安排，可调整日期或关键词再查。</div>`;
+  $('trainingList').innerHTML=groups.length?groups.map(day=>`<section class="training-day"><div class="training-date"><b>${day.date}</b><span>${esc(day.weekday)}</span></div><div class="training-events">${day.items.map(x=>`<article class="${x.edited?'training-edited':''}"><div class="training-time">${esc(x.time)}<small>${esc(x.period)}</small></div><div><h3>${esc(x.title)}</h3><p>${x.items.map(i=>`<span>${esc(i)}</span>`).join('')}${x.linked ? `<span>对象：${esc(x.audience||'未填写')}</span><span>地点：${esc(x.training_location||'未填写')}</span><span>讲师：${esc(x.instructor||'未填写')}</span><span>人数：${esc(x.participant_count||0)}人</span>` : ''}</p></div><button class="training-edit-btn" onclick="openPasswordModal('${esc(x.id)}')" title="编辑">&#9998;</button></article>`).join('')}</div></section>`).join(''):`<div class="panel notice">当前日期范围没有培训安排，可调整日期或关键词再查。</div>`;
 }
 
 /* ======== materials ======== */

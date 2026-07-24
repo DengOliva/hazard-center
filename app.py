@@ -1319,9 +1319,21 @@ def training_ledger_events():
     where = ""
     params = []
     if keyword:
-        where = """WHERE e.name LIKE ? OR e.description LIKE ? OR e.training_date LIKE ?
-                   OR e.training_location LIKE ? OR e.instructor LIKE ? OR e.audience LIKE ?"""
-        params = [f"%{keyword}%"] * 6
+        terms = [term for term in re.split(r"\s+", keyword) if term]
+        searchable = """
+            (e.name LIKE ? OR e.training_date LIKE ? OR e.description LIKE ?
+             OR e.training_location LIKE ? OR e.instructor LIKE ? OR e.audience LIKE ?
+             OR CAST(e.participant_count AS TEXT) LIKE ?
+             OR e.schedule_time LIKE ? OR e.schedule_period LIKE ?
+             OR EXISTS (
+                 SELECT 1 FROM training_ledger_files sf
+                 WHERE sf.event_id=e.id
+                   AND (sf.original_name LIKE ? OR sf.display_name LIKE ?)
+             ))
+        """
+        where = "WHERE " + " AND ".join(searchable for _ in terms)
+        for term in terms:
+            params.extend([f"%{term}%"] * 11)
     with db() as conn:
         events = conn.execute(f"""
             SELECT e.*, COUNT(f.id) AS file_count

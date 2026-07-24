@@ -100,7 +100,7 @@ function bindInlineDropzones() {
       event.preventDefault();
       zone.classList.remove('dragging');
     }));
-    zone.addEventListener('drop', event => uploadInline(eventId, event.dataTransfer.files, zone));
+    zone.addEventListener('drop', event => uploadInline(eventId, droppedFiles(event.dataTransfer), zone));
   });
 }
 
@@ -214,6 +214,7 @@ $('batchImportBtn').onclick = () => {
   batchIndex = 0;
   $('batchFiles').value = '';
   $('batchWorkspace').classList.add('hidden');
+  $('batchSkipTopBtn').classList.add('hidden');
   $('batchProgress').textContent = '尚未选择文件';
   openModal('batchModal');
 };
@@ -284,13 +285,23 @@ function loadBatchFiles(files) {
   batchQueue = accepted;
   batchIndex = 0;
   $('batchWorkspace').classList.remove('hidden');
+  $('batchSkipTopBtn').classList.remove('hidden');
   showBatchFile();
+}
+
+function droppedFiles(dataTransfer) {
+  const fromItems = Array.from(dataTransfer?.items || [])
+    .filter(item => item.kind === 'file')
+    .map(item => item.getAsFile())
+    .filter(Boolean);
+  return fromItems.length ? fromItems : Array.from(dataTransfer?.files || []);
 }
 
 async function showBatchFile() {
   if (batchPreviewUrl) URL.revokeObjectURL(batchPreviewUrl);
   if (batchIndex >= batchQueue.length) {
     batchPreviewUrl = '';
+    $('batchSkipTopBtn').classList.add('hidden');
     closeModals();
     await loadEvents();
     toast(`批量导入完成，共处理 ${batchQueue.length} 个文件`);
@@ -380,11 +391,58 @@ $('batchFiles').onchange = event => loadBatchFiles(event.target.files);
   event.preventDefault();
   $('batchPicker').classList.remove('dragging');
 }));
-$('batchPicker').addEventListener('drop', event => loadBatchFiles(event.dataTransfer.files));
+$('batchPicker').addEventListener('drop', event => {
+  event.stopPropagation();
+  loadBatchFiles(droppedFiles(event.dataTransfer));
+});
 $('batchDate').onchange = refreshBatchEvents;
 $('batchEventSelect').onchange = fillBatchEventFields;
 $('batchSaveBtn').onclick = saveBatchCurrent;
-$('batchSkipBtn').onclick = async () => { batchIndex += 1; await showBatchFile(); };
+async function skipBatchCurrent() {
+  if (batchIndex >= batchQueue.length) return;
+  batchIndex += 1;
+  await showBatchFile();
+}
+$('batchSkipBtn').onclick = skipBatchCurrent;
+$('batchSkipTopBtn').onclick = skipBatchCurrent;
+
+let pageDragDepth = 0;
+document.addEventListener('dragenter', event => {
+  if (!adminPassword || !Array.from(event.dataTransfer?.types || []).includes('Files')) return;
+  if (event.target.closest('.inline-dropzone,.batch-picker')) return;
+  event.preventDefault();
+  pageDragDepth += 1;
+  $('wechatDropOverlay').classList.add('show');
+});
+document.addEventListener('dragover', event => {
+  if (!adminPassword || !Array.from(event.dataTransfer?.types || []).includes('Files')) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
+});
+document.addEventListener('dragleave', event => {
+  if (!adminPassword) return;
+  pageDragDepth = Math.max(0, pageDragDepth - 1);
+  if (!pageDragDepth) $('wechatDropOverlay').classList.remove('show');
+});
+document.addEventListener('drop', event => {
+  pageDragDepth = 0;
+  $('wechatDropOverlay').classList.remove('show');
+  if (!adminPassword || event.target.closest('.inline-dropzone,.batch-picker')) return;
+  event.preventDefault();
+  const files = droppedFiles(event.dataTransfer);
+  if (!files.length) {
+    toast('微信没有提供可读取的文件，请先在微信中完成下载');
+    return;
+  }
+  batchQueue = [];
+  batchIndex = 0;
+  $('batchFiles').value = '';
+  $('batchWorkspace').classList.add('hidden');
+  $('batchSkipTopBtn').classList.add('hidden');
+  $('batchProgress').textContent = '正在读取微信文件…';
+  openModal('batchModal');
+  loadBatchFiles(files);
+});
 
 if (adminPassword) enterAdmin(adminPassword).catch(() => {
   adminPassword = '';

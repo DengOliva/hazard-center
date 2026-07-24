@@ -13,7 +13,7 @@
       <span><b>培训台账</b><small>共享中心</small></span>
     </a>
     <div class="top-actions">
-      <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索培训名目、日期"></label>
+      <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索名称、对象、分包、班组、讲师等"></label>
       <button class="ghost" id="adminBtn">管理上传</button>
       <button class="ghost hidden" id="batchImportBtn">批量导入</button>
       <button class="primary hidden" id="newEventBtn">＋ 新增培训</button>
@@ -73,7 +73,10 @@
       <button type="button" class="close" data-close>×</button>
       <div class="batch-head">
         <div><p class="eyebrow">BATCH IMPORT</p><h2>批量导入培训资料</h2></div>
-        <span id="batchProgress">尚未选择文件</span>
+        <div class="batch-head-actions">
+          <span id="batchProgress">尚未选择文件</span>
+          <button class="ghost hidden" id="batchSkipTopBtn">跳过当前文件</button>
+        </div>
       </div>
       <label class="batch-picker" id="batchPicker">
         <input id="batchFiles" type="file" accept="image/*,.pdf,application/pdf" multiple>
@@ -122,6 +125,9 @@
   </div>
 
   <div id="toast"></div>
+  <div id="wechatDropOverlay" class="wechat-drop-overlay">
+    <div><span>微</span><h2>松开即可从微信导入</h2><p>支持 PDF、培训照片等文件，将按顺序逐个预览归档</p></div>
+  </div>
   <script src="/training-ledger.js"></script>
 </body>
 </html>

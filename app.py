@@ -965,11 +965,151 @@ def training_ledger_page():
     return send_from_directory(app.static_folder, "training-ledger.html")
 
 
+@app.get("/subcontractor-attendance")
+def subcontractor_attendance_page():
+    return send_from_directory(app.static_folder, "subcontractor-attendance.html")
+
+
 @app.get("/api/health")
 def health():
     with db() as conn:
         count = conn.execute("SELECT COUNT(*) FROM hazards").fetchone()[0]
     return jsonify(ok=True, records=count)
+
+
+def workbook_rows(upload_file):
+    workbook = load_workbook(upload_file.stream, read_only=True, data_only=True)
+    try:
+        for sheet in workbook.worksheets:
+            sheet.reset_dimensions()
+            yield sheet.title, sheet.iter_rows(values_only=True)
+    finally:
+        workbook.close()
+
+
+def parse_subcontractor_roster(upload_file):
+    names = []
+    seen = set()
+    for _, rows in workbook_rows(upload_file):
+        for row in rows:
+            values = [str(value or "").strip() for value in row]
+            nonempty = [value for value in values if value]
+            if not nonempty:
+                continue
+            name = nonempty[0]
+            if clean_header(name) in {"姓名", "分包代表", "代表姓名", "序号"}:
+                continue
+            name = re.sub(r"^\d+[.、\s]+", "", name).strip()
+            if name and name not in seen:
+                seen.add(name)
+                names.append(name)
+        if names:
+            break
+    return names
+
+
+def parse_attendance_rows(upload_file):
+    records = []
+    for sheet_name, rows in workbook_rows(upload_file):
+        buffered = list(rows)
+        header_index = name_index = date_index = None
+        for index, row in enumerate(buffered[:12]):
+            headers = [clean_header(value) for value in row]
+            for candidate in ("姓名", "成员姓名", "人员姓名"):
+                if candidate in headers:
+                    name_index = headers.index(candidate)
+                    break
+            for candidate in ("日期", "签到日期", "打卡日期"):
+                if candidate in headers:
+                    date_index = headers.index(candidate)
+                    break
+            if name_index is not None and date_index is not None:
+                header_index = index
+                break
+        if header_index is None:
+            continue
+        for row in buffered[header_index + 1:]:
+            if len(row) <= max(name_index, date_index):
+                continue
+            name = str(row[name_index] or "").strip()
+            date_text = iso_date(row[date_index])
+            if name and re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_text):
+                records.append({"name": name, "date": date_text, "sheet": sheet_name})
+        if records:
+            break
+    return records
+
+
+@app.post("/api/subcontractor-attendance/analyze")
+def subcontractor_attendance_analyze():
+    roster_file = request.files.get("roster")
+    attendance_file = request.files.get("attendance")
+    if not roster_file or not roster_file.filename:
+        return jsonify(error="请选择分包代表名单"), 400
+    if not attendance_file or not attendance_file.filename:
+        return jsonify(error="请选择签到台账"), 400
+    if not roster_file.filename.lower().endswith(".xlsx") or not attendance_file.filename.lower().endswith(".xlsx"):
+        return jsonify(error="目前只支持 .xlsx 文件"), 400
+    try:
+        roster = parse_subcontractor_roster(roster_file)
+        attendance = parse_attendance_rows(attendance_file)
+    except Exception as exc:
+        return jsonify(error=f"Excel 读取失败：{exc}"), 400
+    if not roster:
+        return jsonify(error="名单表中未识别到姓名"), 400
+    if not attendance:
+        return jsonify(error="签到台账中未识别到“姓名”和“日期”明细"), 400
+    all_dates = sorted({item["date"] for item in attendance})
+    start, end = all_dates[0], all_dates[-1]
+    period_days = (date.fromisoformat(end) - date.fromisoformat(start)).days + 1
+    daily_names = {day: set() for day in all_dates}
+    person_dates = {}
+    person_punches = {}
+    for item in attendance:
+        daily_names[item["date"]].add(item["name"])
+        person_dates.setdefault(item["name"], set()).add(item["date"])
+        person_punches[item["name"]] = person_punches.get(item["name"], 0) + 1
+    people = []
+    for name in roster:
+        dates = sorted(person_dates.get(name, set()))
+        signed_days = len(dates)
+        people.append({
+            "name": name,
+            "signed_days": signed_days,
+            "missing_days": max(0, period_days - signed_days),
+            "attendance_rate": round(signed_days / period_days, 4) if period_days else 0,
+            "punch_count": person_punches.get(name, 0),
+            "first_date": dates[0] if dates else "",
+            "last_date": dates[-1] if dates else "",
+            "dates": dates,
+            "status": "全勤" if signed_days == period_days else ("未签到" if signed_days == 0 else "部分签到"),
+        })
+    people.sort(key=lambda item: (item["signed_days"], item["name"]))
+    roster_set = set(roster)
+    unmatched = sorted({item["name"] for item in attendance if item["name"] not in roster_set})
+    daily = [{
+        "date": day,
+        "signed_count": len(daily_names[day] & roster_set),
+        "missing_count": len(roster) - len(daily_names[day] & roster_set),
+        "rate": round(len(daily_names[day] & roster_set) / len(roster), 4),
+    } for day in all_dates]
+    total_signed_days = sum(item["signed_days"] for item in people)
+    return jsonify({
+        "start": start,
+        "end": end,
+        "period_days": period_days,
+        "roster_count": len(roster),
+        "attendance_record_count": len(attendance),
+        "full_attendance_count": sum(item["status"] == "全勤" for item in people),
+        "zero_attendance_count": sum(item["status"] == "未签到" for item in people),
+        "average_days": round(total_signed_days / len(roster), 2),
+        "overall_rate": round(total_signed_days / (len(roster) * period_days), 4) if period_days else 0,
+        "people": people,
+        "daily": daily,
+        "unmatched_names": unmatched,
+        "roster_filename": roster_file.filename,
+        "attendance_filename": attendance_file.filename,
+    })
 
 
 @app.get("/api/meta")

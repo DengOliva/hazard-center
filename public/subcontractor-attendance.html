@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>分包签到统计</title>
+  <link rel="stylesheet" href="/subcontractor-attendance.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/subcontractor-attendance" class="brand"><span>签</span><div><b>分包签到统计</b><small>SUBCONTRACTOR ATTENDANCE</small></div></a>
+    <a href="/" class="back">返回数据中心</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div><p class="eyebrow">WEEKLY ATTENDANCE</p><h1>分包代表签到情况，一次看清</h1><p>导入分包代表名单和企业微信签到报表，按姓名与日期去重计算每人签到天数。</p></div>
+      <div class="rule"><span>统计口径</span><b>同一人同一天多次打卡，只计 1 个签到天数</b></div>
+    </section>
+
+    <section class="upload-panel">
+      <label class="file-box" id="rosterBox">
+        <input type="file" id="rosterFile" accept=".xlsx">
+        <span class="file-icon">名</span>
+        <div><b>分包代表名单</b><p id="rosterText">点击选择或拖入名单文件</p></div>
+        <em>必选</em>
+      </label>
+      <div class="connector">＋</div>
+      <label class="file-box" id="attendanceBox">
+        <input type="file" id="attendanceFile" accept=".xlsx">
+        <span class="file-icon">签</span>
+        <div><b>签到台账</b><p id="attendanceText">点击选择或拖入签到报表</p></div>
+        <em>必选</em>
+      </label>
+      <button id="analyzeBtn" disabled>开始统计</button>
+    </section>
+
+    <section id="emptyState" class="empty-state">
+      <div>表</div><h2>等待导入文件</h2><p>统计结果会在这里显示，不会修改你的原始 Excel。</p>
+    </section>
+
+    <div id="results" class="hidden">
+      <section class="summary-head"><div><p class="eyebrow">RESULT OVERVIEW</p><h2 id="periodTitle">统计结果</h2><p id="sourceText"></p></div><button id="reanalyzeBtn">重新导入</button></section>
+      <section class="kpis">
+        <article><span>分包代表</span><strong id="kpiPeople">0</strong><small>名单人数</small></article>
+        <article><span>平均签到</span><strong id="kpiAverage">0</strong><small>天 / 人</small></article>
+        <article><span>整体签到率</span><strong id="kpiRate">0%</strong><small>人天覆盖率</small></article>
+        <article class="good"><span>全勤人数</span><strong id="kpiFull">0</strong><small>统计期每天签到</small></article>
+        <article class="warn"><span>零签到人数</span><strong id="kpiZero">0</strong><small>统计期无记录</small></article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel trend-panel">
+          <div class="panel-head"><div><h3>每日签到覆盖</h3><p>每天有多少名分包代表完成签到</p></div></div>
+          <div id="dailyChart" class="daily-chart"></div>
+        </article>
+        <article class="panel attention-panel">
+          <div class="panel-head"><div><h3>需要关注</h3><p>优先查看零签到和低签到人员</p></div></div>
+          <div id="attentionList"></div>
+        </article>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-head">
+          <div><h3>人员签到明细</h3><p id="tableSummary"></p></div>
+          <label class="table-search">⌕<input id="personSearch" placeholder="搜索姓名或状态"></label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>姓名</th><th>签到天数</th><th>未签到天数</th><th>签到率</th><th>打卡次数</th><th>首次签到</th><th>最后签到</th><th>状态</th></tr></thead>
+            <tbody id="peopleBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="unmatchedPanel" class="panel unmatched hidden">
+        <div class="panel-head"><div><h3>台账中未匹配名单的人员</h3><p>这些姓名出现在签到台账，但不在本次分包代表名单中。</p></div></div>
+        <div id="unmatchedNames" class="name-tags"></div>
+      </section>
+    </div>
+  </main>
+  <div id="toast"></div>
+  <script src="/subcontractor-attendance.js"></script>
+</body>
+</html>

@@ -48,6 +48,7 @@ async function loadEvents() {
   $('resultText').textContent = keyword ? `找到 ${events.length} 场相关培训` : `共 ${events.length} 场培训，按日期由近到远排列`;
   $('eventList').innerHTML = events.length ? events.map(eventCard).join('') :
     `<div class="empty"><span>档</span><h3>${keyword ? '没有匹配的培训记录' : '还没有培训台账'}</h3><p>${adminPassword ? '点击右上角“新增培训”开始归档。' : '管理员新增培训后，记录会显示在这里。'}</p></div>`;
+  bindInlineDropzones();
 }
 
 function eventCard(event) {
@@ -62,11 +63,56 @@ function eventCard(event) {
     <div class="event-main">
       <div class="event-heading">
         <div><h3>${esc(event.name)}</h3>${event.description ? `<p>${esc(event.description)}</p>` : ''}</div>
-        <div class="event-actions"><span>${event.files.length} 个文件</span>${adminPassword ? `<button onclick="openUpload(${event.id})">＋ 上传资料</button>` : ''}</div>
+        <div class="event-actions"><span>${event.files.length} 个文件</span></div>
       </div>
+      ${adminPassword ? `<label class="inline-dropzone" data-event-id="${event.id}">
+        <input type="file" multiple>
+        <span>⇧</span><b>把签到单、培训照片或其他文件拖到这里直接上传</b><small>也可以点击选择文件</small>
+      </label>` : ''}
       <div class="files-grid">${files}</div>
     </div>
   </section>`;
+}
+
+function bindInlineDropzones() {
+  document.querySelectorAll('.inline-dropzone').forEach(zone => {
+    const eventId = Number(zone.dataset.eventId);
+    const input = zone.querySelector('input');
+    input.addEventListener('change', () => {
+      uploadInline(eventId, input.files, zone);
+      input.value = '';
+    });
+    ['dragenter', 'dragover'].forEach(name => zone.addEventListener(name, event => {
+      event.preventDefault();
+      zone.classList.add('dragging');
+    }));
+    ['dragleave', 'drop'].forEach(name => zone.addEventListener(name, event => {
+      event.preventDefault();
+      zone.classList.remove('dragging');
+    }));
+    zone.addEventListener('drop', event => uploadInline(eventId, event.dataTransfer.files, zone));
+  });
+}
+
+async function uploadInline(eventId, files, zone) {
+  files = Array.from(files || []);
+  if (!files.length || zone.classList.contains('uploading')) return;
+  const body = new FormData();
+  body.append('password', adminPassword);
+  files.forEach(file => body.append('files', file));
+  zone.classList.add('uploading');
+  const label = zone.querySelector('b');
+  const originalText = label.textContent;
+  label.textContent = `正在上传 ${files.length} 个文件…`;
+  try {
+    await api(`/api/training-ledger/events/${eventId}/files`, {method:'POST', body});
+    await loadEvents();
+    toast(`${files.length} 个文件已上传并自动命名`);
+  } catch (error) {
+    zone.classList.remove('uploading');
+    label.textContent = originalText;
+    toast(error.message);
+  }
 }
 
 async function enterAdmin(password) {

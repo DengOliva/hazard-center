@@ -240,6 +240,17 @@ def init_db():
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN schedule_time TEXT NOT NULL DEFAULT '19:30-21:00'")
         if "schedule_period" not in ledger_columns:
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN schedule_period TEXT NOT NULL DEFAULT '晚上'")
+        existing_ledger_files = conn.execute("""
+            SELECT f.id,f.original_name,f.kind,e.name,e.training_date
+            FROM training_ledger_files f
+            JOIN training_ledger_events e ON e.id=f.event_id
+        """).fetchall()
+        for item in existing_ledger_files:
+            suffix = Path(item["original_name"]).suffix.lower()
+            year, month, day = map(int, item["training_date"].split("-"))
+            file_label = "照片" if item["kind"] == "image" else "签到单"
+            display_name = f"{year}年{month}月{day}日{item['name']}{file_label}{suffix}"
+            conn.execute("UPDATE training_ledger_files SET display_name=? WHERE id=?", (display_name, item["id"]))
         defaults = {"internal_unit": "中建二局", "ratio_target": "5"}
         for key, value in defaults.items():
             conn.execute("INSERT OR IGNORE INTO settings(key,value) VALUES (?,?)", (key, value))
@@ -1355,13 +1366,15 @@ def training_ledger_upload(event_id):
         for upload_file in files:
             original = Path(upload_file.filename).name
             safe_original = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", original).strip(" .") or "文件"
-            display_name = f"{event['training_date']}_{safe_original}"
             suffix = Path(safe_original).suffix.lower()
             stored_name = f"{event_id}_{uuid.uuid4().hex}{suffix}"
             target = TRAINING_LEDGER_DIR / stored_name
             upload_file.save(target)
             content_type = upload_file.mimetype or "application/octet-stream"
             kind = "image" if content_type.startswith("image/") else "file"
+            year, month, day = map(int, event["training_date"].split("-"))
+            file_label = "照片" if kind == "image" else "签到单"
+            display_name = f"{year}年{month}月{day}日{event['name']}{file_label}{suffix}"
             now = datetime.now().isoformat(timespec="seconds")
             cursor = conn.execute("""
                 INSERT INTO training_ledger_files

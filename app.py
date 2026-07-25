@@ -4,11 +4,14 @@ import os
 import re
 import sqlite3
 import uuid
+from io import BytesIO
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_file, send_from_directory
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
 
 from data_admin import bp as admin_bp
 from meeting import bp as meeting_bp
@@ -238,6 +241,14 @@ def init_db():
             created_at TEXT NOT NULL
         );
         CREATE INDEX IF NOT EXISTS idx_training_ledger_event ON training_ledger_files(event_id);
+        CREATE TABLE IF NOT EXISTS subcontractor_attendance_dashboard (
+            id INTEGER PRIMARY KEY CHECK (id=1),
+            roster_json TEXT NOT NULL,
+            result_json TEXT NOT NULL,
+            roster_filename TEXT NOT NULL DEFAULT '',
+            attendance_filename TEXT NOT NULL DEFAULT '',
+            imported_at TEXT NOT NULL
+        );
         """)
         ledger_columns = {row[1] for row in conn.execute("PRAGMA table_info(training_ledger_events)")}
         if "schedule_time" not in ledger_columns:
@@ -1044,14 +1055,25 @@ def parse_attendance_rows(upload_file):
 def subcontractor_attendance_analyze():
     roster_file = request.files.get("roster")
     attendance_file = request.files.get("attendance")
-    if not roster_file or not roster_file.filename:
-        return jsonify(error="请选择分包代表名单"), 400
     if not attendance_file or not attendance_file.filename:
         return jsonify(error="请选择签到台账"), 400
-    if not roster_file.filename.lower().endswith(".xlsx") or not attendance_file.filename.lower().endswith(".xlsx"):
+    if roster_file and roster_file.filename and not roster_file.filename.lower().endswith(".xlsx"):
+        return jsonify(error="名单文件目前只支持 .xlsx"), 400
+    if not attendance_file.filename.lower().endswith(".xlsx"):
         return jsonify(error="目前只支持 .xlsx 文件"), 400
     try:
-        roster = parse_subcontractor_roster(roster_file)
+        if roster_file and roster_file.filename:
+            roster = parse_subcontractor_roster(roster_file)
+            roster_filename = roster_file.filename
+        else:
+            with db() as conn:
+                saved = conn.execute(
+                    "SELECT roster_json,roster_filename FROM subcontractor_attendance_dashboard WHERE id=1"
+                ).fetchone()
+            if not saved:
+                return jsonify(error="首次统计请先导入分包代表名单"), 400
+            roster = json.loads(saved["roster_json"])
+            roster_filename = saved["roster_filename"]
         attendance = parse_attendance_rows(attendance_file)
     except Exception as exc:
         return jsonify(error=f"Excel 读取失败：{exc}"), 400
@@ -1094,7 +1116,8 @@ def subcontractor_attendance_analyze():
         "rate": round(len(daily_names[day] & roster_set) / len(roster), 4),
     } for day in all_dates]
     total_signed_days = sum(item["signed_days"] for item in people)
-    return jsonify({
+    imported_at = datetime.now().isoformat(timespec="seconds")
+    result = {
         "start": start,
         "end": end,
         "period_days": period_days,
@@ -1107,9 +1130,40 @@ def subcontractor_attendance_analyze():
         "people": people,
         "daily": daily,
         "unmatched_names": unmatched,
-        "roster_filename": roster_file.filename,
+        "roster_filename": roster_filename,
         "attendance_filename": attendance_file.filename,
-    })
+        "imported_at": imported_at,
+    }
+    with db() as conn:
+        conn.execute("""
+            INSERT INTO subcontractor_attendance_dashboard
+            (id,roster_json,result_json,roster_filename,attendance_filename,imported_at)
+            VALUES (1,?,?,?,?,?)
+            ON CONFLICT(id) DO UPDATE SET
+                roster_json=excluded.roster_json,
+                result_json=excluded.result_json,
+                roster_filename=excluded.roster_filename,
+                attendance_filename=excluded.attendance_filename,
+                imported_at=excluded.imported_at
+        """, (
+            json.dumps(roster, ensure_ascii=False),
+            json.dumps(result, ensure_ascii=False),
+            roster_filename,
+            attendance_file.filename,
+            imported_at,
+        ))
+    return jsonify(result)
+
+
+@app.get("/api/subcontractor-attendance/current")
+def subcontractor_attendance_current():
+    with db() as conn:
+        saved = conn.execute(
+            "SELECT result_json FROM subcontractor_attendance_dashboard WHERE id=1"
+        ).fetchone()
+    if not saved:
+        return jsonify(error="尚未导入签到统计数据"), 404
+    return jsonify(json.loads(saved["result_json"]))
 
 
 @app.get("/api/meta")
@@ -1493,6 +1547,86 @@ def training_ledger_events():
             entry["files"] = [ledger_file_dict(row) for row in files]
             result.append(entry)
     return jsonify(items=result)
+
+
+@app.post("/api/training-ledger/export")
+def training_ledger_export():
+    body = request.get_json(force=True)
+    raw_ids = body.get("ids") or []
+    try:
+        event_ids = [int(value) for value in raw_ids]
+    except (TypeError, ValueError):
+        return jsonify(error="培训记录选择无效"), 400
+    if not event_ids:
+        return jsonify(error="请至少选择一项培训记录"), 400
+    placeholders = ",".join("?" for _ in event_ids)
+    with db() as conn:
+        rows = conn.execute(f"""
+            SELECT id,name,audience,training_location,instructor,participant_count,training_date
+            FROM training_ledger_events
+            WHERE id IN ({placeholders})
+            ORDER BY training_date,id
+        """, event_ids).fetchall()
+    if not rows:
+        return jsonify(error="未找到所选培训记录"), 404
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "培训台账"
+    sheet.sheet_view.showGridLines = False
+    sheet.merge_cells("A1:F1")
+    sheet["A1"] = "培训台账"
+    sheet["A1"].font = Font(name="微软雅黑", size=20, bold=True, color="FFFFFF")
+    sheet["A1"].fill = PatternFill("solid", fgColor="176B57")
+    sheet["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    sheet.row_dimensions[1].height = 38
+    sheet.merge_cells("A2:F2")
+    sheet["A2"] = f"共 {len(rows)} 场培训 · 生成时间：{datetime.now():%Y-%m-%d %H:%M}"
+    sheet["A2"].font = Font(name="微软雅黑", size=10, color="52645E")
+    sheet["A2"].fill = PatternFill("solid", fgColor="E9F5F0")
+    sheet["A2"].alignment = Alignment(horizontal="center", vertical="center")
+    headers = ["培训日期", "培训主题", "培训对象", "培训地点", "培训讲师", "培训人数"]
+    sheet.append(headers)
+    for row in rows:
+        sheet.append([
+            date.fromisoformat(row["training_date"]),
+            row["name"],
+            row["audience"] or "",
+            row["training_location"] or "",
+            row["instructor"] or "",
+            int(row["participant_count"] or 0),
+        ])
+    header_fill = PatternFill("solid", fgColor="267B67")
+    light_fill = PatternFill("solid", fgColor="F3F8F6")
+    thin = Side(style="thin", color="D9E6E1")
+    for cell in sheet[3]:
+        cell.font = Font(name="微软雅黑", size=10, bold=True, color="FFFFFF")
+        cell.fill = header_fill
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    for row_index in range(4, sheet.max_row + 1):
+        if row_index % 2 == 0:
+            for cell in sheet[row_index]:
+                cell.fill = light_fill
+        for cell in sheet[row_index]:
+            cell.font = Font(name="微软雅黑", size=10, color="24332E")
+            cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+            cell.border = Border(bottom=thin)
+        sheet.cell(row_index, 1).number_format = "yyyy-mm-dd"
+        sheet.row_dimensions[row_index].height = 30
+    widths = [15, 34, 28, 26, 18, 13]
+    for index, width in enumerate(widths, 1):
+        sheet.column_dimensions[get_column_letter(index)].width = width
+    sheet.freeze_panes = "A4"
+    sheet.auto_filter.ref = f"A3:F{sheet.max_row}"
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+    filename = f"培训台账_{datetime.now():%Y%m%d}.xlsx"
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name=filename,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
 
 
 @app.post("/api/training-ledger/events")

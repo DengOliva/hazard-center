@@ -14,7 +14,7 @@
 
   <main>
     <section class="hero">
-      <div><p class="eyebrow">WEEKLY ATTENDANCE</p><h1>分包代表签到情况，一次看清</h1><p>导入分包代表名单和企业微信签到报表，按姓名与日期去重计算每人签到天数。</p></div>
+      <div><p class="eyebrow">WEEKLY ATTENDANCE</p><h1>分包代表签到固定看板</h1><p>首次导入后自动保存。以后打开页面直接查看，只需导入新一期签到报表即可更新。</p></div>
       <div class="rule"><span>统计口径</span><b>同一人同一天多次打卡，只计 1 个签到天数</b></div>
     </section>
 
@@ -22,25 +22,25 @@
       <label class="file-box" id="rosterBox">
         <input type="file" id="rosterFile" accept=".xlsx">
         <span class="file-icon">名</span>
-        <div><b>分包代表名单</b><p id="rosterText">点击选择或拖入名单文件</p></div>
-        <em>必选</em>
+        <div><b>分包代表名单</b><p id="rosterText">首次导入必选，之后固定保留</p></div>
+        <em id="rosterState">首次必选</em>
       </label>
       <div class="connector">＋</div>
       <label class="file-box" id="attendanceBox">
         <input type="file" id="attendanceFile" accept=".xlsx">
         <span class="file-icon">签</span>
-        <div><b>签到台账</b><p id="attendanceText">点击选择或拖入签到报表</p></div>
-        <em>必选</em>
+        <div><b>签到台账</b><p id="attendanceText">选择新一期签到报表更新看板</p></div>
+        <em>每次必选</em>
       </label>
       <button id="analyzeBtn" disabled>开始统计</button>
     </section>
 
     <section id="emptyState" class="empty-state">
-      <div>表</div><h2>等待导入文件</h2><p>统计结果会在这里显示，不会修改你的原始 Excel。</p>
+      <div>表</div><h2>尚未建立固定看板</h2><p>首次导入名单和签到台账后，结果会保存在这里。</p>
     </section>
 
     <div id="results" class="hidden">
-      <section class="summary-head"><div><p class="eyebrow">RESULT OVERVIEW</p><h2 id="periodTitle">统计结果</h2><p id="sourceText"></p></div><button id="reanalyzeBtn">重新导入</button></section>
+      <section class="summary-head"><div><p class="eyebrow">SAVED DASHBOARD</p><h2 id="periodTitle">统计结果</h2><p id="sourceText"></p></div><button id="reanalyzeBtn">更新数据</button></section>
       <section class="kpis">
         <article><span>分包代表</span><strong id="kpiPeople">0</strong><small>名单人数</small></article>
         <article><span>平均签到</span><strong id="kpiAverage">0</strong><small>天 / 人</small></article>

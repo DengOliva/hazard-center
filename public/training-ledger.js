@@ -41,6 +41,172 @@ function fileIcon(file) {
   return ext.length <= 4 ? ext : 'FILE';
 }
 
+function openLedgerExport() {
+  if (!loadedEvents.length) { toast('当前没有可导出的培训记录'); return; }
+  $('exportEventList').innerHTML = loadedEvents.map(event => `
+    <label class="export-event">
+      <input type="checkbox" value="${event.id}">
+      <time>${esc(event.training_date)}</time>
+      <b>${esc(event.name)}</b>
+      <small>${esc(event.audience || '未填写对象')}</small>
+    </label>`).join('');
+  $('exportEventList').querySelectorAll('input').forEach(input => input.onchange = updateExportSelection);
+  updateExportSelection();
+  openModal('ledgerExportModal');
+}
+
+function selectedExportEvents() {
+  const ids = new Set(Array.from($('exportEventList').querySelectorAll('input:checked')).map(input => Number(input.value)));
+  return loadedEvents.filter(event => ids.has(event.id)).sort((a, b) => a.training_date.localeCompare(b.training_date) || a.id - b.id);
+}
+
+function updateExportSelection() {
+  const selected = selectedExportEvents();
+  $('exportSelectedCount').textContent = `已选择 ${selected.length} 项`;
+  $('exportConfirmBtn').disabled = !selected.length;
+  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
+  $('selectAllExportBtn').textContent = inputs.length && inputs.every(input => input.checked) ? '取消全选' : '全选';
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1200);
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines=2) {
+  const chars = Array.from(String(text || '—'));
+  const lines = [];
+  let line = '';
+  for (const char of chars) {
+    if (ctx.measureText(line + char).width > maxWidth && line) {
+      lines.push(line);
+      line = char;
+      if (lines.length === maxLines - 1) break;
+    } else {
+      line += char;
+    }
+  }
+  const used = lines.join('').length;
+  if (used < chars.length) {
+    line = chars.slice(used).join('');
+    while (ctx.measureText(line + '…').width > maxWidth && line.length) line = line.slice(0, -1);
+    line += '…';
+  }
+  lines.push(line);
+  lines.slice(0, maxLines).forEach((value, index) => ctx.fillText(value, x, y + index * lineHeight));
+}
+
+function createLedgerImage(events) {
+  const widths = [190, 390, 280, 260, 210, 130];
+  const labels = ['培训日期','培训主题','培训对象','培训地点','培训讲师','培训人数'];
+  const margin = 70;
+  const headerHeight = 190;
+  const tableHeaderHeight = 62;
+  const rowHeight = 88;
+  const footerHeight = 70;
+  const canvas = document.createElement('canvas');
+  canvas.width = widths.reduce((sum, width) => sum + width, 0) + margin * 2;
+  canvas.height = headerHeight + tableHeaderHeight + events.length * rowHeight + footerHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#eef5f2';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, headerHeight);
+  gradient.addColorStop(0, '#123b32');
+  gradient.addColorStop(.65, '#176b57');
+  gradient.addColorStop(1, '#2c987c');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, headerHeight);
+  ctx.fillStyle = '#75d9bb';
+  ctx.font = '700 18px "Microsoft YaHei"';
+  ctx.fillText('TRAINING LEDGER', margin, 48);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '700 46px "Microsoft YaHei"';
+  ctx.fillText('培训台账', margin, 105);
+  ctx.fillStyle = '#d8ebe5';
+  ctx.font = '22px "Microsoft YaHei"';
+  ctx.fillText(`已选 ${events.length} 场培训 · ${events[0].training_date} 至 ${events[events.length - 1].training_date}`, margin, 147);
+  let x = margin;
+  ctx.fillStyle = '#267b67';
+  ctx.fillRect(margin, headerHeight, canvas.width - margin * 2, tableHeaderHeight);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '700 20px "Microsoft YaHei"';
+  ctx.textBaseline = 'middle';
+  labels.forEach((label, index) => {
+    ctx.fillText(label, x + 18, headerHeight + tableHeaderHeight / 2);
+    x += widths[index];
+  });
+  events.forEach((event, rowIndex) => {
+    const y = headerHeight + tableHeaderHeight + rowIndex * rowHeight;
+    ctx.fillStyle = rowIndex % 2 ? '#f5f9f7' : '#ffffff';
+    ctx.fillRect(margin, y, canvas.width - margin * 2, rowHeight);
+    ctx.strokeStyle = '#dce8e3';
+    ctx.beginPath();
+    ctx.moveTo(margin, y + rowHeight);
+    ctx.lineTo(canvas.width - margin, y + rowHeight);
+    ctx.stroke();
+    const values = [
+      event.training_date,
+      event.name,
+      event.audience || '未填写',
+      event.training_location || '未填写',
+      event.instructor || '未填写',
+      `${event.participant_count || 0} 人`,
+    ];
+    x = margin;
+    values.forEach((value, index) => {
+      ctx.fillStyle = index === 1 ? '#17251f' : '#4e6059';
+      ctx.font = `${index === 1 ? '700' : '400'} 19px "Microsoft YaHei"`;
+      ctx.textBaseline = 'top';
+      wrapCanvasText(ctx, value, x + 18, y + 22, widths[index] - 34, 27, 2);
+      x += widths[index];
+    });
+  });
+  ctx.fillStyle = '#71817b';
+  ctx.font = '17px "Microsoft YaHei"';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(`生成时间：${new Date().toLocaleString('zh-CN', {hour12:false})}`, margin, canvas.height - footerHeight / 2);
+  ctx.textAlign = 'right';
+  ctx.fillText('培训台账共享中心', canvas.width - margin, canvas.height - footerHeight / 2);
+  ctx.textAlign = 'left';
+  return canvas;
+}
+
+async function exportSelectedLedger() {
+  const events = selectedExportEvents();
+  if (!events.length) return;
+  $('exportConfirmBtn').disabled = true;
+  $('exportConfirmBtn').textContent = '正在生成…';
+  try {
+    const response = await fetch('/api/training-ledger/export', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ids:events.map(event => event.id)}),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Excel 生成失败');
+    }
+    downloadBlob(await response.blob(), `培训台账_${new Date().toISOString().slice(0,10)}.xlsx`);
+    const canvas = createLedgerImage(events);
+    canvas.toBlob(blob => {
+      if (blob) downloadBlob(blob, `培训台账_${new Date().toISOString().slice(0,10)}.png`);
+    }, 'image/png');
+    closeModals();
+    toast(`已生成 ${events.length} 场培训的 Excel 和图片`);
+  } catch (error) {
+    toast(error.message);
+  } finally {
+    $('exportConfirmBtn').disabled = false;
+    $('exportConfirmBtn').textContent = '生成 Excel ＋ 美化图片';
+  }
+}
+
 async function loadEvents() {
   const keyword = $('keyword').value.trim();
   const data = await api('/api/training-ledger/events?keyword=' + encodeURIComponent(keyword));
@@ -159,6 +325,14 @@ function removeQueued(index) {
 }
 
 $('adminBtn').onclick = () => adminPassword ? toast('当前已是管理模式') : openModal('passwordModal');
+$('generateLedgerBtn').onclick = openLedgerExport;
+$('selectAllExportBtn').onclick = () => {
+  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
+  const shouldSelect = !inputs.every(input => input.checked);
+  inputs.forEach(input => { input.checked = shouldSelect; });
+  updateExportSelection();
+};
+$('exportConfirmBtn').onclick = exportSelectedLedger;
 $('newEventBtn').onclick = () => {
   $('eventEditId').value = '';
   $('eventFormTitle').textContent = '新增培训名目';

@@ -103,6 +103,10 @@ TRAINING_LEDGER_DIR.mkdir(parents=True, exist_ok=True)
 app = Flask(__name__, static_folder="public", static_url_path="")
 app.config["MAX_CONTENT_LENGTH"] = 30 * 1024 * 1024
 
+# Dashboard/statistics policy: D-level hazards remain searchable in the
+# underlying ledger, but never contribute to dashboard totals or compliance.
+NON_D_HAZARD_SQL = "UPPER(TRIM(COALESCE(hazard_level, ''))) NOT IN ('D', 'D级')"
+
 REQUIRED_HEADERS = {"隐患单号", "检查人姓名", "检查日期", "检查单位"}
 DATASET_TYPES = [
     {
@@ -1233,7 +1237,7 @@ def hazard_stats():
     start, end = range_args()
     search = request.args.get("search", "").strip()
     unit = request.args.get("unit", "").strip()
-    where = ["check_date BETWEEN ? AND ?"]
+    where = ["check_date BETWEEN ? AND ?", NON_D_HAZARD_SQL]
     params = [start, end]
     if search:
         where.append("(checker_name LIKE ? OR description LIKE ? OR hazard_no LIKE ? OR area LIKE ?)")
@@ -1260,7 +1264,7 @@ def hazard_category_stats():
     start, end = range_args()
     search = request.args.get("search", "").strip()
     unit = request.args.get("unit", "").strip()
-    where = ["check_date BETWEEN ? AND ?"]
+    where = ["check_date BETWEEN ? AND ?", NON_D_HAZARD_SQL]
     params = [start, end]
     if search:
         where.append("(checker_name LIKE ? OR description LIKE ? OR hazard_no LIKE ? OR area LIKE ?)")
@@ -1301,7 +1305,7 @@ def hazard_category_descriptions():
         return jsonify(descriptions=[])
     search = request.args.get("search", "").strip()
     unit = request.args.get("unit", "").strip()
-    where = ["check_date BETWEEN ? AND ?", "hazard_category=?"]
+    where = ["check_date BETWEEN ? AND ?", NON_D_HAZARD_SQL, "hazard_category=?"]
     params = [start, end, category]
     if search:
         where.append("(checker_name LIKE ? OR description LIKE ? OR hazard_no LIKE ? OR area LIKE ?)")
@@ -1381,8 +1385,12 @@ def statistics():
         settings = {r[0]: r[1] for r in conn.execute("SELECT key,value FROM settings")}
         internal = settings.get("internal_unit", "中建二局")
         ratio_target = float(settings.get("ratio_target", 5))
-        internal_count = conn.execute("SELECT COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND check_unit=?", (start, end, internal)).fetchone()[0]
-        external_count = conn.execute("SELECT COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND check_unit=?", (start, end, "工程公司")).fetchone()[0]
+        internal_count = conn.execute(
+            f"SELECT COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND {NON_D_HAZARD_SQL} AND check_unit=?",
+            (start, end, internal)).fetchone()[0]
+        external_count = conn.execute(
+            f"SELECT COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND {NON_D_HAZARD_SQL} AND check_unit=?",
+            (start, end, "工程公司")).fetchone()[0]
         where = ["active=1"]
         params = []
         if category:
@@ -1390,7 +1398,9 @@ def statistics():
         if department:
             where.append("department=?"); params.append(department)
         roster = conn.execute(f"SELECT * FROM people WHERE {' AND '.join(where)} ORDER BY category,department,name", params).fetchall()
-        counts = {r[0]: r[1] for r in conn.execute("SELECT checker_name,COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? GROUP BY checker_name", (start, end))}
+        counts = {r[0]: r[1] for r in conn.execute(
+            f"SELECT checker_name,COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND {NON_D_HAZARD_SQL} GROUP BY checker_name",
+            (start, end))}
         b_counts = {r[0]: r[1] for r in conn.execute("SELECT checker_name,COUNT(*) FROM hazards WHERE check_date BETWEEN ? AND ? AND hazard_level='B' GROUP BY checker_name", (start, end))}
     result = []
     for person in roster:

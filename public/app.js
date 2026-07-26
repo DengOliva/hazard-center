@@ -3,7 +3,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const api=async(url,options={})=>{const r=await fetch(url,options);const data=await r.json();if(!r.ok)throw new Error(data.error||'请求失败');return data};
 function toast(message){$('toast').textContent=message;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2600)}
-const pageInfo={dashboard:['统计看板','隐患录入达标情况与单位对比'],hazards:['隐患列表','查询最新导入的全部隐患记录'],people:['人员与标准','维护人员分类、部门和考核标准'],imports:['数据更新','拖入最新安全隐患信息表，完整替换数据快照']};
+const pageInfo={dashboard:['统计看板','隐患录入达标情况与单位对比（D级隐患不计入统计）'],hazards:['隐患列表','查询最新导入的全部隐患记录'],people:['人员与标准','维护人员分类、部门和考核标准'],imports:['数据更新','拖入最新安全隐患信息表，完整替换数据快照']};
 function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));[$('pageTitle').textContent,$('pageSub').textContent]=pageInfo[id];if(id==='hazards')loadHazards(1);if(id==='people')loadPeople()}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
 function dates(){return `start=${$('startDate').value}&end=${$('endDate').value}`}
@@ -65,9 +65,9 @@ function enableGroupDrag(group){
 function renderStats(){
   const start=$('startDate').value,end=$('endDate').value,dateRange=`${start} 至 ${end}`;
   const groups=[
-    {title:'安全员',roles:['安全员'],note:'标准：10 条 / 天'},
-    {title:'班组长和驻场代表',roles:['班组长','驻场代表'],note:'班组长 2 条 / 天 · 驻场代表 3 条 / 周'},
-    {title:'执行岗以上',roles:['执行岗及以上'],note:'标准：5 条 / 周'}
+    {title:'安全员',roles:['安全员'],note:'标准：10 条 / 天 · D级隐患不计入'},
+    {title:'班组长和驻场代表',roles:['班组长','驻场代表'],note:'班组长 2 条 / 天 · 驻场代表 3 条 / 周 · D级隐患不计入'},
+    {title:'执行岗以上',roles:['执行岗及以上'],note:'标准：5 条 / 周 · D级隐患不计入'}
   ];
   $('statsGroups').innerHTML=groups.map(g=>{
     let items=stats.filter(x=>g.roles.includes(x.category));

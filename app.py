@@ -557,9 +557,24 @@ def read_training_schedule():
     with db() as conn:
         linked_events = conn.execute("""
             SELECT id,name,training_date,description,schedule_time,schedule_period,
-                   training_location,instructor,audience,participant_count
+                   training_location,instructor,audience,participant_count,category
             FROM training_ledger_events
         """).fetchall()
+        linked_ids = [row["id"] for row in linked_events]
+        files_by_event = {}
+        if linked_ids:
+            placeholders = ",".join("?" for _ in linked_ids)
+            file_rows = conn.execute(f"""
+                SELECT id,event_id,display_name,kind,content_type,size
+                FROM training_ledger_files
+                WHERE event_id IN ({placeholders})
+                ORDER BY id
+            """, linked_ids).fetchall()
+            for frow in file_rows:
+                fdict = dict(frow)
+                fdict["download_url"] = f"/api/training-ledger/files/{fdict['id']}/download"
+                fdict["preview_url"] = f"/api/training-ledger/files/{fdict['id']}/preview"
+                files_by_event.setdefault(frow["event_id"], []).append(fdict)
     for row in linked_events:
         current = date.fromisoformat(row["training_date"])
         event = training_event(
@@ -572,6 +587,8 @@ def read_training_schedule():
         event["instructor"] = row["instructor"]
         event["audience"] = row["audience"]
         event["participant_count"] = row["participant_count"]
+        event["category"] = row["category"] or ""
+        event["files"] = files_by_event.get(row["id"], [])
         events.append(event)
     return sorted(events, key=lambda item: (item["date"], item.get("order", 0), item["time"], item["period"]))
 

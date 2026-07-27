@@ -270,6 +270,34 @@
   background: var(--mint);
 }
 
+.training-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+
+.training-file-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: #e8f0ed;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: .15s;
+}
+
+.training-file-dl:hover {
+  background: var(--green);
+  color: #fff;
+}
+
 /* modal */
 .modal-overlay {
   display: none;

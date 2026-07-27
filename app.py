@@ -267,6 +267,8 @@ def init_db():
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN audience TEXT NOT NULL DEFAULT ''")
         if "participant_count" not in ledger_columns:
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN participant_count INTEGER NOT NULL DEFAULT 0")
+        if "category" not in ledger_columns:
+            conn.execute("ALTER TABLE training_ledger_events ADD COLUMN category TEXT NOT NULL DEFAULT '专题培训'")
         existing_ledger_files = conn.execute("""
             SELECT f.id,f.original_name,f.kind,e.name,e.training_date
             FROM training_ledger_files f
@@ -1520,8 +1522,12 @@ def ledger_file_dict(row):
 @app.get("/api/training-ledger/events")
 def training_ledger_events():
     keyword = (request.args.get("keyword") or "").strip()
+    category = (request.args.get("category") or "").strip()
     where = ""
     params = []
+    if category:
+        where = "WHERE e.category = ?"
+        params.append(category)
     if keyword:
         terms = [term for term in re.split(r"\s+", keyword) if term]
         searchable = """
@@ -1535,7 +1541,8 @@ def training_ledger_events():
                    AND (sf.original_name LIKE ? OR sf.display_name LIKE ?)
              ))
         """
-        where = "WHERE " + " AND ".join(searchable for _ in terms)
+        prefix = "AND " if where else "WHERE "
+        where += prefix + " AND ".join(searchable for _ in terms)
         for term in terms:
             params.extend([f"%{term}%"] * 11)
     with db() as conn:
@@ -1652,6 +1659,7 @@ def training_ledger_create_event():
     training_location = str(body.get("training_location") or "").strip()
     instructor = str(body.get("instructor") or "").strip()
     audience = str(body.get("audience") or "").strip()
+    category = str(body.get("category") or "专题培训").strip()
     try:
         participant_count = max(0, int(body.get("participant_count") or 0))
     except (TypeError, ValueError):
@@ -1667,10 +1675,10 @@ def training_ledger_create_event():
         cursor = conn.execute("""
             INSERT INTO training_ledger_events
             (name,training_date,description,schedule_time,schedule_period,
-             training_location,instructor,audience,participant_count,created_at)
-            VALUES (?,?,?,?,?,?,?,?,?,?)
+             training_location,instructor,audience,participant_count,category,created_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)
         """, (name, training_date, description, schedule_time, schedule_period,
-              training_location, instructor, audience, participant_count, now))
+              training_location, instructor, audience, participant_count, category, now))
     return jsonify(ok=True, id=cursor.lastrowid)
 
 
@@ -1680,7 +1688,7 @@ def training_ledger_update_event(event_id):
         return jsonify(error="管理密码错误"), 403
     body = request.get_json(force=True)
     fields = {}
-    for key in ("name", "training_date", "description", "training_location", "instructor", "audience"):
+    for key in ("name", "training_date", "description", "training_location", "instructor", "audience", "category"):
         if key in body:
             fields[key] = str(body.get(key) or "").strip()
     if "name" in fields and not fields["name"]:

@@ -8,6 +8,7 @@ let batchQueue = [];
 let batchIndex = 0;
 let batchPreviewUrl = '';
 let batchEvents = [];
+let currentCategory = new URLSearchParams(location.search).get('category') || '专题培训';
 
 function toast(message) {
   $('toast').textContent = message;
@@ -127,7 +128,8 @@ function createLedgerImage(events) {
   ctx.fillText('TRAINING LEDGER', margin, 48);
   ctx.fillStyle = '#ffffff';
   ctx.font = '700 46px "Microsoft YaHei"';
-  ctx.fillText('培训台账', margin, 105);
+  const categoryTitle = events[0].category === '入场培训' ? '入场培训台账' : '培训台账';
+  ctx.fillText(categoryTitle, margin, 105);
   ctx.fillStyle = '#d8ebe5';
   ctx.font = '22px "Microsoft YaHei"';
   ctx.fillText(`已选 ${events.length} 场培训 · ${events[0].training_date} 至 ${events[events.length - 1].training_date}`, margin, 147);
@@ -192,10 +194,12 @@ async function exportSelectedLedger() {
       const error = await response.json();
       throw new Error(error.error || 'Excel 生成失败');
     }
-    downloadBlob(await response.blob(), `培训台账_${new Date().toISOString().slice(0,10)}.xlsx`);
+    const prefix = currentCategory === '入场培训' ? '入场培训台账' : '培训台账';
+    const dateStr = new Date().toISOString().slice(0, 10);
+    downloadBlob(await response.blob(), `${prefix}_${dateStr}.xlsx`);
     const canvas = createLedgerImage(events);
     canvas.toBlob(blob => {
-      if (blob) downloadBlob(blob, `培训台账_${new Date().toISOString().slice(0,10)}.png`);
+      if (blob) downloadBlob(blob, `${prefix}_${dateStr}.png`);
     }, 'image/png');
     closeModals();
     toast(`已生成 ${events.length} 场培训的 Excel 和图片`);
@@ -209,7 +213,10 @@ async function exportSelectedLedger() {
 
 async function loadEvents() {
   const keyword = $('keyword').value.trim();
-  const data = await api('/api/training-ledger/events?keyword=' + encodeURIComponent(keyword));
+  const params = new URLSearchParams();
+  if (keyword) params.set('keyword', keyword);
+  params.set('category', currentCategory);
+  const data = await api('/api/training-ledger/events?' + params.toString());
   const events = data.items;
   loadedEvents = events;
   const totalFiles = events.reduce((sum, item) => sum + item.files.length, 0);
@@ -222,6 +229,8 @@ async function loadEvents() {
 }
 
 function eventCard(event) {
+  const categoryBadge = event.category && event.category !== '专题培训'
+    ? `<span class="category-badge">${esc(event.category)}</span>` : '';
   const meta = [
     ['培训对象', event.audience],
     ['培训地点', event.training_location],
@@ -238,7 +247,7 @@ function eventCard(event) {
     <div class="date-block"><strong>${esc(event.training_date.slice(8, 10))}</strong><span>${esc(event.training_date.slice(0, 7))}</span></div>
     <div class="event-main">
       <div class="event-heading">
-        <div class="${adminPassword ? 'event-info-edit' : ''}" ${adminPassword ? `onclick="editEvent(${event.id})" title="点击修改培训信息"` : ''}><h3>${esc(event.name)}</h3>${event.description ? `<p>${esc(event.description)}</p>` : ''}<div class="event-meta">${meta}</div></div>
+        <div class="${adminPassword ? 'event-info-edit' : ''}" ${adminPassword ? `onclick="editEvent(${event.id})" title="点击修改培训信息"` : ''}><h3>${esc(event.name)}${categoryBadge}</h3>${event.description ? `<p>${esc(event.description)}</p>` : ''}<div class="event-meta">${meta}</div></div>
         <div class="event-actions"><span>${event.files.length} 个文件</span>${adminPassword ? `<button class="delete-event" onclick="deleteEvent(${event.id}, event)">删除</button>` : ''}</div>
       </div>
       ${adminPassword ? `<label class="inline-dropzone" data-event-id="${event.id}">
@@ -344,6 +353,7 @@ $('newEventBtn').onclick = () => {
   $('eventAudience').value = '';
   $('eventParticipantCount').value = '';
   $('eventDescription').value = '';
+  $('eventCategory').value = currentCategory;
   openModal('eventModal');
   $('eventName').focus();
 };
@@ -361,6 +371,7 @@ function editEvent(id) {
   $('eventAudience').value = event.audience || '';
   $('eventParticipantCount').value = event.participant_count || '';
   $('eventDescription').value = event.description || '';
+  $('eventCategory').value = event.category || '专题培训';
   openModal('eventModal');
   $('eventName').focus();
 }
@@ -390,6 +401,7 @@ $('batchImportBtn').onclick = () => {
   $('batchWorkspace').classList.add('hidden');
   $('batchSkipTopBtn').classList.add('hidden');
   $('batchProgress').textContent = '尚未选择文件';
+  $('batchCategory').value = currentCategory;
   openModal('batchModal');
 };
 $('refreshBtn').onclick = loadEvents;
@@ -417,6 +429,7 @@ $('eventForm').onsubmit = async e => {
       audience:$('eventAudience').value.trim(),
       participant_count:parseInt($('eventParticipantCount').value) || 0,
       description:$('eventDescription').value.trim(),
+      category:$('eventCategory').value,
     };
     await api(eventId ? `/api/training-ledger/events/${eventId}` : '/api/training-ledger/events', {
       method:eventId ? 'PATCH' : 'POST',
@@ -494,7 +507,7 @@ async function showBatchFile() {
 }
 
 async function refreshBatchEvents() {
-  const data = await api('/api/training-ledger/events');
+  const data = await api('/api/training-ledger/events?category=' + encodeURIComponent($('batchCategory').value));
   batchEvents = data.items.filter(item => item.training_date === $('batchDate').value);
   $('batchEventSelect').innerHTML = `<option value="new">＋ 新建培训名录</option>` +
     batchEvents.map(item => `<option value="${item.id}">${esc(item.name)}</option>`).join('');
@@ -533,7 +546,7 @@ async function saveBatchCurrent() {
       if (!name) throw new Error('请输入新培训名称');
       const created = await api('/api/training-ledger/events', {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({...metadata, name, training_date:trainingDate}),
+        body:JSON.stringify({...metadata, name, training_date:trainingDate, category:$('batchCategory').value}),
       });
       eventId = created.id;
     } else {
@@ -570,6 +583,7 @@ $('batchPicker').addEventListener('drop', event => {
   loadBatchFiles(droppedFiles(event.dataTransfer));
 });
 $('batchDate').onchange = refreshBatchEvents;
+$('batchCategory').onchange = refreshBatchEvents;
 $('batchEventSelect').onchange = fillBatchEventFields;
 $('batchSaveBtn').onclick = saveBatchCurrent;
 async function skipBatchCurrent() {
@@ -614,9 +628,35 @@ document.addEventListener('drop', event => {
   $('batchWorkspace').classList.add('hidden');
   $('batchSkipTopBtn').classList.add('hidden');
   $('batchProgress').textContent = '正在读取微信文件…';
+  $('batchCategory').value = currentCategory;
   openModal('batchModal');
   loadBatchFiles(files);
 });
+
+function setCategory(category) {
+  currentCategory = category;
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.category === category);
+  });
+  $('eventCategory').value = category;
+  $('batchCategory').value = category;
+  const title = category === '入场培训' ? '入场培训归档' : '每场培训，一处归档';
+  $('introTitle').textContent = title;
+  const url = new URL(location);
+  url.searchParams.set('category', category);
+  history.replaceState(null, '', url);
+  document.title = category === '入场培训' ? '入场培训台账共享中心' : '培训台账共享中心';
+}
+
+document.querySelectorAll('.cat-tab').forEach(tab => {
+  tab.addEventListener('click', e => {
+    e.preventDefault();
+    setCategory(tab.dataset.category);
+    loadEvents().catch(error => toast(error.message));
+  });
+});
+
+setCategory(currentCategory);
 
 if (adminPassword) enterAdmin(adminPassword).catch(() => {
   adminPassword = '';

@@ -25,7 +25,7 @@
     <section class="intro">
       <div>
         <p class="eyebrow">TRAINING ARCHIVE</p>
-        <h1>每场培训，一处归档</h1>
+        <h1 id="introTitle">每场培训，一处归档</h1>
         <p>签到单、培训照片和相关文件统一保存。打开即可查看，点击即可下载。</p>
       </div>
       <div class="stats">
@@ -33,6 +33,11 @@
         <div><strong id="fileCount">0</strong><span>归档文件</span></div>
       </div>
     </section>
+
+    <nav class="category-tabs">
+      <a class="cat-tab active" data-category="专题培训" href="?category=专题培训">专题培训</a>
+      <a class="cat-tab" data-category="入场培训" href="?category=入场培训">入场培训</a>
+    </nav>
 
     <section class="section-head">
       <div><h2>培训记录</h2><p id="resultText">正在读取台账…</p></div>
@@ -71,6 +76,12 @@
       <input id="eventEditId" type="hidden">
       <p class="eyebrow">TRAINING INFO</p><h2 id="eventFormTitle">新增培训名目</h2>
       <label>培训名称<input id="eventName" placeholder="例如：高处作业安全培训" required></label>
+      <label>培训类别
+        <select id="eventCategory">
+          <option value="专题培训">专题培训</option>
+          <option value="入场培训">入场培训</option>
+        </select>
+      </label>
       <label>培训日期<input id="eventDate" type="date" required></label>
       <div class="form-grid">
         <label>培训地点<input id="eventLocation" placeholder="例如：项目部会议室"></label>
@@ -104,6 +115,12 @@
         </section>
         <section class="batch-form">
           <label>培训日期<input id="batchDate" type="date"></label>
+          <label>培训类别
+            <select id="batchCategory">
+              <option value="专题培训">专题培训</option>
+              <option value="入场培训">入场培训</option>
+            </select>
+          </label>
           <label>选择当天培训名录
             <select id="batchEventSelect"></select>
           </label>

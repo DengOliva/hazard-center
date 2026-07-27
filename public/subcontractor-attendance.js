@@ -100,7 +100,7 @@ function renderDaily() {
 function renderPeople(items) {
   $('peopleBody').innerHTML = items.map(item => {
     const statusClass = item.status === '全勤' ? 'full' : (item.status === '未签到' ? 'zero' : 'partial');
-    return `<tr><td><strong>${esc(item.name)}</strong></td><td>${item.signed_days} 天</td><td>${item.missing_days} 天</td><td class="rate-cell">${Math.round(item.attendance_rate * 100)}%<div class="rate-line"><i style="width:${Math.round(item.attendance_rate * 100)}%"></i></div></td><td>${item.punch_count}</td><td>${item.first_date || '—'}</td><td>${item.last_date || '—'}</td><td><span class="status ${statusClass}">${item.status}</span></td></tr>`;
+    return `<tr><td><strong>${esc(item.name)}</strong></td><td>${esc(item.role || '—')}</td><td>${item.signed_days} 天</td><td>${item.missing_days} 天</td><td class="rate-cell">${Math.round(item.attendance_rate * 100)}%<div class="rate-line"><i style="width:${Math.round(item.attendance_rate * 100)}%"></i></div></td><td>${item.punch_count}</td><td>${item.first_date || '—'}</td><td>${item.last_date || '—'}</td><td><span class="status ${statusClass}">${item.status}</span></td></tr>`;
   }).join('');
 }
 
@@ -108,9 +108,22 @@ $('personSearch').oninput = () => {
   const keyword = $('personSearch').value.trim().toLowerCase();
   renderPeople(resultData.people.filter(item => `${item.name} ${item.status}`.toLowerCase().includes(keyword)));
 };
+function exportImage(role) {
+  const label = role || '全部';
+  const url = '/api/subcontractor-attendance/export-image' + (role ? '?role=' + encodeURIComponent(role) : '');
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = '';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  toast('正在下载 ' + label + ' 签到图片...');
+}
+$('exportTeamLeaderBtn').onclick = () => exportImage('班组长');
+$('exportAllBtn').onclick = () => exportImage('');
 $('reanalyzeBtn').onclick = () => {
   window.scrollTo({top:0, behavior:'smooth'});
-  toast('选择新一期签到台账后点击“更新看板”');
+  toast('选择新一期签到台账后点击”更新看板”');
 };
 
 function showSavedRoster(data) {

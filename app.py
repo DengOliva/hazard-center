@@ -1,3 +1,4 @@
+import io
 import json
 import math
 import os
@@ -1022,7 +1023,7 @@ def workbook_rows(upload_file):
 
 
 def parse_subcontractor_roster(upload_file):
-    names = []
+    people = []
     seen = set()
     for _, rows in workbook_rows(upload_file):
         for row in rows:
@@ -1036,10 +1037,11 @@ def parse_subcontractor_roster(upload_file):
             name = re.sub(r"^\d+[.、\s]+", "", name).strip()
             if name and name not in seen:
                 seen.add(name)
-                names.append(name)
-        if names:
+                role = nonempty[1] if len(nonempty) > 1 else ""
+                people.append({"name": name, "role": role})
+        if people:
             break
-    return names
+    return people
 
 
 def parse_attendance_rows(upload_file):
@@ -1102,6 +1104,9 @@ def subcontractor_attendance_analyze():
         return jsonify(error=f"Excel 读取失败：{exc}"), 400
     if not roster:
         return jsonify(error="名单表中未识别到姓名"), 400
+    if isinstance(roster[0], str):
+        roster = [{"name": n, "role": ""} for n in roster]
+    roster_names = [item["name"] for item in roster]
     if not attendance:
         return jsonify(error="签到台账中未识别到“姓名”和“日期”明细"), 400
     all_dates = sorted({item["date"] for item in attendance})
@@ -1115,11 +1120,13 @@ def subcontractor_attendance_analyze():
         person_dates.setdefault(item["name"], set()).add(item["date"])
         person_punches[item["name"]] = person_punches.get(item["name"], 0) + 1
     people = []
-    for name in roster:
+    for entry in roster:
+        name = entry["name"]
         dates = sorted(person_dates.get(name, set()))
         signed_days = len(dates)
         people.append({
             "name": name,
+            "role": entry["role"],
             "signed_days": signed_days,
             "missing_days": max(0, period_days - signed_days),
             "attendance_rate": round(signed_days / period_days, 4) if period_days else 0,
@@ -1130,7 +1137,7 @@ def subcontractor_attendance_analyze():
             "status": "全勤" if signed_days == period_days else ("未签到" if signed_days == 0 else "部分签到"),
         })
     people.sort(key=lambda item: (item["signed_days"], item["name"]))
-    roster_set = set(roster)
+    roster_set = set(roster_names)
     unmatched = sorted({item["name"] for item in attendance if item["name"] not in roster_set})
     daily = [{
         "date": day,
@@ -1187,6 +1194,106 @@ def subcontractor_attendance_current():
     if not saved:
         return jsonify(error="尚未导入签到统计数据"), 404
     return jsonify(json.loads(saved["result_json"]))
+
+
+@app.get("/api/subcontractor-attendance/export-image")
+def subcontractor_attendance_export_image():
+    with db() as conn:
+        saved = conn.execute(
+            "SELECT result_json FROM subcontractor_attendance_dashboard WHERE id=1"
+        ).fetchone()
+    if not saved:
+        return jsonify(error="尚未导入签到统计数据"), 404
+    data = json.loads(saved["result_json"])
+    role_filter = (request.args.get("role") or "").strip()
+    people = data["people"]
+    if role_filter:
+        people = [p for p in people if p.get("role") == role_filter]
+    return _generate_attendance_image(data, people, role_filter or "全部")
+
+
+def _generate_attendance_image(data, people, title_role):
+    from PIL import Image, ImageDraw, ImageFont
+    header_h = 150
+    row_h = 36
+    margin = 48
+    col_widths = [110, 90, 84, 92, 80, 140]
+    col_labels = ["姓名", "角色", "签到天数", "未签到天数", "签到率", "状态"]
+    table_w = sum(col_widths)
+    img_w = table_w + margin * 2
+    img_h = header_h + row_h + len(people) * row_h + 60
+    img = Image.new("RGB", (img_w, img_h), "#eef5f2")
+    draw = ImageDraw.Draw(img)
+    try:
+        font_title = ImageFont.truetype("msyh.ttc", 40)
+        font_sub = ImageFont.truetype("msyh.ttc", 18)
+        font_header = ImageFont.truetype("msyhbd.ttf", 16)
+        font_row = ImageFont.truetype("msyh.ttc", 15)
+        font_row_bold = ImageFont.truetype("msyhbd.ttf", 15)
+    except (OSError, IOError):
+        font_title = ImageFont.load_default()
+        font_sub = font_title
+        font_header = font_title
+        font_row = font_title
+        font_row_bold = font_title
+    # header gradient
+    for y in range(header_h):
+        ratio = y / header_h
+        r = int(0x12 + (0x17 - 0x12) * ratio)
+        g = int(0x3b + (0x6b - 0x3b) * ratio)
+        b = int(0x32 + (0x57 - 0x32) * ratio)
+        draw.line([(0, y), (img_w, y)], fill=(r, g, b))
+    draw.text((margin, 28), "SUBCONTRACTOR ATTENDANCE", fill=(0x75, 0xD9, 0xBB), font=font_sub)
+    draw.text((margin, 68), "分包代表签到看板", fill=(255, 255, 255), font=font_title)
+    subtitle = f"{data['start']} 至 {data['end']} | {title_role} | {len(people)} 人"
+    draw.text((margin, 118), subtitle, fill=(0xD8, 0xEB, 0xE5), font=font_sub)
+    # table header
+    x = margin
+    header_y = header_h
+    draw.rectangle([margin, header_y, img_w - margin, header_y + row_h], fill="#267b67")
+    for i, (label, w) in enumerate(zip(col_labels, col_widths)):
+        draw.text((x + 12, header_y + 8), label, fill=(255, 255, 255), font=font_header)
+        x += w
+    # rows
+    for row_i, person in enumerate(people):
+        y = header_y + row_h + row_i * row_h
+        bg = (255, 255, 255) if row_i % 2 == 0 else (0xF5, 0xF9, 0xF7)
+        draw.rectangle([margin, y, img_w - margin, y + row_h], fill=bg)
+        draw.line([(margin, y + row_h), (img_w - margin, y + row_h)], fill=(0xDC, 0xE8, 0xE3))
+        values = [
+            person["name"],
+            person.get("role", ""),
+            str(person["signed_days"]) + " 天",
+            str(person["missing_days"]) + " 天",
+            str(round(person["attendance_rate"] * 100)) + "%",
+        ]
+        status = person["status"]
+        x = margin
+        for i, (val, w) in enumerate(zip(values, col_widths)):
+            color = (0x17, 0x25, 0x1F) if i == 0 else (0x4E, 0x60, 0x59)
+            font = font_row_bold if i == 0 else font_row
+            draw.text((x + 12, y + 8), val, fill=color, font=font)
+            x += w
+        # status badge
+        sx = margin + sum(col_widths[:5]) + 12
+        badge_colors = {
+            "全勤": ((0xE8, 0xF5, 0xF0), (0x17, 0x6B, 0x57)),
+            "部分签到": ((0xFF, 0xF7, 0xE8), (0xAD, 0x74, 0x18)),
+            "未签到": ((0xFF, 0xF0, 0xEF), (0xB5, 0x47, 0x3D)),
+        }
+        bc, tc = badge_colors.get(status, ((0xF0, 0xF4, 0xF2), (0x52, 0x61, 0x5C)))
+        draw.rectangle([sx - 4, y + 6, sx + 60, y + row_h - 6], fill=bc)
+        draw.text((sx, y + 8), status, fill=tc, font=font_row)
+    # footer
+    fy = header_h + row_h + len(people) * row_h + 14
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+    draw.text((margin, fy), f"生成时间：{now_str}", fill=(0x71, 0x81, 0x7B), font=font_sub)
+    buf = io.BytesIO()
+    img.save(buf, "PNG")
+    buf.seek(0)
+    role_label = title_role if title_role != "全部" else "全部"
+    filename = f"分包签到_{role_label}_{data['start']}_{data['end']}.png"
+    return send_file(buf, as_attachment=True, download_name=filename, mimetype="image/png")
 
 
 @app.get("/api/meta")

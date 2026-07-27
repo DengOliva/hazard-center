@@ -40,7 +40,7 @@
     </section>
 
     <div id="results" class="hidden">
-      <section class="summary-head"><div><p class="eyebrow">SAVED DASHBOARD</p><h2 id="periodTitle">统计结果</h2><p id="sourceText"></p></div><button id="reanalyzeBtn">更新数据</button></section>
+      <section class="summary-head"><div><p class="eyebrow">SAVED DASHBOARD</p><h2 id="periodTitle">统计结果</h2><p id="sourceText"></p></div><div class="summary-actions"><button id="exportTeamLeaderBtn" class="export-btn">导出班组长</button><button id="exportAllBtn" class="export-btn">导出全部</button><button id="reanalyzeBtn">更新数据</button></div></section>
       <section class="kpis">
         <article><span>分包代表</span><strong id="kpiPeople">0</strong><small>名单人数</small></article>
         <article><span>平均签到</span><strong id="kpiAverage">0</strong><small>天 / 人</small></article>
@@ -67,7 +67,7 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>姓名</th><th>签到天数</th><th>未签到天数</th><th>签到率</th><th>打卡次数</th><th>首次签到</th><th>最后签到</th><th>状态</th></tr></thead>
+            <thead><tr><th>姓名</th><th>角色</th><th>签到天数</th><th>未签到天数</th><th>签到率</th><th>打卡次数</th><th>首次签到</th><th>最后签到</th><th>状态</th></tr></thead>
             <tbody id="peopleBody"></tbody>
           </table>
         </div>

@@ -120,6 +120,7 @@ function exportImage(role) {
   toast('正在下载 ' + label + ' 签到图片...');
 }
 $('exportTeamLeaderBtn').onclick = () => exportImage('班组长');
+$('exportRepBtn').onclick = () => exportImage('驻场代表');
 $('exportAllBtn').onclick = () => exportImage('');
 $('reanalyzeBtn').onclick = () => {
   window.scrollTo({top:0, behavior:'smooth'});

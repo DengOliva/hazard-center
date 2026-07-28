@@ -133,7 +133,7 @@
       var smax = Math.ceil(Math.max.apply(null, allS.map(function (d) { return d.score; })) + 1);
       drawLineChart("chart-star5", [
         { labels: star5.map(function (d) { return d.month; }), data: star5.map(function (d) { return d.score; }), color: "#e6a23c" },
-        { labels: star6.map(function (d) { return d.month; }), data: star6.map(function (d) { return d.score; }), color: "#c84d4d" }
+        { labels: star6.map(function (d) { return d.month; }), data: star6.map(function (d) { return d.score; }), color: "#FF0000" }
       ], smin, smax);
     }
 
@@ -144,7 +144,7 @@
       var amin = Math.floor(Math.min.apply(null, allA.map(function (d) { return d.score; })) - 2);
       var amax = Math.ceil(Math.max.apply(null, allA.map(function (d) { return d.score; })) + 1);
       drawLineChart("chart-aqhb", [
-        { labels: aq5.map(function (d) { return d.month; }), data: aq5.map(function (d) { return d.score; }), color: "#087b68" },
+        { labels: aq5.map(function (d) { return d.month; }), data: aq5.map(function (d) { return d.score; }), color: "#008000" },
         { labels: aq6.map(function (d) { return d.month; }), data: aq6.map(function (d) { return d.score; }), color: "#409eff" }
       ], amin, amax);
     }
@@ -157,7 +157,7 @@
   // === Type stats (section 四) ===
 
   var TYPE_COLORS = [
-    "#c84d4d", "#409eff", "#e6a23c", "#087b68", "#8b5cf6", "#f97316",
+    "#FF0000", "#409eff", "#e6a23c", "#008000", "#8b5cf6", "#f97316",
     "#06b6d4", "#ec4899", "#84cc16", "#f43f5e", "#6366f1", "#14b8a6"
   ];
 

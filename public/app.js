@@ -17,7 +17,7 @@ function parseFileTime(fn){if(!fn)return'';const nums=fn.match(/\d+/g);if(!nums)
 function renderMeta(){const b=meta.bounds,imp=meta.lastImport,ft=parseFileTime(imp?.filename);const t=ft?` · 更新于 ${ft}`:'';$('dataState').textContent=`${b.count.toLocaleString()} 条 · ${b.max||'暂无日期'}${t}`;$('headerUpdateTime').textContent=ft?`数据更新：${ft}`:'';$('headerUpdateTime').style.display=ft?'':'none';$('updateNote').textContent=ft?'（如数据过时请在ics系统导出缺失数据并导入系统，共同维护系统）':'';$('importInfo').textContent=imp?`${imp.filename} · ${imp.row_count.toLocaleString()} 条 · ${imp.min_date} 至 ${imp.max_date} · 更新于 ${ft}`:'尚未导入数据';$('datasetTypes').innerHTML=(meta.datasetTypes||[]).map(x=>`<div class="dataset-type"><b>${esc(x.label)}</b><div><code>${esc(x.filenameExample)}</code><small>${esc(x.description)}</small></div></div>`).join('')}
 async function loadStatistics(){const q=`${dates()}&category=${encodeURIComponent($('categoryFilter').value)}&department=${encodeURIComponent($('departmentFilter').value)}`;const data=await api('/api/statistics?'+q);stats=data.people;const c=data.comparison,total=c.internal+c.external,ratio=c.ratio===null?'∞ : 1':`${c.ratio} : 1`;$('internalCount').textContent=c.internal.toLocaleString();$('externalCount').textContent=c.external.toLocaleString();$('ratioCount').textContent=ratio;$('ratioBadge').textContent=c.met?'符合比例要求':'未达到比例要求';$('ratioBadge').className='badge '+(c.met?'':'bad');const max=Math.max(c.internal,c.external,1);$('internalBar').style.width=`${c.internal/max*100}%`;$('externalBar').style.width=`${c.external/max*100}%`;$('internalBarText').textContent=`${c.internal} 条`;$('externalBarText').textContent=`${c.external} 条`;const met=stats.filter(x=>x.met).length,rate=stats.length?Math.round(met/stats.length*100):0;$('metRate').textContent=rate+'%';$('metSummary').textContent=`${met} / ${stats.length} 人达标`;$('metCount').textContent=met;$('unmetCount').textContent=stats.length-met;$('donutText').textContent=rate+'%';$('donut').style.background=`conic-gradient(var(--green) ${rate}%,#e9efed ${rate}%)`;renderStats()}
 const exportData=new Map();
-function exportGroupImage(key){const d=exportData.get(key);if(!d)return;const c=document.createElement('canvas'),ctx=c.getContext('2d'),px=24,py=16,rowH=32,headH=34,titleH=46,noteH=20;ctx.font='14px "Microsoft YaHei",sans-serif';const colW=d.headers.map((h,i)=>{let w=ctx.measureText(h).width;d.rows.forEach(r=>{w=Math.max(w,ctx.measureText(String(r[i]||'')).width)});return Math.ceil(w)+24});const tw=colW.reduce((a,b)=>a+b,0),th=py*2+titleH+noteH+headH+d.rows.length*rowH,cw=tw+px*2;c.width=cw;c.height=th;ctx.fillStyle='#fff';ctx.fillRect(0,0,cw,th);ctx.font='bold 18px "Microsoft YaHei",sans-serif';ctx.fillStyle='#17312f';ctx.fillText(`${d.title} · ${d.dateRange}`,px,py+24);ctx.font='12px "Microsoft YaHei",sans-serif';ctx.fillStyle='#72817f';ctx.fillText(d.note,px,py+titleH-6);let y=py+titleH+noteH;ctx.fillStyle='#f7f9f8';ctx.fillRect(0,y,cw,headH);ctx.font='bold 13px "Microsoft YaHei",sans-serif';ctx.fillStyle='#657875';let x=px;d.headers.forEach((h,i)=>{ctx.fillText(h,x+8,y+23);x+=colW[i]});y+=headH;ctx.font='14px "Microsoft YaHei",sans-serif';d.rows.forEach(row=>{ctx.fillStyle=row[row.length-1]==='已达标'?'#e7f5f0':'#fdecec';ctx.fillRect(0,y,cw,rowH);ctx.fillStyle='#17312f';x=px;row.forEach((cell,i)=>{ctx.fillText(String(cell??''),x+8,y+23);x+=colW[i]});ctx.strokeStyle='#edf1f0';ctx.beginPath();ctx.moveTo(0,y+rowH);ctx.lineTo(cw,y+rowH);ctx.stroke();y+=rowH});const a=document.createElement('a');a.download=`${d.title}_${d.dateRange}.png`;a.href=c.toDataURL('image/png');a.click()}
+function exportGroupImage(key){const d=exportData.get(key);if(!d)return;const c=document.createElement('canvas'),ctx=c.getContext('2d'),px=24,py=16,rowH=32,headH=34,titleH=46,noteH=20;ctx.font='14px "Microsoft YaHei",sans-serif';const colW=d.headers.map((h,i)=>{let w=ctx.measureText(h).width;d.rows.forEach(r=>{w=Math.max(w,ctx.measureText(String(r[i]||'')).width)});return Math.ceil(w)+24});const tw=colW.reduce((a,b)=>a+b,0),th=py*2+titleH+noteH+headH+d.rows.length*rowH,cw=tw+px*2;c.width=cw;c.height=th;ctx.fillStyle='#fff';ctx.fillRect(0,0,cw,th);ctx.font='bold 18px "Microsoft YaHei",sans-serif';ctx.fillStyle='#17312f';ctx.fillText(`${d.title} · ${d.dateRange}`,px,py+24);ctx.font='12px "Microsoft YaHei",sans-serif';ctx.fillStyle='#72817f';ctx.fillText(d.note,px,py+titleH-6);let y=py+titleH+noteH;ctx.fillStyle='#f7f9f8';ctx.fillRect(0,y,cw,headH);ctx.font='bold 13px "Microsoft YaHei",sans-serif';ctx.fillStyle='#657875';let x=px;d.headers.forEach((h,i)=>{ctx.fillText(h,x+8,y+23);x+=colW[i]});y+=headH;ctx.font='14px "Microsoft YaHei",sans-serif';d.rows.forEach(row=>{ctx.fillStyle=row[row.length-1]==='已达标'?'#E8FFE8':'#FFE8E8';ctx.fillRect(0,y,cw,rowH);ctx.fillStyle='#17312f';x=px;row.forEach((cell,i)=>{ctx.fillText(String(cell??''),x+8,y+23);x+=colW[i]});ctx.strokeStyle='#edf1f0';ctx.beginPath();ctx.moveTo(0,y+rowH);ctx.lineTo(cw,y+rowH);ctx.stroke();y+=rowH});const a=document.createElement('a');a.download=`${d.title}_${d.dateRange}.png`;a.href=c.toDataURL('image/png');a.click()}
 function orderKey(group){return `hazard_people_order_${group}`}
 function getSavedOrder(group){try{return JSON.parse(localStorage.getItem(orderKey(group))||'[]')}catch{return []}}
 function saveOrder(group,names){localStorage.setItem(orderKey(group),JSON.stringify(names));toast(`${group}排序已保存`)}
@@ -28,9 +28,6 @@ function defaultSortPeople(group,items){
     if(group==='安全员'){
       const ai=safetyTop.indexOf(a.name),bi=safetyTop.indexOf(b.name);
       if(ai!==-1||bi!==-1)return (ai===-1?999:ai)-(bi===-1?999:bi);
-    }
-    if(group==='班组长和驻场代表'&&a.category!==b.category){
-      return a.category==='班组长'?-1:1;
     }
     return (a.department||'').localeCompare(b.department||'','zh-Hans')||a.name.localeCompare(b.name,'zh-Hans');
   });
@@ -66,7 +63,8 @@ function renderStats(){
   const start=$('startDate').value,end=$('endDate').value,dateRange=`${start} 至 ${end}`;
   const groups=[
     {title:'安全员',roles:['安全员'],note:'标准：10 条 / 天 · D级隐患不计入'},
-    {title:'班组长和驻场代表',roles:['班组长','驻场代表'],note:'班组长 2 条 / 天 · 驻场代表 3 条 / 周 · D级隐患不计入'},
+    {title:'班组长',roles:['班组长'],note:'标准：2 条 / 天 · D级隐患不计入'},
+    {title:'驻场代表',roles:['驻场代表'],note:'标准：3 条 / 周 · D级隐患不计入'},
     {title:'执行岗以上',roles:['执行岗及以上'],note:'标准：5 条 / 周 · D级隐患不计入'}
   ];
   $('statsGroups').innerHTML=groups.map(g=>{
@@ -74,13 +72,19 @@ function renderStats(){
     items=applySavedOrder(g.title,defaultSortPeople(g.title,items));
     const isSafetyGroup=g.title==='安全员';
     const isExecGroup=g.title==='执行岗以上';
-    const headers=isSafetyGroup?['拖动','姓名','录入标准','实际录入','B级隐患','状态']:(isExecGroup?['拖动','部门','姓名','录入标准','实际录入','状态']:['拖动','人员类型','姓名','录入标准','实际录入','状态']);
+    let headers;
+    if(isSafetyGroup){
+      headers=['拖动','姓名','录入标准','实际录入','B级隐患','状态'];
+    }else if(isExecGroup){
+      headers=['拖动','部门','姓名','录入标准','实际录入','状态'];
+    }else{
+      headers=['拖动','姓名','录入标准','实际录入','状态'];
+    }
     const std=x=>`${x.periodTarget} 条`;
     const displayDept=x=>x.department||x.category||'—';
     const expRows=items.map(x=>{
       const row=[];
       if(isExecGroup)row.push(displayDept(x));
-      if(!isSafetyGroup&& !isExecGroup)row.push(x.category);
       row.push(x.name,std(x),`${x.count} 条`);
       if(isSafetyGroup)row.push(String(x.bCount));
       row.push(x.met?'已达标':'未达标');
@@ -89,8 +93,7 @@ function renderStats(){
     const htmlRows=items.map(x=>{
       const bCell=isSafetyGroup?`<td>${x.bCount}</td>`:'';
       const deptCell=isExecGroup?`<td>${esc(displayDept(x))}</td>`:'';
-      const typeCell=(!isSafetyGroup&&!isExecGroup)?`<td>${esc(x.category)}</td>`:'';
-      return `<tr draggable="true" data-name="${esc(x.name)}" class="${x.met?'row-met':'row-unmet'}"><td class="drag-handle" title="拖动调整顺序">⋮⋮</td>${deptCell}${typeCell}<td><b>${esc(x.name)}</b></td><td>${std(x)}</td><td><b>${x.count}</b> 条</td>${bCell}<td>${x.met?'已达标':'未达标'}</td></tr>`;
+      return `<tr draggable="true" data-name="${esc(x.name)}" class="${x.met?'row-met':'row-unmet'}"><td class="drag-handle" title="拖动调整顺序">⋮⋮</td>${deptCell}<td><b>${esc(x.name)}</b></td><td>${std(x)}</td><td><b>${x.count}</b> 条</td>${bCell}<td>${x.met?'已达标':'未达标'}</td></tr>`;
     }).join('');
     exportData.set(g.title,{title:g.title,note:g.note,dateRange,headers:headers.slice(1),rows:expRows});
     return `<section class="score-group"><div class="score-heading"><div><h3>${g.title}</h3><small>${g.note} · 可拖动人员行调整顺序</small></div><div class="score-heading-right"><b>${items.filter(x=>x.met).length} / ${items.length} 达标</b><button class="btn-sm" onclick="resetGroupOrder('${g.title}')">恢复默认排序</button><button class="btn-sm" onclick="exportGroupImage('${g.title}')">导出图片</button></div></div><div class="table-wrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody data-group="${esc(g.title)}">${htmlRows||`<tr><td colspan="${headers.length}">当前筛选下暂无人员</td></tr>`}</tbody></table></div></section>`;
@@ -98,7 +101,7 @@ function renderStats(){
   groups.forEach(g=>enableGroupDrag(g.title));
 }
 async function loadHazardStats(){const q=`${hazardDates()}&search=${encodeURIComponent($('hazardSearch').value)}&unit=${encodeURIComponent($('unitFilter').value)}`;hazardStats=await api('/api/hazards/stats?'+q);const c=hazardStats;$('hzBCount').textContent=`共 ${(c.bHazards||[]).length} 条`;$('hzBBody').innerHTML=(c.bHazards||[]).length?c.bHazards.map(x=>`<tr><td>${x.check_date}</td><td>${esc(x.checker_name)}</td><td>${esc(x.description)}</td></tr>`).join(''):'<tr><td colspan="3">当前筛选下无 B 级隐患</td></tr>';const bInternal=c.bInternal||0,bExternal=c.bExternal||0,bTotal=bInternal+bExternal;$('rectificationRate').textContent='隐患整改率 '+c.rectificationRate+'%（'+c.rectificationCount+'/'+c.total+'）';if(bTotal>0){const ip=Math.round(bInternal/bTotal*100),ep=100-ip;$('hzBBlue').style.width=`${ip}%`;$('hzBRed').style.width=`${ep}%`;$('hzBInternal').textContent=`${bInternal} 条`;$('hzBExternal').textContent=`${bExternal} 条`;$('hzBRatioText').textContent=`中建二局 ${ip}% · 工程公司 ${ep}%`}else{$('hzBBlue').style.width='0%';$('hzBRed').style.width='0%';$('hzBInternal').textContent='—';$('hzBExternal').textContent='—';$('hzBRatioText').textContent='暂无 B 级隐患'}try{await loadCategoryStats()}catch(e){console.error('category stats failed',e)}}
-const HZ_COLORS=['#087b68','#e6a23c','#409eff','#c84d4d','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#0ea5e9'];
+const HZ_COLORS=['#008000','#e6a23c','#409eff','#FF0000','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#0ea5e9'];
 function buildCatTree(cats){const major={};for(const c of cats){const segs=c.category.split('/');const m=segs[0]||'其他';const s=segs.length>1?segs.slice(1).join('/'):m;if(!major[m])major[m]={name:m,total:0,internal:0,external:0,subs:{}};major[m].total+=c.total;major[m].internal+=c.internal;major[m].external+=c.external;if(!major[m].subs[s])major[m].subs[s]={name:s,total:0};major[m].subs[s].total+=c.total}return Object.values(major).sort((a,b)=>b.total-a.total)}
 async function loadCategoryStats(){const q=`${hazardDates()}&search=${encodeURIComponent($('hazardSearch').value)}&unit=${encodeURIComponent($('unitFilter').value)}`;categoryStats=await api('/api/hazards/category-stats?'+q);renderCategoryDonut(categoryStats.categories);renderCategoryRank(categoryStats.categories)}
 function renderCategoryDonut(cats){if(!cats||!cats.length){$('hzPie').style.background='#edf2f1';$('hzPieTotal').textContent='—';$('hzPieLegend').innerHTML='';return}

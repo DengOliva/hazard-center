@@ -3,8 +3,8 @@
   --card: #ffffff;
   --ink: #17312f;
   --muted: #72817f;
-  --green: #008000;
-  --red: #FF0000;
+  --green: #0d9488;
+  --red: #e05555;
   --orange: #e6a23c;
   --blue: #409eff;
   --border: #e4e7eb;
@@ -61,7 +61,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 40px; }
   padding: 7px 20px; background: var(--green); color: #fff;
   border: none; border-radius: 6px; cursor: pointer; font-size: 14px; transition: .15s;
 }
-.btn-filter:hover { background: #066b5a; }
+.btn-filter:hover { background: #0b7d72; }
 
 /* Panels */
 .panel {

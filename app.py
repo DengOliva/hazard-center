@@ -1222,7 +1222,7 @@ def _generate_attendance_image(data, people, title_role):
     table_w = sum(col_widths)
     img_w = table_w + margin * 2
     img_h = header_h + row_h + len(people) * row_h + 60
-    img = Image.new("RGB", (img_w, img_h), "#EEFFEE")
+    img = Image.new("RGB", (img_w, img_h), "#e6f7f0")
     draw = ImageDraw.Draw(img)
     try:
         font_title = ImageFont.truetype("msyh.ttc", 40)
@@ -1239,25 +1239,27 @@ def _generate_attendance_image(data, people, title_role):
     # header gradient
     for y in range(header_h):
         ratio = y / header_h
-        g = int(0x33 + (0x80 - 0x33) * ratio)
-        draw.line([(0, y), (img_w, y)], fill=(0, g, 0))
-    draw.text((margin, 28), "SUBCONTRACTOR ATTENDANCE", fill=(0x66, 0xFF, 0x66), font=font_sub)
+        r = int(0x0A + (0x0D - 0x0A) * ratio)
+        g = int(0x2E + (0x7A - 0x2E) * ratio)
+        b = int(0x26 + (0x5C - 0x26) * ratio)
+        draw.line([(0, y), (img_w, y)], fill=(r, g, b))
+    draw.text((margin, 28), "SUBCONTRACTOR ATTENDANCE", fill=(0x75, 0xD9, 0xBB), font=font_sub)
     draw.text((margin, 68), "分包代表签到看板", fill=(255, 255, 255), font=font_title)
     subtitle = f"{data['start']} 至 {data['end']} | {title_role} | {len(people)} 人"
-    draw.text((margin, 118), subtitle, fill=(0xCC, 0xFF, 0xCC), font=font_sub)
+    draw.text((margin, 118), subtitle, fill=(0xD8, 0xEB, 0xE5), font=font_sub)
     # table header
     x = margin
     header_y = header_h
-    draw.rectangle([margin, header_y, img_w - margin, header_y + row_h], fill="#008000")
+    draw.rectangle([margin, header_y, img_w - margin, header_y + row_h], fill="#0d7a5c")
     for i, (label, w) in enumerate(zip(col_labels, col_widths)):
         draw.text((x + 12, header_y + 8), label, fill=(255, 255, 255), font=font_header)
         x += w
     # rows
     for row_i, person in enumerate(people):
         y = header_y + row_h + row_i * row_h
-        bg = (255, 255, 255) if row_i % 2 == 0 else (0xF5, 0xFF, 0xF5)
+        bg = (255, 255, 255) if row_i % 2 == 0 else (0xF5, 0xF9, 0xF7)
         draw.rectangle([margin, y, img_w - margin, y + row_h], fill=bg)
-        draw.line([(margin, y + row_h), (img_w - margin, y + row_h)], fill=(0xCC, 0xEE, 0xCC))
+        draw.line([(margin, y + row_h), (img_w - margin, y + row_h)], fill=(0xDC, 0xE8, 0xE3))
         values = [
             person["name"],
             person.get("role", ""),
@@ -1275,9 +1277,9 @@ def _generate_attendance_image(data, people, title_role):
         # status badge
         sx = margin + sum(col_widths[:5]) + 12
         badge_colors = {
-            "全勤": ((0xE8, 0xFF, 0xE8), (0x00, 0x80, 0x00)),
+            "全勤": ((0xE8, 0xF5, 0xF0), (0x0D, 0x7A, 0x5C)),
             "部分签到": ((0xFF, 0xF7, 0xE8), (0xAD, 0x74, 0x18)),
-            "未签到": ((0xFF, 0xE8, 0xE8), (0xFF, 0x00, 0x00)),
+            "未签到": ((0xFC, 0xE8, 0xE8), (0xD6, 0x30, 0x31)),
         }
         bc, tc = badge_colors.get(status, ((0xF0, 0xF4, 0xF2), (0x52, 0x61, 0x5C)))
         draw.rectangle([sx - 4, y + 6, sx + 60, y + row_h - 6], fill=bc)

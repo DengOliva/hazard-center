@@ -1038,8 +1038,7 @@ def parse_subcontractor_roster(upload_file):
             if name and name not in seen:
                 seen.add(name)
                 role = nonempty[1] if len(nonempty) > 1 else ""
-                department = nonempty[2] if len(nonempty) > 2 else ""
-                people.append({"name": name, "role": role, "department": department})
+                people.append({"name": name, "role": role})
         if people:
             break
     return people
@@ -1106,7 +1105,7 @@ def subcontractor_attendance_analyze():
     if not roster:
         return jsonify(error="名单表中未识别到姓名"), 400
     if isinstance(roster[0], str):
-        roster = [{"name": n, "role": "", "department": ""} for n in roster]
+        roster = [{"name": n, "role": ""} for n in roster]
     roster_names = [item["name"] for item in roster]
     if not attendance:
         return jsonify(error="签到台账中未识别到“姓名”和“日期”明细"), 400
@@ -1128,7 +1127,6 @@ def subcontractor_attendance_analyze():
         people.append({
             "name": name,
             "role": entry["role"],
-            "department": entry.get("department", ""),
             "signed_days": signed_days,
             "missing_days": max(0, period_days - signed_days),
             "attendance_rate": round(signed_days / period_days, 4) if period_days else 0,
@@ -1208,12 +1206,9 @@ def subcontractor_attendance_export_image():
         return jsonify(error="尚未导入签到统计数据"), 404
     data = json.loads(saved["result_json"])
     role_filter = (request.args.get("role") or "").strip()
-    exclude_dept = (request.args.get("exclude_dept") or "").strip()
     people = data["people"]
     if role_filter:
         people = [p for p in people if p.get("role") == role_filter]
-    if exclude_dept:
-        people = [p for p in people if p.get("department") != exclude_dept]
     return _generate_attendance_image(data, people, role_filter or "全部")
 
 

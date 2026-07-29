@@ -108,13 +108,9 @@ $('personSearch').oninput = () => {
   const keyword = $('personSearch').value.trim().toLowerCase();
   renderPeople(resultData.people.filter(item => `${item.name} ${item.status}`.toLowerCase().includes(keyword)));
 };
-function exportImage(role, excludeDept) {
+function exportImage(role) {
   const label = role || '全部';
-  const params = new URLSearchParams();
-  if (role) params.set('role', role);
-  if (excludeDept) params.set('exclude_dept', excludeDept);
-  const qs = params.toString();
-  const url = '/api/subcontractor-attendance/export-image' + (qs ? '?' + qs : '');
+  const url = '/api/subcontractor-attendance/export-image' + (role ? '?role=' + encodeURIComponent(role) : '');
   const link = document.createElement('a');
   link.href = url;
   link.download = '';
@@ -125,7 +121,6 @@ function exportImage(role, excludeDept) {
 }
 $('exportTeamLeaderBtn').onclick = () => exportImage('班组长');
 $('exportRepBtn').onclick = () => exportImage('驻场代表');
-$('exportExecBtn').onclick = () => exportImage('执行岗及以上', '经理部');
 $('exportAllBtn').onclick = () => exportImage('');
 $('reanalyzeBtn').onclick = () => {
   window.scrollTo({top:0, behavior:'smooth'});

@@ -82,7 +82,8 @@ function renderStats(){
     }
     const std=x=>`${x.periodTarget} 条`;
     const displayDept=x=>x.department||x.category||'—';
-    const expRows=items.map(x=>{
+    const exportItems=isExecGroup?items.filter(x=>(x.department||'')!=='经理部'):items;
+    const expRows=exportItems.map(x=>{
       const row=[];
       if(isExecGroup)row.push(displayDept(x));
       row.push(x.name,std(x),`${x.count} 条`);

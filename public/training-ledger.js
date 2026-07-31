@@ -342,6 +342,17 @@ function removeQueued(index) {
 
 $('adminBtn').onclick = () => adminPassword ? toast('当前已是管理模式') : openModal('passwordModal');
 $('generateLedgerBtn').onclick = openLedgerExport;
+const CATEGORY_DEFAULTS = {
+  '入场培训': { location: '党群活动室', instructor: '徐荣', audience: '入场培训人员' },
+};
+
+function applyCategoryDefaults(category) {
+  const defs = CATEGORY_DEFAULTS[category];
+  $('eventLocation').value = defs?.location || '';
+  $('eventInstructor').value = defs?.instructor || '';
+  $('eventAudience').value = defs?.audience || '';
+}
+
 $('selectAllExportBtn').onclick = () => {
   const inputs = Array.from($('exportEventList').querySelectorAll('input'));
   const shouldSelect = !inputs.every(input => input.checked);
@@ -355,12 +366,10 @@ $('newEventBtn').onclick = () => {
   $('eventSubmitBtn').textContent = '创建培训';
   $('eventDate').value = new Date().toISOString().slice(0, 10);
   $('eventName').value = '';
-  $('eventLocation').value = '';
-  $('eventInstructor').value = '';
-  $('eventAudience').value = '';
-  $('eventParticipantCount').value = '';
   $('eventDescription').value = '';
+  $('eventParticipantCount').value = '';
   $('eventCategory').value = currentCategory;
+  applyCategoryDefaults(currentCategory);
   openModal('eventModal');
   $('eventName').focus();
 };
@@ -441,6 +450,10 @@ $('passwordForm').onsubmit = async e => {
   e.preventDefault();
   try { await enterAdmin($('passwordInput').value); } catch (error) { toast(error.message); }
 };
+$('eventCategory').addEventListener('change', () => {
+  if (!$('eventEditId').value) applyCategoryDefaults($('eventCategory').value);
+});
+
 $('eventForm').onsubmit = async e => {
   e.preventDefault();
   try {
@@ -545,9 +558,10 @@ function fillBatchEventFields() {
   const event = batchEvents.find(item => String(item.id) === selectedId);
   $('batchNewNameWrap').style.display = event ? 'none' : '';
   $('batchNewName').value = event ? event.name : '';
-  $('batchLocation').value = event?.training_location || '';
-  $('batchInstructor').value = event?.instructor || '';
-  $('batchAudience').value = event?.audience || '';
+  const defs = !event ? CATEGORY_DEFAULTS[$('batchCategory').value] : null;
+  $('batchLocation').value = event?.training_location || defs?.location || '';
+  $('batchInstructor').value = event?.instructor || defs?.instructor || '';
+  $('batchAudience').value = event?.audience || defs?.audience || '';
   $('batchParticipantCount').value = event?.participant_count || '';
 }
 

@@ -653,6 +653,7 @@ function setCategory(category) {
   url.searchParams.set('category', category);
   history.replaceState(null, '', url);
   document.title = category !== primary ? `${category}台账共享中心` : '培训台账共享中心';
+  loadStats().catch(() => {});
 }
 
 function bindCategoryTabClicks() {
@@ -824,9 +825,42 @@ $('addCategoryBtn').onclick = async () => {
   } catch (error) { toast(error.message); }
 };
 
+async function loadStats() {
+  const from = $('statsDateFrom').value;
+  const to = $('statsDateTo').value;
+  if (!from || !to) return;
+  const params = new URLSearchParams({ start_date: from, end_date: to });
+  if (currentCategory) params.set('category', currentCategory);
+  try {
+    const data = await api('/api/training-ledger/stats?' + params.toString());
+    $('statsSessions').textContent = data.sessions;
+    $('statsParticipants').textContent = data.participants;
+  } catch (error) {
+    $('statsSessions').textContent = '—';
+    $('statsParticipants').textContent = '—';
+  }
+}
+
+function setStatsDefaults() {
+  const now = new Date();
+  $('statsDateTo').value = now.toISOString().slice(0, 10);
+  $('statsDateFrom').value = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
+}
+
+$('statsMonthBtn').onclick = () => {
+  setStatsDefaults();
+  loadStats().catch(() => {});
+};
+
+$('statsRefreshBtn').onclick = () => loadStats().catch(() => {});
+
+$('statsDateFrom').addEventListener('change', () => loadStats().catch(() => {}));
+$('statsDateTo').addEventListener('change', () => loadStats().catch(() => {}));
+
 async function initialize() {
   await loadCategories();
   setCategory(currentCategory);
+  setStatsDefaults();
   if (adminPassword) {
     enterAdmin(adminPassword).catch(() => {
       adminPassword = '';
@@ -836,6 +870,7 @@ async function initialize() {
   } else {
     loadEvents().catch(error => toast(error.message));
   }
+  loadStats().catch(() => {});
 }
 
 initialize();

@@ -36,6 +36,23 @@
 
     <nav class="category-tabs" id="categoryTabs"></nav>
 
+    <section class="period-stats">
+      <div class="period-head">
+        <h3>周期统计</h3>
+        <div class="period-dates">
+          <input type="date" id="statsDateFrom">
+          <span>至</span>
+          <input type="date" id="statsDateTo">
+          <button class="ghost" id="statsMonthBtn">本月</button>
+          <button class="ghost" id="statsRefreshBtn">统计</button>
+        </div>
+      </div>
+      <div class="period-cards">
+        <div class="period-card"><strong id="statsSessions">—</strong><span>培训场次</span></div>
+        <div class="period-card"><strong id="statsParticipants">—</strong><span>培训人次</span></div>
+      </div>
+    </section>
+
     <section class="section-head">
       <div><h2>培训记录</h2><p id="resultText">正在读取台账…</p></div>
       <button class="text-button" id="refreshBtn">刷新</button>

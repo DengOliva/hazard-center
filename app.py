@@ -1990,6 +1990,31 @@ def training_ledger_reorder_categories():
     return jsonify(ok=True)
 
 
+@app.get("/api/training-ledger/stats")
+def training_ledger_stats():
+    start_date = (request.args.get("start_date") or "").strip()
+    end_date = (request.args.get("end_date") or "").strip()
+    category = (request.args.get("category") or "").strip()
+    where = []
+    params = []
+    if start_date:
+        where.append("training_date >= ?")
+        params.append(start_date)
+    if end_date:
+        where.append("training_date <= ?")
+        params.append(end_date)
+    if category:
+        where.append("category = ?")
+        params.append(category)
+    clause = ("WHERE " + " AND ".join(where)) if where else ""
+    with db() as conn:
+        row = conn.execute(
+            f"SELECT COUNT(*) AS sessions, COALESCE(SUM(participant_count), 0) AS participants FROM training_ledger_events {clause}",
+            params,
+        ).fetchone()
+    return jsonify(sessions=row["sessions"], participants=row["participants"])
+
+
 @app.post("/api/training-ledger/events/<int:event_id>/files")
 def training_ledger_upload(event_id):
     if not ledger_password_ok():

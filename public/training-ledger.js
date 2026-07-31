@@ -246,6 +246,7 @@ function eventCard(event) {
       ${file.kind === 'image' ? `<a class="thumb" href="${file.preview_url}" target="_blank"><img src="${file.preview_url}" alt="${esc(file.display_name)}" loading="lazy"></a>` : `<div class="file-type">${esc(fileIcon(file))}</div>`}
       <div class="file-info"><b title="${esc(file.display_name)}">${esc(file.display_name)}</b><span>${sizeText(file.size)} · ${file.kind === 'image' ? '培训照片' : '培训文件'}</span></div>
       <a class="download" href="${file.download_url}" title="下载 ${esc(file.display_name)}">↓<span>下载</span></a>
+      ${adminPassword ? `<button class="delete-file-btn" onclick="deleteFile(${file.id}, event)" title="删除文件">×</button>` : ''}
     </article>`).join('') : `<div class="no-files">暂未上传资料</div>`;
   return `<section class="event-card">
     <div class="date-block"><strong>${esc(event.training_date.slice(8, 10))}</strong><span>${esc(event.training_date.slice(0, 7))}</span></div>
@@ -400,6 +401,24 @@ async function deleteEvent(id, clickEvent) {
     toast(error.message);
   }
 }
+
+async function deleteFile(fileId, clickEvent) {
+  clickEvent?.stopPropagation();
+  clickEvent?.preventDefault();
+  if (!confirm('确定删除该文件吗？此操作无法撤销。')) return;
+  try {
+    await api(`/api/training-ledger/files/${fileId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword }),
+    });
+    await loadEvents();
+    toast('文件已删除');
+  } catch (error) {
+    toast(error.message);
+  }
+}
+
 $('batchImportBtn').onclick = () => {
   batchQueue = [];
   batchIndex = 0;

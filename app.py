@@ -2073,6 +2073,21 @@ def training_ledger_preview(file_id):
     return send_file(target, mimetype=item["content_type"], conditional=True)
 
 
+@app.delete("/api/training-ledger/files/<int:file_id>")
+def training_ledger_delete_file(file_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        item = conn.execute("SELECT * FROM training_ledger_files WHERE id=?", (file_id,)).fetchone()
+        if not item:
+            return jsonify(error="文件不存在"), 404
+        conn.execute("DELETE FROM training_ledger_files WHERE id=?", (file_id,))
+    target = TRAINING_LEDGER_DIR / item["stored_name"]
+    if target.is_file():
+        target.unlink()
+    return jsonify(ok=True, id=file_id)
+
+
 @app.get("/api/training/materials")
 def training_materials():
     materials = load_training_materials()

@@ -34,10 +34,7 @@
       </div>
     </section>
 
-    <nav class="category-tabs">
-      <a class="cat-tab active" data-category="专题培训" href="?category=专题培训">专题培训</a>
-      <a class="cat-tab" data-category="入场培训" href="?category=入场培训">入场培训</a>
-    </nav>
+    <nav class="category-tabs" id="categoryTabs"></nav>
 
     <section class="section-head">
       <div><h2>培训记录</h2><p id="resultText">正在读取台账…</p></div>
@@ -77,10 +74,7 @@
       <p class="eyebrow">TRAINING INFO</p><h2 id="eventFormTitle">新增培训名目</h2>
       <label>培训名称<input id="eventName" placeholder="例如：高处作业安全培训" required></label>
       <label>培训类别
-        <select id="eventCategory">
-          <option value="专题培训">专题培训</option>
-          <option value="入场培训">入场培训</option>
-        </select>
+        <select id="eventCategory"></select>
       </label>
       <label>培训日期<input id="eventDate" type="date" required></label>
       <div class="form-grid">
@@ -116,10 +110,7 @@
         <section class="batch-form">
           <label>培训日期<input id="batchDate" type="date"></label>
           <label>培训类别
-            <select id="batchCategory">
-              <option value="专题培训">专题培训</option>
-              <option value="入场培训">入场培训</option>
-            </select>
+            <select id="batchCategory"></select>
           </label>
           <label>选择当天培训名录
             <select id="batchEventSelect"></select>
@@ -153,6 +144,19 @@
       </label>
       <div id="fileQueue" class="file-queue"></div>
       <button class="primary wide" id="uploadBtn" disabled>开始上传</button>
+    </div>
+  </div>
+
+  <div class="modal" id="categoryModal" aria-hidden="true">
+    <div class="dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">MANAGE MODULES</p><h2>管理培训模块</h2>
+      <p>可新增、重命名或删除培训分类模块，拖拽排序。</p>
+      <div class="category-list" id="categoryList"></div>
+      <div class="category-add">
+        <input id="newCategoryName" placeholder="输入新模块名称">
+        <button class="primary" id="addCategoryBtn">新增</button>
+      </div>
     </div>
   </div>
 

@@ -254,6 +254,12 @@ def init_db():
             attendance_filename TEXT NOT NULL DEFAULT '',
             imported_at TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS training_categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            sort_order INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL
+        );
         """)
         ledger_columns = {row[1] for row in conn.execute("PRAGMA table_info(training_ledger_events)")}
         if "schedule_time" not in ledger_columns:
@@ -270,6 +276,14 @@ def init_db():
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN participant_count INTEGER NOT NULL DEFAULT 0")
         if "category" not in ledger_columns:
             conn.execute("ALTER TABLE training_ledger_events ADD COLUMN category TEXT NOT NULL DEFAULT '专题培训'")
+        conn.execute("""
+            INSERT OR IGNORE INTO training_categories (name, sort_order, created_at)
+            VALUES ('专题培训', 0, ?)
+        """, (datetime.now().isoformat(timespec="seconds"),))
+        conn.execute("""
+            INSERT OR IGNORE INTO training_categories (name, sort_order, created_at)
+            VALUES ('入场培训', 1, ?)
+        """, (datetime.now().isoformat(timespec="seconds"),))
         existing_ledger_files = conn.execute("""
             SELECT f.id,f.original_name,f.kind,e.name,e.training_date
             FROM training_ledger_files f
@@ -1873,6 +1887,107 @@ def training_ledger_delete_event(event_id):
         if target.parent == TRAINING_LEDGER_DIR and target.is_file():
             target.unlink()
     return jsonify(ok=True, id=event_id)
+
+
+@app.get("/api/training-ledger/categories")
+def training_ledger_categories():
+    with db() as conn:
+        rows = conn.execute(
+            "SELECT id, name, sort_order FROM training_categories ORDER BY sort_order, id"
+        ).fetchall()
+    return jsonify(items=[dict(row) for row in rows])
+
+
+@app.post("/api/training-ledger/categories")
+def training_ledger_create_category():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    name = str(body.get("name") or "").strip()
+    if not name:
+        return jsonify(error="请输入模块名称"), 400
+    now = datetime.now().isoformat(timespec="seconds")
+    with db() as conn:
+        existing = conn.execute(
+            "SELECT id FROM training_categories WHERE name=?", (name,)
+        ).fetchone()
+        if existing:
+            return jsonify(error="模块名称已存在"), 409
+        max_order = conn.execute(
+            "SELECT COALESCE(MAX(sort_order), -1) AS max_order FROM training_categories"
+        ).fetchone()["max_order"]
+        cursor = conn.execute(
+            "INSERT INTO training_categories (name, sort_order, created_at) VALUES (?, ?, ?)",
+            (name, max_order + 1, now),
+        )
+    return jsonify(ok=True, id=cursor.lastrowid, name=name, sort_order=max_order + 1)
+
+
+@app.patch("/api/training-ledger/categories/<int:category_id>")
+def training_ledger_update_category(category_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    name = str(body.get("name") or "").strip()
+    if not name:
+        return jsonify(error="请输入模块名称"), 400
+    with db() as conn:
+        cat = conn.execute(
+            "SELECT id, name FROM training_categories WHERE id=?", (category_id,)
+        ).fetchone()
+        if not cat:
+            return jsonify(error="模块不存在"), 404
+        dup = conn.execute(
+            "SELECT id FROM training_categories WHERE name=? AND id!=?", (name, category_id)
+        ).fetchone()
+        if dup:
+            return jsonify(error="模块名称已存在"), 409
+        conn.execute(
+            "UPDATE training_categories SET name=? WHERE id=?", (name, category_id)
+        )
+        conn.execute(
+            "UPDATE training_ledger_events SET category=? WHERE category=?",
+            (name, cat["name"]),
+        )
+    return jsonify(ok=True, id=category_id, name=name)
+
+
+@app.delete("/api/training-ledger/categories/<int:category_id>")
+def training_ledger_delete_category(category_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        cat = conn.execute(
+            "SELECT id, name FROM training_categories WHERE id=?", (category_id,)
+        ).fetchone()
+        if not cat:
+            return jsonify(error="模块不存在"), 404
+        count = conn.execute("SELECT COUNT(*) AS cnt FROM training_categories").fetchone()["cnt"]
+        if count <= 1:
+            return jsonify(error="至少保留一个培训模块"), 400
+        conn.execute(
+            "UPDATE training_ledger_events SET category='专题培训' WHERE category=?",
+            (cat["name"],)
+        )
+        conn.execute("DELETE FROM training_categories WHERE id=?", (category_id,))
+    return jsonify(ok=True, id=category_id)
+
+
+@app.post("/api/training-ledger/categories/reorder")
+def training_ledger_reorder_categories():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    ids = body.get("ids")
+    if not ids or not isinstance(ids, list):
+        return jsonify(error="请提供模块ID列表"), 400
+    with db() as conn:
+        for index, cat_id in enumerate(ids):
+            conn.execute(
+                "UPDATE training_categories SET sort_order=? WHERE id=?",
+                (index, int(cat_id)),
+            )
+    return jsonify(ok=True)
 
 
 @app.post("/api/training-ledger/events/<int:event_id>/files")

@@ -4,6 +4,7 @@ let adminPassword = sessionStorage.getItem('trainingLedgerPassword') || '';
 let activeEventId = null;
 let queuedFiles = [];
 let loadedEvents = [];
+let categories = [];
 let batchQueue = [];
 let batchIndex = 0;
 let batchPreviewUrl = '';
@@ -128,7 +129,8 @@ function createLedgerImage(events) {
   ctx.fillText('TRAINING LEDGER', margin, 48);
   ctx.fillStyle = '#ffffff';
   ctx.font = '700 46px "Microsoft YaHei"';
-  const categoryTitle = events[0].category === '入场培训' ? '入场培训台账' : '培训台账';
+  const primary = categories.length ? categories[0].name : '专题培训';
+  const categoryTitle = events[0].category !== primary ? `${events[0].category}台账` : '培训台账';
   ctx.fillText(categoryTitle, margin, 105);
   ctx.fillStyle = '#d8ebe5';
   ctx.font = '22px "Microsoft YaHei"';
@@ -194,7 +196,8 @@ async function exportSelectedLedger() {
       const error = await response.json();
       throw new Error(error.error || 'Excel 生成失败');
     }
-    const prefix = currentCategory === '入场培训' ? '入场培训台账' : '培训台账';
+    const primary = categories.length ? categories[0].name : '专题培训';
+    const prefix = currentCategory !== primary ? `${currentCategory}台账` : '培训台账';
     const dateStr = new Date().toISOString().slice(0, 10);
     downloadBlob(await response.blob(), `${prefix}_${dateStr}.xlsx`);
     const canvas = createLedgerImage(events);
@@ -229,7 +232,8 @@ async function loadEvents() {
 }
 
 function eventCard(event) {
-  const categoryBadge = event.category && event.category !== '专题培训'
+  const primaryCategory = categories.length ? categories[0].name : '专题培训';
+  const categoryBadge = event.category && event.category !== primaryCategory
     ? `<span class="category-badge">${esc(event.category)}</span>` : '';
   const meta = [
     ['培训对象', event.audience],
@@ -307,6 +311,8 @@ async function enterAdmin(password) {
   $('adminBtn').textContent = '已进入管理模式';
   $('newEventBtn').classList.remove('hidden');
   $('batchImportBtn').classList.remove('hidden');
+  renderCategoryTabs();
+  bindCategoryTabClicks();
   closeModals();
   await loadEvents();
 }
@@ -640,27 +646,196 @@ function setCategory(category) {
   });
   $('eventCategory').value = category;
   $('batchCategory').value = category;
-  const title = category === '入场培训' ? '入场培训归档' : '每场培训，一处归档';
+  const primary = categories.length ? categories[0].name : '专题培训';
+  const title = category !== primary ? `${category}归档` : '每场培训，一处归档';
   $('introTitle').textContent = title;
   const url = new URL(location);
   url.searchParams.set('category', category);
   history.replaceState(null, '', url);
-  document.title = category === '入场培训' ? '入场培训台账共享中心' : '培训台账共享中心';
+  document.title = category !== primary ? `${category}台账共享中心` : '培训台账共享中心';
 }
 
-document.querySelectorAll('.cat-tab').forEach(tab => {
-  tab.addEventListener('click', e => {
-    e.preventDefault();
-    setCategory(tab.dataset.category);
-    loadEvents().catch(error => toast(error.message));
+function bindCategoryTabClicks() {
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    tab.addEventListener('click', e => {
+      e.preventDefault();
+      setCategory(tab.dataset.category);
+      loadEvents().catch(error => toast(error.message));
+    });
   });
-});
+}
 
-setCategory(currentCategory);
+async function loadCategories() {
+  const data = await api('/api/training-ledger/categories');
+  categories = data.items;
+  renderCategoryTabs();
+  populateCategoryDropdowns();
+  bindCategoryTabClicks();
+}
 
-if (adminPassword) enterAdmin(adminPassword).catch(() => {
-  adminPassword = '';
-  sessionStorage.removeItem('trainingLedgerPassword');
-  loadEvents();
-});
-else loadEvents().catch(error => toast(error.message));
+function renderCategoryTabs() {
+  const primary = categories.length ? categories[0].name : '专题培训';
+  if (!categories.find(c => c.name === currentCategory)) {
+    currentCategory = primary;
+  }
+  $('categoryTabs').innerHTML = categories.map(cat => {
+    const active = cat.name === currentCategory ? ' active' : '';
+    return `<a class="cat-tab${active}" data-category="${esc(cat.name)}" href="?category=${encodeURIComponent(cat.name)}">${esc(cat.name)}</a>`;
+  }).join('') + (adminPassword ? `<button class="manage-categories-btn" id="manageCategoriesBtn" title="管理培训模块">⚙</button>` : '');
+  if (adminPassword) {
+    $('manageCategoriesBtn').onclick = openCategoryManager;
+  }
+}
+
+function populateCategoryDropdowns() {
+  const options = categories.map(cat => `<option value="${esc(cat.name)}">${esc(cat.name)}</option>`).join('');
+  $('eventCategory').innerHTML = options;
+  $('batchCategory').innerHTML = options;
+  $('eventCategory').value = currentCategory;
+  $('batchCategory').value = currentCategory;
+}
+
+function openCategoryManager() {
+  renderCategoryList();
+  openModal('categoryModal');
+}
+
+function renderCategoryList() {
+  $('categoryList').innerHTML = categories.map((cat, i) => `
+    <div class="category-row" draggable="true" data-id="${cat.id}">
+      <span class="drag-handle" title="拖拽排序">⠿</span>
+      <input class="category-name-input" value="${esc(cat.name)}" data-id="${cat.id}" placeholder="模块名称">
+      <button class="save-cat-btn" data-id="${cat.id}" data-idx="${i}" title="保存名称">✓</button>
+      <button class="delete-cat-btn" data-id="${cat.id}" title="删除模块">×</button>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.save-cat-btn').forEach(btn => {
+    btn.onclick = async () => {
+      const id = Number(btn.dataset.id);
+      const idx = Number(btn.dataset.idx);
+      const input = document.querySelector(`.category-name-input[data-id="${id}"]`);
+      const newName = input.value.trim();
+      if (!newName) { toast('模块名称不能为空'); return; }
+      if (newName === categories[idx].name) { toast('名称未变更'); return; }
+      try {
+        const result = await api(`/api/training-ledger/categories/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: adminPassword, name: newName }),
+        });
+        categories[idx].name = newName;
+        renderCategoryTabs();
+        populateCategoryDropdowns();
+        bindCategoryTabClicks();
+        renderCategoryList();
+        toast('模块已重命名');
+      } catch (error) { toast(error.message); }
+    };
+  });
+
+  document.querySelectorAll('.delete-cat-btn').forEach(btn => {
+    btn.onclick = async () => {
+      const id = Number(btn.dataset.id);
+      const cat = categories.find(c => c.id === id);
+      if (!cat) return;
+      if (!confirm(`确定删除"${cat.name}"模块吗？该模块下的培训记录将归入默认模块。`)) return;
+      try {
+        await api(`/api/training-ledger/categories/${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: adminPassword }),
+        });
+        categories = categories.filter(c => c.id !== id);
+        if (currentCategory === cat.name) {
+          currentCategory = categories.length ? categories[0].name : '专题培训';
+        }
+        await loadEvents();
+        renderCategoryTabs();
+        populateCategoryDropdowns();
+        bindCategoryTabClicks();
+        renderCategoryList();
+        toast('模块已删除');
+      } catch (error) { toast(error.message); }
+    };
+  });
+
+  document.querySelectorAll('.category-row').forEach(row => {
+    row.addEventListener('dragstart', e => {
+      e.dataTransfer.effectAllowed = 'move';
+      row.classList.add('dragging-row');
+    });
+    row.addEventListener('dragend', () => {
+      row.classList.remove('dragging-row');
+      document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    });
+    row.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const dragging = document.querySelector('.dragging-row');
+      if (dragging && dragging !== row) {
+        row.classList.add('drag-over');
+      }
+    });
+    row.addEventListener('dragleave', () => { row.classList.remove('drag-over'); });
+    row.addEventListener('drop', async e => {
+      e.preventDefault();
+      row.classList.remove('drag-over');
+      const dragging = document.querySelector('.dragging-row');
+      if (!dragging || dragging === row) return;
+      const rows = Array.from($('categoryList').querySelectorAll('.category-row'));
+      const fromIdx = rows.indexOf(dragging);
+      const toIdx = rows.indexOf(row);
+      if (fromIdx < 0 || toIdx < 0) return;
+      const moved = categories.splice(fromIdx, 1)[0];
+      categories.splice(toIdx, 0, moved);
+      renderCategoryList();
+      try {
+        await api('/api/training-ledger/categories/reorder', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: adminPassword, ids: categories.map(c => c.id) }),
+        });
+        renderCategoryTabs();
+        populateCategoryDropdowns();
+        bindCategoryTabClicks();
+        toast('排序已保存');
+      } catch (error) { toast(error.message); }
+    });
+  });
+}
+
+$('addCategoryBtn').onclick = async () => {
+  const name = $('newCategoryName').value.trim();
+  if (!name) { toast('请输入模块名称'); return; }
+  try {
+    const result = await api('/api/training-ledger/categories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword, name }),
+    });
+    categories.push({ id: result.id, name: result.name, sort_order: result.sort_order });
+    $('newCategoryName').value = '';
+    renderCategoryTabs();
+    populateCategoryDropdowns();
+    bindCategoryTabClicks();
+    renderCategoryList();
+    toast(`模块"${name}"已添加`);
+  } catch (error) { toast(error.message); }
+};
+
+async function initialize() {
+  await loadCategories();
+  setCategory(currentCategory);
+  if (adminPassword) {
+    enterAdmin(adminPassword).catch(() => {
+      adminPassword = '';
+      sessionStorage.removeItem('trainingLedgerPassword');
+      loadEvents();
+    });
+  } else {
+    loadEvents().catch(error => toast(error.message));
+  }
+}
+
+initialize();

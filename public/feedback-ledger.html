@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>经验反馈共享中心</title>
+  <link rel="stylesheet" href="/training-ledger.css">
+  <style>
+    .preview-docx-btn{width:30px;height:30px;display:grid;place-items:center;border:1px solid #bbe0d4;border-radius:6px;background:var(--mint);color:var(--green);font-size:12px;font-weight:700;cursor:pointer}.preview-docx-btn:hover{background:var(--green);color:#fff;border-color:var(--green)}.feedback-content{grid-column:span 2;margin-top:10px;padding:14px 16px;border-left:3px solid var(--green);border-radius:0 8px 8px 0;background:#f8faf9;color:var(--ink);font-size:13px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.content-label{display:block;margin:15px 0 6px;color:var(--muted);font-size:12px}.content-label textarea{display:block;width:100%;margin-top:6px;padding:11px 12px;border:1px solid var(--line);border-radius:9px;outline:0;resize:vertical;background:#fff;font-family:inherit;font-size:13px;line-height:1.7;min-height:120px}.content-label textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px #00b35918}.docx-preview-modal .preview-text{width:100%;min-height:320px;padding:14px;border:1px solid var(--line);border-radius:9px;background:#f9faf9;font-family:inherit;font-size:13px;line-height:1.8;resize:vertical;white-space:pre-wrap;word-break:break-all}.copy-btn{height:34px;padding:0 14px;border-radius:7px;background:var(--mint);color:var(--green);font-weight:700;font-size:12px;cursor:pointer;border:1px solid #bbe0d4;margin-top:10px}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/feedback-ledger">
+      <span class="brand-mark">反</span>
+      <span><b>经验反馈</b><small>共享中心</small></span>
+    </a>
+    <div class="top-actions">
+      <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索事件名、内容等"></label>
+      <button class="ghost" id="adminBtn">管理上传</button>
+      <button class="primary hidden" id="newEventBtn">＋ 新增事件</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">EXPERIENCE FEEDBACK</p>
+        <h1 id="introTitle">经验反馈，持续改进</h1>
+        <p>记录安全事件经验教训，上传相关材料、照片和文件，统一归档共享。</p>
+      </div>
+      <div class="stats">
+        <div><strong id="eventCount">0</strong><span>反馈事件</span></div>
+        <div><strong id="fileCount">0</strong><span>归档文件</span></div>
+      </div>
+    </section>
+
+    <nav class="category-tabs" id="categoryTabs"></nav>
+
+    <section class="period-stats">
+      <div class="period-head">
+        <h3>周期统计</h3>
+        <div class="period-dates">
+          <input type="date" id="statsDateFrom">
+          <span>至</span>
+          <input type="date" id="statsDateTo">
+          <button class="ghost" id="statsMonthBtn">本月</button>
+          <button class="ghost" id="statsRefreshBtn">统计</button>
+        </div>
+      </div>
+      <div class="period-cards">
+        <div class="period-card"><strong id="statsRecords">—</strong><span>反馈事件</span></div>
+        <div class="period-card"><strong id="statsFiles">—</strong><span>归档文件</span></div>
+      </div>
+    </section>
+
+    <section class="section-head">
+      <div><h2>反馈记录</h2><p id="resultText">正在读取…</p></div>
+      <button class="text-button" id="refreshBtn">刷新</button>
+    </section>
+    <section id="eventList" class="event-list"></section>
+  </main>
+
+  <div class="modal" id="passwordModal" aria-hidden="true">
+    <form class="dialog" id="passwordForm">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">ADMIN ACCESS</p><h2>进入管理模式</h2>
+      <p>验证后可新增经验反馈事件并上传资料。</p>
+      <label>管理密码<input id="passwordInput" type="password" autocomplete="current-password" required></label>
+      <button class="primary wide">验证并进入</button>
+    </form>
+  </div>
+
+  <div class="modal" id="eventModal" aria-hidden="true">
+    <form class="dialog" id="eventForm">
+      <button type="button" class="close" data-close>×</button>
+      <input id="eventEditId" type="hidden">
+      <p class="eyebrow">FEEDBACK INFO</p><h2 id="eventFormTitle">新增经验反馈</h2>
+      <label>事件名称<input id="eventName" placeholder="例如：高处作业未系挂安全带事件" required></label>
+      <label>所属分类
+        <select id="eventCategory"></select>
+      </label>
+      <label>事件日期<input id="eventDate" type="date" required></label>
+      <div class="content-label">事件内容<textarea id="eventContent" placeholder="描述事件经过、原因分析、经验教训和纠正措施…" rows="5"></textarea></div>
+      <button class="primary wide" id="eventSubmitBtn">创建事件</button>
+    </form>
+  </div>
+
+  <div class="modal" id="docxPreviewModal" aria-hidden="true">
+    <div class="dialog docx-preview-modal">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">DOCX PREVIEW</p><h2 id="docxPreviewTitle">文件预览</h2>
+      <textarea class="preview-text" id="docxPreviewText" readonly></textarea>
+      <button class="copy-btn" id="copyDocxBtn">复制全文</button>
+    </div>
+  </div>
+
+  <div class="modal" id="categoryModal" aria-hidden="true">
+    <div class="dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">MANAGE MODULES</p><h2>管理分类模块</h2>
+      <p>可新增、重命名或删除分类模块，拖拽排序。</p>
+      <div class="category-list" id="categoryList"></div>
+      <div class="category-add">
+        <input id="newCategoryName" placeholder="输入新模块名称">
+        <button class="primary" id="addCategoryBtn">新增</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="/feedback-ledger.js"></script>
+</body>
+</html>

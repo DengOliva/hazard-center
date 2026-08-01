@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple --default-timeout=120 -r requirements.txt
 COPY app.py data_admin.py meeting.py pptx_export.py collection.py ./
 COPY public ./public
 COPY seed ./seed

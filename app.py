@@ -23,6 +23,7 @@ DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
 DB_PATH = DATA_DIR / "hazards.db"
 UPLOAD_DIR = DATA_DIR / "uploads"
 TRAINING_LEDGER_DIR = DATA_DIR / "training_ledger"
+BRAKE_LEDGER_DIR = DATA_DIR / "brake_ledger"
 SEED_DIR = ROOT / "seed"
 TRAINING_SCHEDULE_FILE = SEED_DIR / "2026年7月安全培训安排表.xlsx"
 TRAINING_OVERRIDES_FILE = DATA_DIR / "training_overrides.json"
@@ -100,6 +101,7 @@ _alert_data = None
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 TRAINING_LEDGER_DIR.mkdir(parents=True, exist_ok=True)
+BRAKE_LEDGER_DIR.mkdir(parents=True, exist_ok=True)
 
 app = Flask(__name__, static_folder="public", static_url_path="")
 app.config["MAX_CONTENT_LENGTH"] = 30 * 1024 * 1024
@@ -260,6 +262,39 @@ def init_db():
             sort_order INTEGER NOT NULL DEFAULT 0,
             created_at TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS brake_ledger_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            record_date TEXT NOT NULL,
+            category TEXT NOT NULL DEFAULT '工程公司整改单',
+            description TEXT NOT NULL DEFAULT '',
+            issue_dept TEXT NOT NULL DEFAULT '',
+            responsible_dept TEXT NOT NULL DEFAULT '',
+            responsible_person TEXT NOT NULL DEFAULT '',
+            area TEXT NOT NULL DEFAULT '',
+            subcontractor TEXT NOT NULL DEFAULT '',
+            team TEXT NOT NULL DEFAULT '',
+            status TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS brake_ledger_files (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_id INTEGER NOT NULL REFERENCES brake_ledger_events(id) ON DELETE CASCADE,
+            original_name TEXT NOT NULL,
+            stored_name TEXT NOT NULL UNIQUE,
+            display_name TEXT NOT NULL,
+            kind TEXT NOT NULL DEFAULT 'file',
+            content_type TEXT NOT NULL DEFAULT 'application/octet-stream',
+            size INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_brake_ledger_event ON brake_ledger_files(event_id);
+        CREATE TABLE IF NOT EXISTS brake_ledger_categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            sort_order INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL
+        );
         """)
         ledger_columns = {row[1] for row in conn.execute("PRAGMA table_info(training_ledger_events)")}
         if "schedule_time" not in ledger_columns:
@@ -284,6 +319,20 @@ def init_db():
             INSERT OR IGNORE INTO training_categories (name, sort_order, created_at)
             VALUES ('入场培训', 1, ?)
         """, (datetime.now().isoformat(timespec="seconds"),))
+        brake_categories = [
+            ("工程公司挂牌督办单", 0),
+            ("红黄牌", 1),
+            ("工程公司处理通报", 2),
+            ("工程公司通报批评", 3),
+            ("工程公司整改单", 4),
+            ("工程公司停工令", 5),
+            ("监理业主整改通知单", 6),
+        ]
+        for i, (name, order) in enumerate(brake_categories):
+            conn.execute(
+                "INSERT OR IGNORE INTO brake_ledger_categories (name, sort_order, created_at) VALUES (?, ?, ?)",
+                (name, order, datetime.now().isoformat(timespec="seconds")),
+            )
         existing_ledger_files = conn.execute("""
             SELECT f.id,f.original_name,f.kind,e.name,e.training_date
             FROM training_ledger_files f
@@ -2013,6 +2062,477 @@ def training_ledger_stats():
             params,
         ).fetchone()
     return jsonify(sessions=row["sessions"], participants=row["participants"])
+
+
+# ── Brake Warning Ledger ──────────────────────────────────────────────
+
+@app.get("/brake-ledger")
+def brake_ledger_page():
+    return send_from_directory("public", "brake-ledger.html")
+
+
+@app.get("/api/brake-ledger/categories")
+def brake_ledger_categories():
+    with db() as conn:
+        rows = conn.execute(
+            "SELECT id, name, sort_order FROM brake_ledger_categories ORDER BY sort_order, id"
+        ).fetchall()
+    return jsonify(items=[dict(row) for row in rows])
+
+
+@app.post("/api/brake-ledger/categories")
+def brake_ledger_create_category():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    name = str(body.get("name") or "").strip()
+    if not name:
+        return jsonify(error="请输入模块名称"), 400
+    now = datetime.now().isoformat(timespec="seconds")
+    with db() as conn:
+        if conn.execute("SELECT id FROM brake_ledger_categories WHERE name=?", (name,)).fetchone():
+            return jsonify(error="模块名称已存在"), 409
+        max_order = conn.execute("SELECT COALESCE(MAX(sort_order), -1) AS o FROM brake_ledger_categories").fetchone()["o"]
+        cursor = conn.execute(
+            "INSERT INTO brake_ledger_categories (name, sort_order, created_at) VALUES (?, ?, ?)",
+            (name, max_order + 1, now),
+        )
+    return jsonify(ok=True, id=cursor.lastrowid, name=name, sort_order=max_order + 1)
+
+
+@app.patch("/api/brake-ledger/categories/<int:category_id>")
+def brake_ledger_update_category(category_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    name = str(body.get("name") or "").strip()
+    if not name:
+        return jsonify(error="请输入模块名称"), 400
+    with db() as conn:
+        cat = conn.execute("SELECT id, name FROM brake_ledger_categories WHERE id=?", (category_id,)).fetchone()
+        if not cat:
+            return jsonify(error="模块不存在"), 404
+        if conn.execute("SELECT id FROM brake_ledger_categories WHERE name=? AND id!=?", (name, category_id)).fetchone():
+            return jsonify(error="模块名称已存在"), 409
+        conn.execute("UPDATE brake_ledger_categories SET name=? WHERE id=?", (name, category_id))
+        conn.execute("UPDATE brake_ledger_events SET category=? WHERE category=?", (name, cat["name"]))
+    return jsonify(ok=True, id=category_id, name=name)
+
+
+@app.delete("/api/brake-ledger/categories/<int:category_id>")
+def brake_ledger_delete_category(category_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        cat = conn.execute("SELECT id, name FROM brake_ledger_categories WHERE id=?", (category_id,)).fetchone()
+        if not cat:
+            return jsonify(error="模块不存在"), 404
+        if conn.execute("SELECT COUNT(*) AS cnt FROM brake_ledger_categories").fetchone()["cnt"] <= 1:
+            return jsonify(error="至少保留一个模块"), 400
+        conn.execute("UPDATE brake_ledger_events SET category=? WHERE category=?", (brake_categories[0][0], cat["name"]))
+        conn.execute("DELETE FROM brake_ledger_categories WHERE id=?", (category_id,))
+    return jsonify(ok=True, id=category_id)
+
+
+@app.post("/api/brake-ledger/categories/reorder")
+def brake_ledger_reorder_categories():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    ids = body.get("ids")
+    if not ids or not isinstance(ids, list):
+        return jsonify(error="请提供模块ID列表"), 400
+    with db() as conn:
+        for index, cid in enumerate(ids):
+            conn.execute("UPDATE brake_ledger_categories SET sort_order=? WHERE id=?", (index, int(cid)))
+    return jsonify(ok=True)
+
+
+def _brake_file_dict(row):
+    item = dict(row)
+    item["download_url"] = f"/api/brake-ledger/files/{item['id']}/download"
+    item["preview_url"] = f"/api/brake-ledger/files/{item['id']}/preview"
+    return item
+
+
+@app.get("/api/brake-ledger/events")
+def brake_ledger_events():
+    keyword = (request.args.get("keyword") or "").strip()
+    category = (request.args.get("category") or "").strip()
+    where = ""
+    params = []
+    if category:
+        where = "WHERE e.category = ?"
+        params.append(category)
+    if keyword:
+        terms = [t for t in re.split(r"\s+", keyword) if t]
+        searchable = """
+            (e.name LIKE ? OR e.record_date LIKE ? OR e.description LIKE ?
+             OR e.issue_dept LIKE ? OR e.responsible_dept LIKE ? OR e.responsible_person LIKE ?
+             OR e.area LIKE ? OR e.subcontractor LIKE ? OR e.team LIKE ?
+             OR EXISTS (
+                 SELECT 1 FROM brake_ledger_files sf
+                 WHERE sf.event_id=e.id
+                   AND (sf.original_name LIKE ? OR sf.display_name LIKE ?)
+             ))
+        """
+        prefix = "AND " if where else "WHERE "
+        where += prefix + " AND ".join(searchable for _ in terms)
+        for term in terms:
+            params.extend([f"%{term}%"] * 11)
+    with db() as conn:
+        events = conn.execute(f"""
+            SELECT e.*, COUNT(f.id) AS file_count
+            FROM brake_ledger_events e
+            LEFT JOIN brake_ledger_files f ON f.event_id=e.id
+            {where}
+            GROUP BY e.id
+            ORDER BY e.record_date DESC, e.id DESC
+        """, params).fetchall()
+        result = []
+        for event in events:
+            files = conn.execute(
+                "SELECT id,event_id,original_name,display_name,kind,content_type,size,created_at FROM brake_ledger_files WHERE event_id=? ORDER BY id DESC",
+                (event["id"],),
+            ).fetchall()
+            entry = dict(event)
+            entry["files"] = [_brake_file_dict(row) for row in files]
+            result.append(entry)
+    return jsonify(items=result)
+
+
+@app.post("/api/brake-ledger/events")
+def brake_ledger_create_event():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    name = str(body.get("name") or "").strip()
+    record_date = str(body.get("record_date") or "").strip()
+    if not name:
+        return jsonify(error="请输入记录名称"), 400
+    try:
+        date.fromisoformat(record_date)
+    except ValueError:
+        return jsonify(error="请选择正确的日期"), 400
+    category = str(body.get("category") or "工程公司整改单").strip()
+    description = str(body.get("description") or "").strip()
+    issue_dept = str(body.get("issue_dept") or "").strip()
+    responsible_dept = str(body.get("responsible_dept") or "").strip()
+    responsible_person = str(body.get("responsible_person") or "").strip()
+    area = str(body.get("area") or "").strip()
+    subcontractor = str(body.get("subcontractor") or "").strip()
+    team = str(body.get("team") or "").strip()
+    status = str(body.get("status") or "").strip()
+    now = datetime.now().isoformat(timespec="seconds")
+    with db() as conn:
+        cursor = conn.execute(
+            "INSERT INTO brake_ledger_events (name,record_date,category,description,issue_dept,responsible_dept,responsible_person,area,subcontractor,team,status,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            (name, record_date, category, description, issue_dept, responsible_dept, responsible_person, area, subcontractor, team, status, now),
+        )
+    return jsonify(ok=True, id=cursor.lastrowid)
+
+
+@app.patch("/api/brake-ledger/events/<int:event_id>")
+def brake_ledger_update_event(event_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    body = request.get_json(force=True)
+    fields = {}
+    for key in ("name", "record_date", "category", "description", "issue_dept", "responsible_dept", "responsible_person", "area", "subcontractor", "team", "status"):
+        if key in body:
+            fields[key] = str(body.get(key) or "").strip()
+    if "name" in fields and not fields["name"]:
+        return jsonify(error="请输入记录名称"), 400
+    if "record_date" in fields:
+        try:
+            date.fromisoformat(fields["record_date"])
+        except ValueError:
+            return jsonify(error="请选择正确的日期"), 400
+    if not fields:
+        return jsonify(ok=True, id=event_id)
+    assignments = ",".join(f"{k}=?" for k in fields)
+    with db() as conn:
+        cursor = conn.execute(
+            f"UPDATE brake_ledger_events SET {assignments} WHERE id=?",
+            [*fields.values(), event_id],
+        )
+        event = conn.execute("SELECT name,record_date FROM brake_ledger_events WHERE id=?", (event_id,)).fetchone()
+        if event:
+            files = conn.execute("SELECT id,original_name,kind FROM brake_ledger_files WHERE event_id=?", (event_id,)).fetchall()
+            year, month, day = map(int, event["record_date"].split("-"))
+            for item in files:
+                suffix = Path(item["original_name"]).suffix.lower()
+                file_label = "照片" if item["kind"] == "image" else "文件"
+                display_name = f"{year}年{month}月{day}日{event['name']}{file_label}{suffix}"
+                conn.execute("UPDATE brake_ledger_files SET display_name=? WHERE id=?", (display_name, item["id"]))
+    if not cursor.rowcount:
+        return jsonify(error="记录不存在"), 404
+    return jsonify(ok=True, id=event_id)
+
+
+@app.delete("/api/brake-ledger/events/<int:event_id>")
+def brake_ledger_delete_event(event_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        event = conn.execute("SELECT id FROM brake_ledger_events WHERE id=?", (event_id,)).fetchone()
+        if not event:
+            return jsonify(error="记录不存在"), 404
+        stored_names = [row["stored_name"] for row in conn.execute("SELECT stored_name FROM brake_ledger_files WHERE event_id=?", (event_id,))]
+        conn.execute("DELETE FROM brake_ledger_events WHERE id=?", (event_id,))
+    for name in stored_names:
+        target = BRAKE_LEDGER_DIR / name
+        if target.parent == BRAKE_LEDGER_DIR and target.is_file():
+            target.unlink()
+    return jsonify(ok=True, id=event_id)
+
+
+@app.post("/api/brake-ledger/events/<int:event_id>/files")
+def brake_ledger_upload(event_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    files = [f for f in request.files.getlist("files") if f and f.filename]
+    if not files:
+        return jsonify(error="请选择要上传的文件"), 400
+    with db() as conn:
+        event = conn.execute("SELECT * FROM brake_ledger_events WHERE id=?", (event_id,)).fetchone()
+        if not event:
+            return jsonify(error="记录不存在"), 404
+        saved = []
+        for upload_file in files:
+            original = Path(upload_file.filename).name
+            safe_original = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", original).strip(" .") or "文件"
+            suffix = Path(safe_original).suffix.lower()
+            stored_name = f"{event_id}_{uuid.uuid4().hex}{suffix}"
+            target = BRAKE_LEDGER_DIR / stored_name
+            upload_file.save(target)
+            ct = upload_file.mimetype or "application/octet-stream"
+            if ct.startswith("image/"):
+                kind = "image"
+            elif ct == "application/pdf":
+                kind = "pdf"
+            elif ct in ("application/vnd.openxmlformats-officedocument.wordprocessingml.document",):
+                kind = "docx"
+            else:
+                kind = "file"
+            year, month, day = map(int, event["record_date"].split("-"))
+            file_label = "照片" if kind == "image" else "文件"
+            display_name = f"{year}年{month}月{day}日{event['name']}{file_label}{suffix}"
+            now = datetime.now().isoformat(timespec="seconds")
+            cursor = conn.execute(
+                "INSERT INTO brake_ledger_files (event_id,original_name,stored_name,display_name,kind,content_type,size,created_at) VALUES (?,?,?,?,?,?,?,?)",
+                (event_id, original, stored_name, display_name, kind, ct, upload_file.tell(), now),
+            )
+            saved.append({"id": cursor.lastrowid, "display_name": display_name})
+    return jsonify(ok=True, items=saved)
+
+
+@app.get("/api/brake-ledger/files/<int:file_id>/download")
+def brake_ledger_download(file_id):
+    with db() as conn:
+        item = conn.execute("SELECT * FROM brake_ledger_files WHERE id=?", (file_id,)).fetchone()
+    if not item:
+        return jsonify(error="文件不存在"), 404
+    target = BRAKE_LEDGER_DIR / item["stored_name"]
+    if not target.is_file():
+        return jsonify(error="文件已丢失"), 404
+    return send_file(target, as_attachment=True, download_name=item["display_name"], mimetype=item["content_type"])
+
+
+@app.get("/api/brake-ledger/files/<int:file_id>/preview")
+def brake_ledger_preview(file_id):
+    with db() as conn:
+        item = conn.execute("SELECT * FROM brake_ledger_files WHERE id=?", (file_id,)).fetchone()
+    if not item:
+        return jsonify(error="文件不存在"), 404
+    target = BRAKE_LEDGER_DIR / item["stored_name"]
+    if not target.is_file():
+        return jsonify(error="文件已丢失"), 404
+    if item["kind"] == "image":
+        return send_file(target, mimetype=item["content_type"], conditional=True)
+    if item["kind"] == "pdf":
+        return send_file(target, mimetype="application/pdf", conditional=True)
+    if item["kind"] == "docx":
+        try:
+            from docx import Document
+            doc = Document(target)
+            text = "\n".join(p.text for p in doc.paragraphs if p.text.strip())
+            return jsonify(text=text, kind="docx")
+        except Exception as e:
+            return jsonify(error=f"DOCX 解析失败: {str(e)}"), 500
+    return jsonify(error="不支持预览此文件类型"), 400
+
+
+@app.delete("/api/brake-ledger/files/<int:file_id>")
+def brake_ledger_delete_file(file_id):
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        item = conn.execute("SELECT * FROM brake_ledger_files WHERE id=?", (file_id,)).fetchone()
+        if not item:
+            return jsonify(error="文件不存在"), 404
+        conn.execute("DELETE FROM brake_ledger_files WHERE id=?", (file_id,))
+    target = BRAKE_LEDGER_DIR / item["stored_name"]
+    if target.is_file():
+        target.unlink()
+    return jsonify(ok=True, id=file_id)
+
+
+@app.get("/api/brake-ledger/stats")
+def brake_ledger_stats():
+    start_date = (request.args.get("start_date") or "").strip()
+    end_date = (request.args.get("end_date") or "").strip()
+    category = (request.args.get("category") or "").strip()
+    where = []
+    params = []
+    if start_date:
+        where.append("record_date >= ?")
+        params.append(start_date)
+    if end_date:
+        where.append("record_date <= ?")
+        params.append(end_date)
+    if category:
+        where.append("category = ?")
+        params.append(category)
+    clause = ("WHERE " + " AND ".join(where)) if where else ""
+    with db() as conn:
+        row = conn.execute(
+            f"SELECT COUNT(*) AS records, (SELECT COUNT(*) FROM brake_ledger_files{(' WHERE event_id IN (SELECT id FROM brake_ledger_events '+clause+')') if clause else ''}) AS files FROM brake_ledger_events {clause}",
+            params,
+        ).fetchone()
+    return jsonify(records=row["records"], files=row["files"])
+
+
+@app.post("/api/brake-ledger/export")
+def brake_ledger_export():
+    body = request.get_json(force=True)
+    raw_ids = body.get("ids") or []
+    try:
+        event_ids = [int(v) for v in raw_ids]
+    except (TypeError, ValueError):
+        return jsonify(error="记录选择无效"), 400
+    if not event_ids:
+        return jsonify(error="请至少选择一项记录"), 400
+    placeholders = ",".join("?" for _ in event_ids)
+    with db() as conn:
+        rows = conn.execute(
+            f"SELECT * FROM brake_ledger_events WHERE id IN ({placeholders}) ORDER BY record_date, id",
+            event_ids,
+        ).fetchall()
+    if not rows:
+        return jsonify(error="未找到所选记录"), 404
+
+    wb = Workbook()
+    wb.remove(wb.active)
+    header_font = Font(name="微软雅黑", size=10, bold=True, color="FFFFFF")
+    header_fill = PatternFill("solid", fgColor="267B67")
+    cell_font = Font(name="微软雅黑", size=10, color="24332E")
+    light_fill = PatternFill("solid", fgColor="F3F8F6")
+    thin = Side(style="thin", color="D9E6E1")
+
+    # Sheet-to-category mapping: (sheet_name_in_template, column_count)
+    sheet_specs = [
+        ("工程公司挂牌督办单", 14),
+        ("红黄牌", 12),
+        ("工程公司处理通报", 14),
+        ("工程公司通报批评", 15),
+        ("工程公司整改单", 16),
+        ("工程公司停工令", 14),
+        ("监理业主整改通知单", 14),
+    ]
+
+    # Column name → event field mapping key
+    field_map = {
+        "序号": "seq",
+        "主题": "name",
+        "备注": "description",
+        "涉及区域": "area",
+        "涉及分包": "subcontractor",
+        "涉及班组": "team",
+        "签发部门": "issue_dept",
+        "责任部门": "responsible_dept",
+        "责任人": "responsible_person",
+        "是否关闭": "status",
+        "发出日期": "record_date",
+        "停工时间": "record_date",
+    }
+    event_field_names = {"name", "record_date", "description", "issue_dept", "responsible_dept", "responsible_person", "area", "subcontractor", "team", "status"}
+
+    for sheet_name, col_count in sheet_specs:
+        cat_rows = [r for r in rows if r["category"] == sheet_name]
+        ws = wb.create_sheet(title=sheet_name)
+        ws.sheet_view.showGridLines = False
+
+        # Read headers from reference template
+        headers = []
+        try:
+            ref_wb = load_workbook(ROOT / "外部刹车预警台账.xlsx", data_only=True)
+            if sheet_name in ref_wb.sheetnames:
+                ref_ws = ref_wb[sheet_name]
+                for cell in next(ref_ws.iter_rows(min_row=1, max_row=1)):
+                    headers.append(str(cell.value) if cell.value is not None else "")
+            ref_wb.close()
+        except Exception:
+            pass
+
+        if not headers:
+            headers = [f"列{i+1}" for i in range(col_count)]
+
+        # Write header row
+        for ci, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=ci, value=header)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = Alignment(horizontal="center", vertical="center")
+        ws.row_dimensions[1].height = 28
+
+        # Write data rows
+        for ri, event in enumerate(cat_rows):
+            row_num = ri + 2
+            seq_num = ri + 1
+            for ci, header in enumerate(headers, 1):
+                col_name = header.strip()
+                cell = ws.cell(row=row_num, column=ci)
+                if col_name == "序号":
+                    cell.value = seq_num
+                elif col_name in field_map:
+                    fname = field_map[col_name]
+                    if fname == "seq":
+                        cell.value = seq_num
+                    elif fname in event_field_names:
+                        val = event[fname]
+                        if fname == "record_date":
+                            try:
+                                cell.value = date.fromisoformat(val)
+                            except (ValueError, TypeError):
+                                cell.value = val
+                        else:
+                            cell.value = val if val else ""
+                    else:
+                        cell.value = ""
+                else:
+                    cell.value = ""
+                cell.font = cell_font
+                cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+                cell.border = Border(bottom=thin)
+                if ri % 2 == 0:
+                    cell.fill = light_fill
+            ws.row_dimensions[row_num].height = 30
+
+        # Column widths
+        for ci in range(1, len(headers) + 1):
+            ws.column_dimensions[get_column_letter(ci)].width = 16
+
+        ws.freeze_panes = "A2"
+
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+    filename = f"外部刹车预警台账_{datetime.now():%Y%m%d}.xlsx"
+    return send_file(
+        output, as_attachment=True, download_name=filename,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
 
 
 @app.post("/api/training-ledger/events/<int:event_id>/files")

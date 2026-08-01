@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>外部刹车预警台账</title>
+  <link rel="stylesheet" href="/training-ledger.css">
+  <style>
+    .brake-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.brake-meta span{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;background:#eef5f2;color:#52635e;font-size:11px}.brake-meta b{color:var(--ink)}.docx-preview-modal .preview-text{width:100%;min-height:320px;padding:14px;border:1px solid var(--line);border-radius:9px;background:#f9faf9;font-family:inherit;font-size:13px;line-height:1.8;resize:vertical;white-space:pre-wrap;word-break:break-all}.copy-btn{height:34px;padding:0 14px;border-radius:7px;background:var(--mint);color:var(--green);font-weight:700;font-size:12px;cursor:pointer;border:1px solid #bbe0d4;margin-top:10px}.more-toggle{display:inline-flex;align-items:center;gap:4px;padding:0;margin:10px 0 0;background:transparent;border:none;color:var(--green);font-size:11px;font-weight:700;cursor:pointer}.more-fields{display:none;margin-top:8px}.more-fields.open{display:block}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/brake-ledger">
+      <span class="brand-mark">刹</span>
+      <span><b>预警台账</b><small>共享中心</small></span>
+    </a>
+    <div class="top-actions">
+      <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索名称、部门、责任人等"></label>
+      <button class="ghost" id="exportLedgerBtn">生成台账</button>
+      <button class="ghost" id="adminBtn">管理上传</button>
+      <button class="primary hidden" id="newEventBtn">＋ 新增记录</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">BRAKE WARNING ARCHIVE</p>
+        <h1 id="introTitle">刹车预警，一处归档</h1>
+        <p>挂牌督办、红黄牌、通报批评、停工令等文件统一保存。点击即可查看、复制或下载。</p>
+      </div>
+      <div class="stats">
+        <div><strong id="eventCount">0</strong><span>预警记录</span></div>
+        <div><strong id="fileCount">0</strong><span>归档文件</span></div>
+      </div>
+    </section>
+
+    <nav class="category-tabs" id="categoryTabs"></nav>
+
+    <section class="period-stats">
+      <div class="period-head">
+        <h3>周期统计</h3>
+        <div class="period-dates">
+          <input type="date" id="statsDateFrom">
+          <span>至</span>
+          <input type="date" id="statsDateTo">
+          <button class="ghost" id="statsMonthBtn">本月</button>
+          <button class="ghost" id="statsRefreshBtn">统计</button>
+        </div>
+      </div>
+      <div class="period-cards">
+        <div class="period-card"><strong id="statsRecords">—</strong><span>预警记录</span></div>
+        <div class="period-card"><strong id="statsFiles">—</strong><span>归档文件</span></div>
+      </div>
+    </section>
+
+    <section class="section-head">
+      <div><h2>预警记录</h2><p id="resultText">正在读取台账…</p></div>
+      <button class="text-button" id="refreshBtn">刷新</button>
+    </section>
+    <section id="eventList" class="event-list"></section>
+  </main>
+
+  <div class="modal" id="passwordModal" aria-hidden="true">
+    <form class="dialog" id="passwordForm">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">ADMIN ACCESS</p><h2>进入管理模式</h2>
+      <p>验证后可新增预警记录并上传资料。</p>
+      <label>管理密码<input id="passwordInput" type="password" autocomplete="current-password" required></label>
+      <button class="primary wide">验证并进入</button>
+    </form>
+  </div>
+
+  <div class="modal" id="exportModal" aria-hidden="true">
+    <div class="dialog export-dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">EXPORT LEDGER</p><h2>选择记录生成台账</h2>
+      <p>勾选需要导出的记录，生成多 sheet Excel 台账。</p>
+      <div class="export-tools">
+        <button class="ghost" id="selectAllExportBtn">全选</button>
+        <span id="exportSelectedCount">已选择 0 项</span>
+      </div>
+      <div id="exportEventList" class="export-event-list"></div>
+      <button class="primary wide" id="exportConfirmBtn" disabled>生成 Excel 台账</button>
+    </div>
+  </div>
+
+  <div class="modal" id="eventModal" aria-hidden="true">
+    <form class="dialog" id="eventForm">
+      <button type="button" class="close" data-close>×</button>
+      <input id="eventEditId" type="hidden">
+      <p class="eyebrow">RECORD INFO</p><h2 id="eventFormTitle">新增预警记录</h2>
+      <label>记录名称<input id="eventName" placeholder="例如：关于XX单位的挂牌督办通知" required></label>
+      <label>所属分类
+        <select id="eventCategory"></select>
+      </label>
+      <label>日期<input id="eventDate" type="date" required></label>
+      <label>备注（选填）<textarea id="eventDescription" rows="2" placeholder="其他补充说明"></textarea></label>
+      <button type="button" class="more-toggle" id="moreToggle">▸ 更多信息</button>
+      <div class="more-fields" id="moreFields">
+        <div class="form-grid">
+          <label>签发部门<input id="eventIssueDept" placeholder="如 HSF / CMF"></label>
+          <label>责任部门<input id="eventResponsibleDept" placeholder="责任部门"></label>
+          <label>责任人<input id="eventResponsiblePerson" placeholder="责任人姓名"></label>
+          <label>涉及区域<input id="eventArea" placeholder="涉及区域"></label>
+          <label>涉及分包<input id="eventSubcontractor" placeholder="分包单位"></label>
+          <label>涉及班组<input id="eventTeam" placeholder="班组名称"></label>
+        </div>
+        <label>是否关闭
+          <select id="eventStatus">
+            <option value="">未填写</option>
+            <option value="是">是</option>
+            <option value="否">否</option>
+            <option value="已关闭">已关闭</option>
+            <option value="已复工">已复工</option>
+          </select>
+        </label>
+      </div>
+      <button class="primary wide" id="eventSubmitBtn">创建记录</button>
+    </form>
+  </div>
+
+  <div class="modal" id="docxPreviewModal" aria-hidden="true">
+    <div class="dialog docx-preview-modal">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">DOCX PREVIEW</p><h2 id="docxPreviewTitle">文件预览</h2>
+      <textarea class="preview-text" id="docxPreviewText" readonly></textarea>
+      <button class="copy-btn" id="copyDocxBtn">复制全文</button>
+    </div>
+  </div>
+
+  <div class="modal" id="categoryModal" aria-hidden="true">
+    <div class="dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">MANAGE MODULES</p><h2>管理分类模块</h2>
+      <p>可新增、重命名或删除分类模块，拖拽排序。</p>
+      <div class="category-list" id="categoryList"></div>
+      <div class="category-add">
+        <input id="newCategoryName" placeholder="输入新模块名称">
+        <button class="primary" id="addCategoryBtn">新增</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="/brake-ledger.js"></script>
+</body>
+</html>

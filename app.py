@@ -2492,7 +2492,7 @@ def brake_ledger_import():
     combined = header_str + " " + title_str
     if "偏差" in combined and "纠偏编号" in header_str:
         file_type = "deviation"
-    elif "约谈编号" in header_str or ("约谈标题" in header_str and "被约谈方" in header_str):
+    elif "约谈编号" in header_str or ("约谈主题" in header_str and "被约谈方" in header_str):
         file_type = "interview"
     elif "停工" in combined and "复工条件" in header_str:
         file_type = "stop_work"
@@ -2569,7 +2569,7 @@ def brake_ledger_import():
 
                 source_ref = val(row, "约谈编号")
                 category = "约谈记录"
-                name = val(row, "约谈标题")
+                name = val(row, "约谈主题")
                 record_date = val(row, "约谈日期")
                 description = val(row, "约谈纪要")
                 issue_dept = val(row, "主持人")

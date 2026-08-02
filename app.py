@@ -3277,16 +3277,20 @@ def feedback_import():
                     "SELECT id FROM feedback_events WHERE source_ref = ? AND source_ref != ''",
                     (source_ref,),
                 ).fetchone()
-                if existing:
-                    skipped += 1
-                    continue
 
                 now = datetime.now().isoformat(timespec="seconds")
-                cursor = conn.execute(
-                    "INSERT INTO feedback_events (name, record_date, category, content, participant_count, source_ref, created_at) VALUES (?,?,?,?,?,?,?)",
-                    (name, record_date, "经验反馈", "", participant_count, source_ref, now),
-                )
-                event_id = cursor.lastrowid
+
+                if existing:
+                    event_id = existing["id"]
+                    skipped += 1
+                else:
+                    cursor = conn.execute(
+                        "INSERT INTO feedback_events (name, record_date, category, content, participant_count, source_ref, created_at) VALUES (?,?,?,?,?,?,?)",
+                        (name, record_date, "经验反馈", "", participant_count, source_ref, now),
+                    )
+                    event_id = cursor.lastrowid
+                    imported += 1
+                    items.append({"name": name, "participant_count": participant_count})
 
                 # Save the uploaded xlsx as an attachment
                 original = Path(upload_file.filename).name
@@ -3304,8 +3308,6 @@ def feedback_import():
                     "INSERT INTO feedback_files (event_id, original_name, stored_name, display_name, kind, content_type, size, created_at) VALUES (?,?,?,?,?,?,?,?)",
                     (event_id, original, stored_name, display_name, "file", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", len(file_bytes), now),
                 )
-                imported += 1
-                items.append({"name": name, "participant_count": participant_count})
             except Exception:
                 skipped += 1
 

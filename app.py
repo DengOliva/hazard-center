@@ -2789,58 +2789,80 @@ def brake_ledger_export():
     light_fill = PatternFill("solid", fgColor="F3F8F6")
     thin = Side(style="thin", color="D9E6E1")
 
-    # Sheet-to-category mapping: (sheet_name_in_template, column_count)
+    # Sheet definition: (sheet_name, [(header, event_field), ...])
+    # event_field can be a DB column name, "seq" for auto-number, or "" for blank
     sheet_specs = [
-        ("工程公司挂牌督办单", 14),
-        ("红黄牌", 12),
-        ("工程公司处理通报", 14),
-        ("工程公司通报批评", 15),
-        ("工程公司整改单", 16),
-        ("工程公司停工令", 14),
-        ("监理业主整改通知单", 14),
-        ("行为偏差", 12),
-        ("约谈记录", 12),
+        ("工程公司挂牌督办单", [
+            ("序号", "seq"), ("签发部门", "issue_dept"), ("主题", "name"),
+            ("发出日期", "record_date"), ("责任部门", "responsible_dept"),
+            ("责任人", "responsible_person"), ("涉及区域", "area"),
+            ("涉及分包", "subcontractor"), ("涉及班组", "team"),
+            ("是否关闭", "status"), ("备注", "description"),
+        ]),
+        ("红黄牌", [
+            ("序号", "seq"), ("发生地点", "area"), ("发出日期", "record_date"),
+            ("责任人", "responsible_person"), ("责任部门", "responsible_dept"),
+            ("责任班组", "team"), ("偏差类型", ""), ("偏差等级", ""),
+            ("偏差描述", "description"), ("处理措施", ""), ("积分分值", ""),
+            ("分包单位", "subcontractor"),
+        ]),
+        ("工程公司处理通报", [
+            ("序号", "seq"), ("主题", "name"), ("发出日期", "record_date"),
+            ("责任部门", "responsible_dept"), ("涉及区域", "area"),
+            ("涉及分包", "subcontractor"), ("涉及班组", "team"),
+            ("责任人", "responsible_person"), ("是否关闭", "status"),
+            ("备注", "description"),
+        ]),
+        ("工程公司通报批评", [
+            ("序号", "seq"), ("签发部门", "issue_dept"), ("主题", "name"),
+            ("发出日期", "record_date"), ("责任部门", "responsible_dept"),
+            ("责任人", "responsible_person"), ("涉及区域", "area"),
+            ("涉及分包", "subcontractor"), ("涉及班组", "team"),
+            ("是否关闭", "status"), ("备注", "description"),
+        ]),
+        ("工程公司整改单", [
+            ("序号", "seq"), ("签发部门", "issue_dept"), ("主题", "name"),
+            ("发出日期", "record_date"), ("责任部门", "responsible_dept"),
+            ("责任人", "responsible_person"), ("涉及区域", "area"),
+            ("涉及分包", "subcontractor"), ("涉及班组", "team"),
+            ("是否关闭", "status"), ("备注", "description"),
+        ]),
+        ("工程公司停工令", [
+            ("序号", "seq"), ("主题", "name"), ("发出部门", "issue_dept"),
+            ("停工时间", "record_date"), ("停工原因", "description"),
+            ("是否复工", "status"), ("责任部门", "responsible_dept"),
+            ("责任人", "responsible_person"), ("涉及区域", "area"),
+            ("涉及分包", "subcontractor"), ("涉及班组", "team"),
+        ]),
+        ("监理业主整改通知单", [
+            ("序号", "seq"), ("签发部门", "issue_dept"), ("主题", "name"),
+            ("发出日期", "record_date"), ("责任部门", "responsible_dept"),
+            ("责任人", "responsible_person"), ("涉及区域", "area"),
+            ("涉及分包", "subcontractor"), ("涉及班组", "team"),
+            ("是否关闭", "status"), ("备注", "description"),
+        ]),
+        ("行为偏差", [
+            ("序号", "seq"), ("发生地点", "area"), ("偏差时间", "record_date"),
+            ("责任人", "responsible_person"), ("责任部门", "responsible_dept"),
+            ("责任班组", "team"), ("偏差描述", "description"),
+            ("分包单位", "subcontractor"), ("状态", "status"),
+        ]),
+        ("约谈记录", [
+            ("序号", "seq"), ("约谈主题", "name"), ("约谈日期", "record_date"),
+            ("被约谈方", "subcontractor"), ("被约谈人", "responsible_person"),
+            ("约谈纪要", "description"), ("状态", "status"),
+        ]),
     ]
 
-    # Column name → event field mapping key
-    field_map = {
-        "序号": "seq",
-        "主题": "name",
-        "备注": "description",
-        "涉及区域": "area",
-        "涉及分包": "subcontractor",
-        "涉及班组": "team",
-        "签发部门": "issue_dept",
-        "责任部门": "responsible_dept",
-        "责任人": "responsible_person",
-        "是否关闭": "status",
-        "发出日期": "record_date",
-        "停工时间": "record_date",
-    }
-    event_field_names = {"name", "record_date", "description", "issue_dept", "responsible_dept", "responsible_person", "area", "subcontractor", "team", "status"}
+    db_fields = {"name", "record_date", "description", "issue_dept", "responsible_dept", "responsible_person", "area", "subcontractor", "team", "status"}
 
-    for sheet_name, col_count in sheet_specs:
+    for sheet_name, columns in sheet_specs:
         cat_rows = [r for r in rows if r["category"] == sheet_name]
         ws = wb.create_sheet(title=sheet_name)
         ws.sheet_view.showGridLines = False
 
-        # Read headers from reference template
-        headers = []
-        try:
-            ref_wb = load_workbook(ROOT / "外部刹车预警台账.xlsx", data_only=True)
-            if sheet_name in ref_wb.sheetnames:
-                ref_ws = ref_wb[sheet_name]
-                for cell in next(ref_ws.iter_rows(min_row=1, max_row=1)):
-                    headers.append(str(cell.value) if cell.value is not None else "")
-            ref_wb.close()
-        except Exception:
-            pass
-
-        if not headers:
-            headers = [f"列{i+1}" for i in range(col_count)]
-
         # Write header row
-        for ci, header in enumerate(headers, 1):
+        for ci, (header, _) in enumerate(columns, 1):
             cell = ws.cell(row=1, column=ci, value=header)
             cell.font = header_font
             cell.fill = header_fill
@@ -2850,27 +2872,19 @@ def brake_ledger_export():
         # Write data rows
         for ri, event in enumerate(cat_rows):
             row_num = ri + 2
-            seq_num = ri + 1
-            for ci, header in enumerate(headers, 1):
-                col_name = header.strip()
+            for ci, (_, fname) in enumerate(columns, 1):
                 cell = ws.cell(row=row_num, column=ci)
-                if col_name == "序号":
-                    cell.value = seq_num
-                elif col_name in field_map:
-                    fname = field_map[col_name]
-                    if fname == "seq":
-                        cell.value = seq_num
-                    elif fname in event_field_names:
-                        val = event[fname]
-                        if fname == "record_date":
-                            try:
-                                cell.value = date.fromisoformat(val)
-                            except (ValueError, TypeError):
-                                cell.value = val
-                        else:
-                            cell.value = val if val else ""
+                if fname == "seq":
+                    cell.value = ri + 1
+                elif fname in db_fields:
+                    val = event[fname] or "" if event[fname] else ""
+                    if fname == "record_date" and val:
+                        try:
+                            cell.value = date.fromisoformat(val)
+                        except (ValueError, TypeError):
+                            cell.value = val
                     else:
-                        cell.value = ""
+                        cell.value = val
                 else:
                     cell.value = ""
                 cell.font = cell_font
@@ -2881,7 +2895,7 @@ def brake_ledger_export():
             ws.row_dimensions[row_num].height = 30
 
         # Column widths
-        for ci in range(1, len(headers) + 1):
+        for ci in range(1, len(columns) + 1):
             ws.column_dimensions[get_column_letter(ci)].width = 16
 
         ws.freeze_panes = "A2"

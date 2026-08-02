@@ -591,8 +591,9 @@ async function doImport(file) {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || '导入失败');
     let msg = `导入完成：新增 ${data.imported} 条记录`;
-    if (data.skipped_existing) msg += `，跳过 ${data.skipped_existing} 条已存在`;
+    if (data.skipped_existing) msg += `，${data.skipped_existing} 条已存在`;
     if (data.skipped_filter) msg += `，过滤 ${data.skipped_filter} 条`;
+    if (data.file_attached) msg += `，源文件已上传`;
     resultDiv.innerHTML = `<b style="color:var(--green)">${msg}</b>`;
     toast(msg);
     await loadCategories();

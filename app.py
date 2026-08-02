@@ -2465,8 +2465,9 @@ def brake_ledger_import():
     if not file:
         return jsonify(error="请选择一个 Excel 文件"), 400
 
+    file_bytes = file.read()
     try:
-        wb = load_workbook(BytesIO(file.read()), data_only=True)
+        wb = load_workbook(BytesIO(file_bytes), data_only=True)
     except Exception:
         return jsonify(error="文件不是有效的 Excel 格式"), 400
 
@@ -2522,6 +2523,7 @@ def brake_ledger_import():
     imported = 0
     skipped_existing = 0
     skipped_filter = 0
+    file_attached = False
 
     with db() as conn:
         for row in rows[1:]:
@@ -2679,17 +2681,41 @@ def brake_ledger_import():
                 "SELECT id FROM brake_ledger_events WHERE source_ref = ? AND source_ref != ''",
                 (source_ref,),
             ).fetchone()
-            if existing:
-                skipped_existing += 1
-                continue
 
             # Parse date
             date_str = record_date[:10] if record_date else ""
             if len(date_str) < 10:
                 date_str = ""
             now = datetime.now().isoformat(timespec="seconds")
+
+            if existing:
+                event_id = existing["id"]
+                skipped_existing += 1
+                # Attach the source xlsx file to the existing event
+                if not file_attached:
+                    try:
+                        original_name = Path(file.filename).name if file.filename else "source.xlsx"
+                        safe_original = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", original_name).strip(" .") or "文件"
+                        sfx = Path(safe_original).suffix.lower()
+                        sname = f"{event_id}_{uuid.uuid4().hex}{sfx}"
+                        target = BRAKE_LEDGER_DIR / sname
+                        target.write_bytes(file_bytes)
+                        try:
+                            y, m, d = map(int, date_str.split("-"))
+                        except (ValueError, AttributeError):
+                            y, m, d = 2026, 1, 1
+                        dname = f"{y}年{m}月{d}日{name}文件{sfx}"
+                        conn.execute(
+                            "INSERT INTO brake_ledger_files (event_id, original_name, stored_name, display_name, kind, content_type, size, created_at) VALUES (?,?,?,?,?,?,?,?)",
+                            (event_id, original_name, sname, dname, "file", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", len(file_bytes), now),
+                        )
+                        file_attached = True
+                    except Exception:
+                        pass
+                continue
+
             try:
-                conn.execute(
+                cursor = conn.execute(
                     """INSERT INTO brake_ledger_events
                        (name, record_date, category, description, issue_dept, responsible_dept,
                         responsible_person, area, subcontractor, team, status, source_ref, created_at)
@@ -2697,7 +2723,29 @@ def brake_ledger_import():
                     (name, date_str, category, description, issue_dept, responsible_dept,
                      responsible_person, area, subcontractor, team, status, source_ref, now),
                 )
+                event_id = cursor.lastrowid
                 imported += 1
+                # Attach source file to new event
+                if not file_attached:
+                    try:
+                        original_name = Path(file.filename).name if file.filename else "source.xlsx"
+                        safe_original = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", original_name).strip(" .") or "文件"
+                        sfx = Path(safe_original).suffix.lower()
+                        sname = f"{event_id}_{uuid.uuid4().hex}{sfx}"
+                        target = BRAKE_LEDGER_DIR / sname
+                        target.write_bytes(file_bytes)
+                        try:
+                            y, m, d = map(int, date_str.split("-"))
+                        except (ValueError, AttributeError):
+                            y, m, d = 2026, 1, 1
+                        dname = f"{y}年{m}月{d}日{name}文件{sfx}"
+                        conn.execute(
+                            "INSERT INTO brake_ledger_files (event_id, original_name, stored_name, display_name, kind, content_type, size, created_at) VALUES (?,?,?,?,?,?,?,?)",
+                            (event_id, original_name, sname, dname, "file", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", len(file_bytes), now),
+                        )
+                        file_attached = True
+                    except Exception:
+                        pass
             except Exception:
                 skipped_existing += 1
 
@@ -2706,6 +2754,7 @@ def brake_ledger_import():
         imported=imported,
         skipped_existing=skipped_existing,
         skipped_filter=skipped_filter,
+        file_attached=file_attached,
         category=category if imported else "",
     )
 

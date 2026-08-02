@@ -19,6 +19,7 @@
       <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索名称、部门、责任人等"></label>
       <button class="ghost" id="exportLedgerBtn">生成台账</button>
       <button class="ghost" id="adminBtn">管理上传</button>
+      <button class="ghost hidden" id="importBtn">导入台账</button>
       <button class="primary hidden" id="newEventBtn">＋ 新增记录</button>
     </div>
   </header>
@@ -83,6 +84,22 @@
       </div>
       <div id="exportEventList" class="export-event-list"></div>
       <button class="primary wide" id="exportConfirmBtn" disabled>生成 Excel 台账</button>
+    </div>
+  </div>
+
+  <div class="modal" id="importModal" aria-hidden="true">
+    <div class="dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">IMPORT FROM EXTERNAL</p><h2>导入外部台账</h2>
+      <p>选择外部系统导出的 Excel 文件，系统自动识别类型并导入。</p>
+      <p style="font-size:11px;color:var(--muted);margin-top:-14px">仅导入责任单位为中建二局、状态非作废的记录。偏差记录自动拆分为行为偏差和红黄牌。</p>
+      <label class="dropzone" id="importDropzone" style="min-height:120px">
+        <input id="importFileInput" type="file" accept=".xlsx,.xls">
+        <span class="upload-icon">⇧</span>
+        <b>选择或拖入 Excel 文件</b>
+        <small>支持 .xlsx / .xls 格式</small>
+      </label>
+      <div id="importResult" style="display:none;padding:14px;border-radius:9px;background:var(--mint);margin-top:14px;font-size:13px;line-height:1.8"></div>
     </div>
   </div>
 

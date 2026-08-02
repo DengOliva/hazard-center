@@ -158,6 +158,7 @@ async function enterAdmin(password) {
   sessionStorage.setItem('brakeLedgerPassword', password);
   $('adminBtn').textContent = '已进入管理模式';
   $('newEventBtn').classList.remove('hidden');
+  $('importBtn').classList.remove('hidden');
   renderCategoryTabs();
   bindCategoryTabClicks();
   closeModals();
@@ -575,6 +576,7 @@ $('addCategoryBtn').onclick = async () => {
 // ── Event Listeners ───────────────────────────────────────────────────
 
 $('exportLedgerBtn').onclick = openLedgerExport;
+$('importBtn').onclick = () => { openModal('importModal'); $('importResult').style.display = 'none'; $('importFileInput').value = ''; };
 $('selectAllExportBtn').onclick = () => {
   const inputs = Array.from($('exportEventList').querySelectorAll('input'));
   const shouldSelect = !inputs.every(i => i.checked);
@@ -594,6 +596,53 @@ $('statsDateTo').addEventListener('change', () => loadStats().catch(() => {}));
 
 document.querySelectorAll('[data-close]').forEach(btn => btn.onclick = closeModals);
 document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', e => { if (e.target === modal) closeModals(); }));
+
+// ── Import ──────────────────────────────────────────────────────────────
+
+$('importFileInput').onchange = e => {
+  if (e.target.files.length) doImport(e.target.files[0]);
+};
+
+['dragenter', 'dragover'].forEach(name => $('importDropzone').addEventListener(name, e => {
+  e.preventDefault();
+  $('importDropzone').classList.add('dragging');
+}));
+['dragleave', 'drop'].forEach(name => $('importDropzone').addEventListener(name, e => {
+  e.preventDefault();
+  $('importDropzone').classList.remove('dragging');
+}));
+$('importDropzone').addEventListener('drop', e => {
+  const files = Array.from(e.dataTransfer.files || []);
+  if (files.length) doImport(files[0]);
+});
+
+async function doImport(file) {
+  const resultDiv = $('importResult');
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = '正在上传并解析文件…';
+  try {
+    const body = new FormData();
+    body.append('password', adminPassword);
+    body.append('file', file);
+    const response = await fetch('/api/brake-ledger/import', { method: 'POST', body });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '导入失败');
+    let msg = `导入完成：新增 ${data.imported} 条记录`;
+    if (data.skipped_existing) msg += `，跳过 ${data.skipped_existing} 条已存在`;
+    if (data.skipped_filter) msg += `，过滤 ${data.skipped_filter} 条`;
+    resultDiv.innerHTML = `<b style="color:var(--green)">${msg}</b>`;
+    toast(msg);
+    await loadCategories();
+    renderCategoryTabs();
+    bindCategoryTabClicks();
+    populateDropdowns();
+    await loadEvents();
+    loadStats().catch(() => {});
+  } catch (error) {
+    resultDiv.innerHTML = `<b style="color:#b33b32">导入失败：${esc(error.message)}</b>`;
+    toast(error.message);
+  }
+}
 
 // ── Init ──────────────────────────────────────────────────────────────
 

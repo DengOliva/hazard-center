@@ -355,12 +355,18 @@ def init_db():
             ("工程公司整改单", 4),
             ("工程公司停工令", 5),
             ("监理业主整改通知单", 6),
+            ("行为偏差", 7),
+            ("约谈记录", 8),
         ]
         for i, (name, order) in enumerate(brake_categories):
             conn.execute(
                 "INSERT OR IGNORE INTO brake_ledger_categories (name, sort_order, created_at) VALUES (?, ?, ?)",
                 (name, order, datetime.now().isoformat(timespec="seconds")),
             )
+        brake_columns = {row[1] for row in conn.execute("PRAGMA table_info(brake_ledger_events)")}
+        if "source_ref" not in brake_columns:
+            conn.execute("ALTER TABLE brake_ledger_events ADD COLUMN source_ref TEXT NOT NULL DEFAULT ''")
+            conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_brake_source_ref ON brake_ledger_events(source_ref) WHERE source_ref != ''")
         conn.execute(
             "INSERT OR IGNORE INTO feedback_categories (name, sort_order, created_at) VALUES ('经验反馈', 0, ?)",
             (datetime.now().isoformat(timespec="seconds"),),
@@ -2445,7 +2451,257 @@ def brake_ledger_stats():
     return jsonify(records=row["records"], files=row["files"])
 
 
-@app.post("/api/brake-ledger/export")
+@app.post("/api/brake-ledger/import")
+def brake_ledger_import():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    file = request.files.get("file")
+    if not file:
+        return jsonify(error="请选择一个 Excel 文件"), 400
+
+    try:
+        wb = load_workbook(BytesIO(file.read()), data_only=True)
+    except Exception:
+        return jsonify(error="文件不是有效的 Excel 格式"), 400
+
+    ws = wb.active
+    rows = list(ws.iter_rows(min_row=1, max_row=min(ws.max_row, 5000), values_only=True))
+    if len(rows) < 2:
+        return jsonify(error="Excel 至少需要标题行和一行数据"), 400
+
+    raw_headers = [str(c).strip() if c else "" for c in rows[0]]
+    # The actual headers are usually in row 2; row 1 is the sheet title
+    if len(rows) >= 2:
+        row2 = [str(c).strip() if c else "" for c in rows[1]]
+        if any(h in " ".join(row2) for h in ["序号", "编号", "纠偏编号", "约谈编号"]):
+            raw_headers = row2
+
+    # Determine file type from all rows (title row + headers)
+    headers = raw_headers
+    header_str = " ".join(headers)
+    # Also check the title row for sheet-level keywords
+    title_str = " ".join(str(c).strip() if c else "" for c in rows[0])
+
+    # ── Detect file type ──
+    combined = header_str + " " + title_str
+    if "偏差" in combined and "纠偏编号" in header_str:
+        file_type = "deviation"
+    elif "约谈编号" in header_str or ("约谈标题" in header_str and "被约谈方" in header_str):
+        file_type = "interview"
+    elif "停工" in combined and "复工条件" in header_str:
+        file_type = "stop_work"
+    elif "挂牌督办" in combined:
+        file_type = "supervision"
+    elif "通报批评" in combined:
+        file_type = "criticism"
+    elif "整改" in combined:
+        file_type = "rectify"
+    else:
+        return jsonify(error="无法识别台账类型，请确认文件内容"), 400
+
+    def col(name, default=""):
+        """Find column index by header name (partial match)."""
+        for i, h in enumerate(headers):
+            if name in h:
+                return i
+        return -1
+
+    def val(row, name, default=""):
+        idx = col(name)
+        if idx >= 0 and idx < len(row):
+            v = row[idx]
+            return str(v).strip() if v is not None else default
+        return default
+
+    imported = 0
+    skipped_existing = 0
+    skipped_filter = 0
+
+    with db() as conn:
+        for row in rows[1:]:
+            if not row or all(c is None for c in row):
+                continue
+
+            if file_type == "deviation":
+                # Filter: 责任单位 must be 中建二局
+                responsible = val(row, "责任单位")
+                if "中建二局" not in responsible:
+                    skipped_filter += 1
+                    continue
+                status = val(row, "状态")
+                if status == "作废":
+                    skipped_filter += 1
+                    continue
+
+                source_ref = val(row, "纠偏编号")
+                treatment = val(row, "处理措施")
+                if "红牌" in treatment or "黄牌" in treatment:
+                    category = "红黄牌"
+                else:
+                    category = "行为偏差"
+
+                name = val(row, "纠偏编号")
+                record_date = val(row, "偏差时间")
+                description = val(row, "偏差描述")
+                issue_dept = val(row, "发出方")
+                responsible_person = val(row, "责任人")
+                responsible_dept = val(row, "责任部门")
+                area = val(row, "发生地点")
+                subcontractor = val(row, "责任单位")
+                team = val(row, "责任班组")
+
+            elif file_type == "interview":
+                # Filter: 被约谈方 contains 中建二局
+                party = val(row, "被约谈方")
+                if "中建二局" not in party:
+                    skipped_filter += 1
+                    continue
+                status = val(row, "状态")
+                if status == "作废":
+                    skipped_filter += 1
+                    continue
+
+                source_ref = val(row, "约谈编号")
+                category = "约谈记录"
+                name = val(row, "约谈标题")
+                record_date = val(row, "约谈日期")
+                description = val(row, "约谈纪要")
+                issue_dept = val(row, "主持人")
+                responsible_person = val(row, "被约谈人")
+                responsible_dept = ""
+                area = val(row, "约谈地点")
+                subcontractor = val(row, "被约谈方")
+                team = ""
+
+            elif file_type == "stop_work":
+                responsible = val(row, "责任单位")
+                if "中建二局" not in responsible:
+                    skipped_filter += 1
+                    continue
+                status = val(row, "状态")
+                if status == "作废":
+                    skipped_filter += 1
+                    continue
+
+                source_ref = val(row, "编号")
+                category = "工程公司停工令"
+                name = val(row, "主题")
+                record_date = val(row, "发出日期")
+                description = val(row, "停工原因及依据")
+                issue_dept = val(row, "发出方")
+                responsible_person = val(row, "录入人")
+                responsible_dept = ""
+                area = val(row, "停工范围")
+                subcontractor = val(row, "责任单位")
+                team = ""
+
+            elif file_type == "supervision":
+                responsible = val(row, "责任承包商")
+                if "中建二局" not in responsible:
+                    skipped_filter += 1
+                    continue
+                status = val(row, "状态")
+                if status == "作废":
+                    skipped_filter += 1
+                    continue
+
+                source_ref = val(row, "编号")
+                category = "工程公司挂牌督办单"
+                name = val(row, "主题")
+                record_date = val(row, "发出日期")
+                description = val(row, "问题描述")
+                issue_dept = val(row, "发出方")
+                responsible_person = val(row, "发出人")
+                responsible_dept = val(row, "内部责任方")
+                area = val(row, "涉及厂房")
+                subcontractor = val(row, "责任承包商")
+                team = ""
+
+            elif file_type == "criticism":
+                responsible = val(row, "责任承包商")
+                if "中建二局" not in responsible:
+                    skipped_filter += 1
+                    continue
+                status = val(row, "状态")
+                if status == "作废":
+                    skipped_filter += 1
+                    continue
+
+                source_ref = val(row, "编号")
+                category = "工程公司通报批评"
+                name = val(row, "主题")
+                record_date = val(row, "发出日期")
+                description = val(row, "问题描述")
+                issue_dept = val(row, "发出方")
+                responsible_person = val(row, "发出人")
+                responsible_dept = val(row, "内部责任方")
+                area = val(row, "涉及厂房")
+                subcontractor = val(row, "责任承包商")
+                team = ""
+
+            elif file_type == "rectify":
+                responsible = val(row, "责任承包商")
+                if "中建二局" not in responsible:
+                    skipped_filter += 1
+                    continue
+                status = val(row, "状态")
+                if status == "作废":
+                    skipped_filter += 1
+                    continue
+
+                source_ref = val(row, "编号")
+                category = "工程公司整改单"
+                name = val(row, "主题")
+                record_date = val(row, "发出日期")
+                description = val(row, "问题描述")
+                issue_dept = val(row, "发出方")
+                responsible_person = val(row, "发出人")
+                responsible_dept = val(row, "内部责任方")
+                area = val(row, "涉及厂房")
+                subcontractor = val(row, "责任承包商")
+                team = ""
+
+            else:
+                continue
+
+            if not name or not source_ref:
+                skipped_filter += 1
+                continue
+
+            # Check for duplicate
+            existing = conn.execute(
+                "SELECT id FROM brake_ledger_events WHERE source_ref = ? AND source_ref != ''",
+                (source_ref,),
+            ).fetchone()
+            if existing:
+                skipped_existing += 1
+                continue
+
+            # Parse date
+            date_str = record_date[:10] if record_date else ""
+            if len(date_str) < 10:
+                date_str = ""
+            now = datetime.now().isoformat(timespec="seconds")
+            try:
+                conn.execute(
+                    """INSERT INTO brake_ledger_events
+                       (name, record_date, category, description, issue_dept, responsible_dept,
+                        responsible_person, area, subcontractor, team, status, source_ref, created_at)
+                       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    (name, date_str, category, description, issue_dept, responsible_dept,
+                     responsible_person, area, subcontractor, team, status, source_ref, now),
+                )
+                imported += 1
+            except Exception:
+                skipped_existing += 1
+
+    return jsonify(
+        ok=True,
+        imported=imported,
+        skipped_existing=skipped_existing,
+        skipped_filter=skipped_filter,
+        category=category if imported else "",
+    )
 def brake_ledger_export():
     body = request.get_json(force=True)
     raw_ids = body.get("ids") or []
@@ -2481,6 +2737,8 @@ def brake_ledger_export():
         ("工程公司整改单", 16),
         ("工程公司停工令", 14),
         ("监理业主整改通知单", 14),
+        ("行为偏差", 12),
+        ("约谈记录", 12),
     ]
 
     # Column name → event field mapping key

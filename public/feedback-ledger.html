@@ -17,6 +17,8 @@
     </a>
     <div class="top-actions">
       <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索事件名、内容等"></label>
+      <button class="ghost hidden" id="importBtn">导入台账</button>
+      <button class="ghost hidden" id="exportBtn">导出台账</button>
       <button class="ghost" id="adminBtn">管理上传</button>
       <button class="primary hidden" id="newEventBtn">＋ 新增事件</button>
     </div>
@@ -50,6 +52,7 @@
       </div>
       <div class="period-cards">
         <div class="period-card"><strong id="statsRecords">—</strong><span>反馈事件</span></div>
+        <div class="period-card"><strong id="statsParticipants">—</strong><span>反馈人数</span></div>
         <div class="period-card"><strong id="statsFiles">—</strong><span>归档文件</span></div>
       </div>
     </section>
@@ -82,8 +85,23 @@
       </label>
       <label>事件日期<input id="eventDate" type="date" required></label>
       <div class="content-label">事件内容<textarea id="eventContent" placeholder="描述事件经过、原因分析、经验教训和纠正措施…" rows="5"></textarea></div>
+      <label>反馈人数<input id="eventParticipantCount" type="number" min="0" placeholder="0"></label>
       <button class="primary wide" id="eventSubmitBtn">创建事件</button>
     </form>
+  </div>
+
+  <div class="modal" id="exportModal" aria-hidden="true">
+    <div class="dialog export-dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">EXPORT LEDGER</p><h2>选择记录生成台账</h2>
+      <p>勾选需要导出的记录，生成 Excel 台账。</p>
+      <div class="export-tools">
+        <button class="ghost" id="selectAllExportBtn">全选</button>
+        <span id="exportSelectedCount">已选择 0 项</span>
+      </div>
+      <div id="exportEventList" class="export-event-list"></div>
+      <button class="primary wide" id="exportConfirmBtn" disabled>生成 Excel 台账</button>
+    </div>
   </div>
 
   <div class="modal" id="docxPreviewModal" aria-hidden="true">

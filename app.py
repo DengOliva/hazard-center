@@ -371,6 +371,12 @@ def init_db():
             "INSERT OR IGNORE INTO feedback_categories (name, sort_order, created_at) VALUES ('经验反馈', 0, ?)",
             (datetime.now().isoformat(timespec="seconds"),),
         )
+        fb_columns = {row[1] for row in conn.execute("PRAGMA table_info(feedback_events)")}
+        if "participant_count" not in fb_columns:
+            conn.execute("ALTER TABLE feedback_events ADD COLUMN participant_count INTEGER NOT NULL DEFAULT 0")
+        if "source_ref" not in fb_columns:
+            conn.execute("ALTER TABLE feedback_events ADD COLUMN source_ref TEXT NOT NULL DEFAULT ''")
+            conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_feedback_source_ref ON feedback_events(source_ref) WHERE source_ref != ''")
         existing_ledger_files = conn.execute("""
             SELECT f.id,f.original_name,f.kind,e.name,e.training_date
             FROM training_ledger_files f
@@ -2968,6 +2974,7 @@ def feedback_create_event():
     record_date = str(body.get("record_date") or "").strip()
     category = str(body.get("category") or "经验反馈").strip()
     content = str(body.get("content") or "").strip()
+    participant_count = int(body.get("participant_count") or 0)
     if not name:
         return jsonify(error="请输入事件名称"), 400
     try:
@@ -2977,8 +2984,8 @@ def feedback_create_event():
     now = datetime.now().isoformat(timespec="seconds")
     with db() as conn:
         cursor = conn.execute(
-            "INSERT INTO feedback_events (name,record_date,category,content,created_at) VALUES (?,?,?,?,?)",
-            (name, record_date, category, content, now),
+            "INSERT INTO feedback_events (name,record_date,category,content,participant_count,created_at) VALUES (?,?,?,?,?,?)",
+            (name, record_date, category, content, participant_count, now),
         )
     return jsonify(ok=True, id=cursor.lastrowid)
 
@@ -2992,6 +2999,8 @@ def feedback_update_event(event_id):
     for key in ("name", "record_date", "category", "content"):
         if key in body:
             fields[key] = str(body.get(key) or "").strip()
+    if "participant_count" in body:
+        fields["participant_count"] = int(body.get("participant_count") or 0)
     if "name" in fields and not fields["name"]:
         return jsonify(error="请输入事件名称"), 400
     if "record_date" in fields:
@@ -3145,10 +3154,140 @@ def feedback_stats():
     clause = ("WHERE " + " AND ".join(where)) if where else ""
     with db() as conn:
         row = conn.execute(
-            f"SELECT COUNT(*) AS records, (SELECT COUNT(*) FROM feedback_files{(' WHERE event_id IN (SELECT id FROM feedback_events '+clause+')') if clause else ''}) AS files FROM feedback_events {clause}",
+            f"SELECT COUNT(*) AS records, COALESCE(SUM(participant_count), 0) AS participants, (SELECT COUNT(*) FROM feedback_files{(' WHERE event_id IN (SELECT id FROM feedback_events '+clause+')') if clause else ''}) AS files FROM feedback_events {clause}",
             params,
         ).fetchone()
-    return jsonify(records=row["records"], files=row["files"])
+    return jsonify(records=row["records"], files=row["files"], participants=row["participants"])
+
+
+@app.post("/api/feedback/import")
+def feedback_import():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    import_dir = ROOT / "经验反馈导入数据"
+    if not import_dir.is_dir():
+        return jsonify(error="未找到经验反馈导入数据目录"), 400
+
+    imported = 0
+    skipped = 0
+    with db() as conn:
+        for fpath in sorted(import_dir.glob("*.xlsx")):
+            try:
+                wb = load_workbook(fpath, read_only=True, data_only=True)
+                ws = wb.active
+                rows = list(ws.iter_rows(min_row=1, max_row=min(ws.max_row, 2000), values_only=True))
+                if len(rows) < 2:
+                    wb.close()
+                    continue
+
+                # Extract: col 2=填表时间, col 3=表单编号, col 4=二维码名称
+                name = ""
+                record_date = ""
+                source_ref = ""
+                for row in rows[1:]:
+                    if not name and row[4]:
+                        name = str(row[4]).strip()
+                    if not record_date and row[1]:
+                        val = str(row[1]).strip()
+                        record_date = val[:10] if len(val) >= 10 else val
+                    if not source_ref and row[3]:
+                        source_ref = str(row[3]).strip()
+                    if name and record_date and source_ref:
+                        break
+
+                participant_count = len([r for r in rows[1:] if any(c is not None for c in r)])
+
+                wb.close()
+
+                if not name:
+                    skipped += 1
+                    continue
+
+                existing = conn.execute(
+                    "SELECT id FROM feedback_events WHERE source_ref = ? AND source_ref != ''",
+                    (source_ref,),
+                ).fetchone()
+                if existing:
+                    skipped += 1
+                    continue
+
+                now = datetime.now().isoformat(timespec="seconds")
+                conn.execute(
+                    "INSERT INTO feedback_events (name, record_date, category, content, participant_count, source_ref, created_at) VALUES (?,?,?,?,?,?,?)",
+                    (name, record_date, "经验反馈", "", participant_count, source_ref, now),
+                )
+                imported += 1
+            except Exception:
+                skipped += 1
+
+    return jsonify(ok=True, imported=imported, skipped=skipped)
+
+
+@app.post("/api/feedback/export")
+def feedback_export():
+    body = request.get_json(force=True)
+    raw_ids = body.get("ids") or []
+    try:
+        event_ids = [int(v) for v in raw_ids]
+    except (TypeError, ValueError):
+        return jsonify(error="记录选择无效"), 400
+    if not event_ids:
+        return jsonify(error="请至少选择一项记录"), 400
+
+    placeholders = ",".join("?" for _ in event_ids)
+    with db() as conn:
+        rows = conn.execute(
+            f"SELECT id, name, record_date, participant_count FROM feedback_events WHERE id IN ({placeholders}) ORDER BY record_date, id",
+            event_ids,
+        ).fetchall()
+    if not rows:
+        return jsonify(error="未找到所选记录"), 404
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "经验反馈台账"
+    ws.sheet_view.showGridLines = False
+
+    header_font = Font(name="微软雅黑", size=11, bold=True, color="FFFFFF")
+    header_fill = PatternFill("solid", fgColor="267B67")
+    cell_font = Font(name="微软雅黑", size=11, color="24332E")
+    thin = Side(style="thin", color="D9E6E1")
+    light_fill = PatternFill("solid", fgColor="F3F8F6")
+
+    headers = ["序号", "反馈日期", "反馈主题", "反馈人数"]
+    for ci, h in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=ci, value=h)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    ws.row_dimensions[1].height = 30
+
+    for ri, event in enumerate(rows):
+        row_num = ri + 2
+        vals = [ri + 1, event["record_date"], event["name"], event["participant_count"] or 0]
+        for ci, val in enumerate(vals, 1):
+            cell = ws.cell(row=row_num, column=ci, value=val)
+            cell.font = cell_font
+            cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+            cell.border = Border(bottom=thin)
+            if ri % 2 == 0:
+                cell.fill = light_fill
+        ws.row_dimensions[row_num].height = 28
+
+    ws.column_dimensions["A"].width = 8
+    ws.column_dimensions["B"].width = 14
+    ws.column_dimensions["C"].width = 55
+    ws.column_dimensions["D"].width = 12
+    ws.freeze_panes = "A2"
+
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+    filename = f"经验反馈台账_{datetime.now():%Y%m%d}.xlsx"
+    return send_file(
+        output, as_attachment=True, download_name=filename,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
 
 
 @app.post("/api/training-ledger/events/<int:event_id>/files")

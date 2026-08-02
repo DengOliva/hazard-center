@@ -80,6 +80,7 @@ function eventCard(event) {
           ${event.content ? `<div class="feedback-content">${esc(event.content)}</div>` : ''}
         </div>
         <div class="event-actions">
+          ${event.participant_count ? `<span>${event.participant_count} 人</span>` : ''}
           <span>${event.files.length} 个文件</span>
           ${adminPassword ? `<button class="delete-event" onclick="deleteEvent(${event.id}, event)">删除</button>` : ''}
         </div>
@@ -133,6 +134,8 @@ async function enterAdmin(password) {
   sessionStorage.setItem('feedbackLedgerPassword', password);
   $('adminBtn').textContent = '已进入管理模式';
   $('newEventBtn').classList.remove('hidden');
+  $('importBtn').classList.remove('hidden');
+  $('exportBtn').classList.remove('hidden');
   renderCategoryTabs();
   bindCategoryTabClicks();
   closeModals();
@@ -151,6 +154,7 @@ $('newEventBtn').onclick = () => {
   $('eventDate').value = new Date().toISOString().slice(0, 10);
   $('eventName').value = '';
   $('eventContent').value = '';
+  $('eventParticipantCount').value = '';
   $('eventCategory').value = currentCategory;
   openModal('eventModal');
   $('eventName').focus();
@@ -165,6 +169,7 @@ function editEvent(id) {
   $('eventName').value = event.name || '';
   $('eventDate').value = event.record_date || '';
   $('eventContent').value = event.content || '';
+  $('eventParticipantCount').value = event.participant_count || '';
   $('eventCategory').value = event.category || currentCategory;
   openModal('eventModal');
   $('eventName').focus();
@@ -203,6 +208,7 @@ $('eventForm').onsubmit = async e => {
       record_date: $('eventDate').value,
       category: $('eventCategory').value,
       content: $('eventContent').value.trim(),
+      participant_count: parseInt($('eventParticipantCount').value) || 0,
     };
     await api(eventId ? `/api/feedback/events/${eventId}` : '/api/feedback/events', {
       method: eventId ? 'PATCH' : 'POST',
@@ -245,8 +251,9 @@ async function loadStats() {
   try {
     const data = await api('/api/feedback/stats?' + params.toString());
     $('statsRecords').textContent = data.records;
+    $('statsParticipants').textContent = data.participants || 0;
     $('statsFiles').textContent = data.files;
-  } catch (e) { $('statsRecords').textContent = '—'; $('statsFiles').textContent = '—'; }
+  } catch (e) { $('statsRecords').textContent = '—'; $('statsParticipants').textContent = '—'; $('statsFiles').textContent = '—'; }
 }
 
 function setStatsDefaults() {
@@ -254,6 +261,85 @@ function setStatsDefaults() {
   $('statsDateTo').value = now.toISOString().slice(0, 10);
   $('statsDateFrom').value = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
 }
+
+// ── Import ──────────────────────────────────────────────────────────────
+
+$('importBtn').onclick = async () => {
+  if (!confirm('将从「经验反馈导入数据」目录扫描并导入所有宣贯记录文件，确认继续？')) return;
+  $('importBtn').disabled = true;
+  $('importBtn').textContent = '正在导入…';
+  try {
+    const data = await api('/api/feedback/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: adminPassword }) });
+    toast(`导入完成：新增 ${data.imported} 条，跳过 ${data.skipped} 条`);
+    await loadEvents();
+    loadStats().catch(() => {});
+  } catch (error) { toast(error.message); }
+  finally { $('importBtn').disabled = false; $('importBtn').textContent = '导入台账'; }
+};
+
+// ── Export ──────────────────────────────────────────────────────────────
+
+function openFeedbackExport() {
+  if (!loadedEvents.length) { toast('当前没有可导出的记录'); return; }
+  $('exportEventList').innerHTML = loadedEvents.map(event => `
+    <label class="export-event">
+      <input type="checkbox" value="${event.id}">
+      <time>${esc(event.record_date)}</time>
+      <b>${esc(event.name)}</b>
+      <small>${event.participant_count || 0} 人</small>
+    </label>`).join('');
+  $('exportEventList').querySelectorAll('input').forEach(input => input.onchange = updateFeedbackExportSelection);
+  updateFeedbackExportSelection();
+  openModal('exportModal');
+}
+
+function selectedFeedbackExportEvents() {
+  const ids = new Set(Array.from($('exportEventList').querySelectorAll('input:checked')).map(i => Number(i.value)));
+  return loadedEvents.filter(e => ids.has(e.id)).sort((a, b) => a.record_date.localeCompare(b.record_date) || a.id - b.id);
+}
+
+function updateFeedbackExportSelection() {
+  const selected = selectedFeedbackExportEvents();
+  $('exportSelectedCount').textContent = `已选择 ${selected.length} 项`;
+  $('exportConfirmBtn').disabled = !selected.length;
+  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
+  $('selectAllExportBtn').textContent = inputs.length && inputs.every(i => i.checked) ? '取消全选' : '全选';
+}
+
+async function exportFeedbackLedger() {
+  const events = selectedFeedbackExportEvents();
+  if (!events.length) return;
+  $('exportConfirmBtn').disabled = true;
+  $('exportConfirmBtn').textContent = '正在生成…';
+  try {
+    const response = await fetch('/api/feedback/export', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: events.map(e => e.id) }),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || '生成失败');
+    }
+    downloadBlob(await response.blob(), `经验反馈台账_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    closeModals();
+    toast(`已导出 ${events.length} 条记录`);
+  } catch (error) {
+    toast(error.message);
+  } finally {
+    $('exportConfirmBtn').disabled = false;
+    $('exportConfirmBtn').textContent = '生成 Excel 台账';
+  }
+}
+
+$('exportBtn').onclick = openFeedbackExport;
+$('selectAllExportBtn').onclick = () => {
+  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
+  const shouldSelect = !inputs.every(i => i.checked);
+  inputs.forEach(i => { i.checked = shouldSelect; });
+  updateFeedbackExportSelection();
+};
+$('exportConfirmBtn').onclick = exportFeedbackLedger;
 
 // ── Categories ────────────────────────────────────────────────────────
 

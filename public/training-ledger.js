@@ -858,6 +858,8 @@ $('addCategoryBtn').onclick = async () => {
   } catch (error) { toast(error.message); }
 };
 
+let statsEvents = [];
+
 async function loadStats() {
   const from = $('statsDateFrom').value;
   const to = $('statsDateTo').value;
@@ -865,12 +867,86 @@ async function loadStats() {
   const params = new URLSearchParams({ start_date: from, end_date: to });
   if (currentCategory) params.set('category', currentCategory);
   try {
-    const data = await api('/api/training-ledger/stats?' + params.toString());
-    $('statsSessions').textContent = data.sessions;
-    $('statsParticipants').textContent = data.participants;
+    const data = await api('/api/training-ledger/events?' + params.toString());
+    statsEvents = data.items;
+    renderStatsEventList(statsEvents);
+    updateStatsFromCheckboxes();
+    if (statsEvents.length) {
+      $('statsToolbar').classList.remove('hidden');
+    } else {
+      $('statsToolbar').classList.add('hidden');
+    }
   } catch (error) {
     $('statsSessions').textContent = '—';
     $('statsParticipants').textContent = '—';
+    $('statsEventList').innerHTML = '';
+    $('statsToolbar').classList.add('hidden');
+  }
+}
+
+function renderStatsEventList(events) {
+  if (!events.length) {
+    $('statsEventList').innerHTML = '<div class="stats-empty">该时间段内无培训记录</div>';
+    return;
+  }
+  $('statsEventList').innerHTML = events.map(event => `
+    <label class="stats-event-row">
+      <input type="checkbox" value="${event.id}" checked onchange="updateStatsFromCheckboxes()">
+      <time>${esc(event.training_date)}</time>
+      <b>${esc(event.name)}</b>
+      <small>${esc(event.audience || '未填写对象')}</small>
+      <span>${event.participant_count || 0} 人</span>
+    </label>`).join('');
+  document.querySelectorAll('#statsEventList input[type=checkbox]').forEach(cb => {
+    cb.onchange = updateStatsFromCheckboxes;
+  });
+}
+
+function checkedStatsEvents() {
+  const ids = new Set(Array.from($('statsEventList').querySelectorAll('input:checked')).map(input => Number(input.value)));
+  return statsEvents.filter(event => ids.has(event.id));
+}
+
+function updateStatsFromCheckboxes() {
+  const checked = checkedStatsEvents();
+  $('statsSessions').textContent = checked.length;
+  const total = checked.reduce((sum, event) => sum + (event.participant_count || 0), 0);
+  $('statsParticipants').textContent = total;
+  $('statsSelectionInfo').textContent = `已选 ${checked.length} 场，${total} 人次`;
+  const allCbs = $('statsEventList').querySelectorAll('input[type=checkbox]');
+  const allChecked = allCbs.length && Array.from(allCbs).every(cb => cb.checked);
+  $('statsSelectAllBtn').textContent = allChecked ? '取消全选' : '全选';
+}
+
+async function exportStatsLedger() {
+  const events = checkedStatsEvents();
+  if (!events.length) { toast('请至少勾选一场培训'); return; }
+  $('statsExportBtn').disabled = true;
+  $('statsExportBtn').textContent = '正在生成…';
+  try {
+    const response = await fetch('/api/training-ledger/export', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: events.map(e => e.id) }),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Excel 生成失败');
+    }
+    const primary = categories.length ? categories[0].name : '专题培训';
+    const prefix = currentCategory !== primary ? `${currentCategory}台账` : '培训台账';
+    const dateStr = new Date().toISOString().slice(0, 10);
+    downloadBlob(await response.blob(), `${prefix}_${dateStr}.xlsx`);
+    const canvas = createLedgerImage(events);
+    canvas.toBlob(blob => {
+      if (blob) downloadBlob(blob, `${prefix}_${dateStr}.png`);
+    }, 'image/png');
+    toast(`已生成 ${events.length} 场培训的 Excel 和图片`);
+  } catch (error) {
+    toast(error.message);
+  } finally {
+    $('statsExportBtn').disabled = false;
+    $('statsExportBtn').textContent = '生成台账';
   }
 }
 
@@ -889,6 +965,16 @@ $('statsRefreshBtn').onclick = () => loadStats().catch(() => {});
 
 $('statsDateFrom').addEventListener('change', () => loadStats().catch(() => {}));
 $('statsDateTo').addEventListener('change', () => loadStats().catch(() => {}));
+
+$('statsSelectAllBtn').onclick = () => {
+  const allCbs = $('statsEventList').querySelectorAll('input[type=checkbox]');
+  if (!allCbs.length) return;
+  const allChecked = Array.from(allCbs).every(cb => cb.checked);
+  allCbs.forEach(cb => { cb.checked = !allChecked; });
+  updateStatsFromCheckboxes();
+};
+
+$('statsExportBtn').onclick = exportStatsLedger;
 
 async function initialize() {
   await loadCategories();

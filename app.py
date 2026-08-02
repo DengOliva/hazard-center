@@ -1742,11 +1742,21 @@ def ledger_file_dict(row):
 def training_ledger_events():
     keyword = (request.args.get("keyword") or "").strip()
     category = (request.args.get("category") or "").strip()
+    start_date = (request.args.get("start_date") or "").strip()
+    end_date = (request.args.get("end_date") or "").strip()
     where = ""
     params = []
     if category:
         where = "WHERE e.category = ?"
         params.append(category)
+    if start_date:
+        prefix = "AND " if where else "WHERE "
+        where += f"{prefix}e.training_date >= ?"
+        params.append(start_date)
+    if end_date:
+        prefix = "AND " if where else "WHERE "
+        where += f"{prefix}e.training_date <= ?"
+        params.append(end_date)
     if keyword:
         terms = [term for term in re.split(r"\s+", keyword) if term]
         searchable = """

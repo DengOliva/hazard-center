@@ -3164,40 +3164,40 @@ def feedback_stats():
 def feedback_import():
     if not ledger_password_ok():
         return jsonify(error="管理密码错误"), 403
-    import_dir = ROOT / "经验反馈导入数据"
-    if not import_dir.is_dir():
-        return jsonify(error="未找到经验反馈导入数据目录"), 400
+    files = [f for f in request.files.getlist("files") if f and f.filename]
+    if not files:
+        return jsonify(error="请选择要导入的 Excel 文件"), 400
 
     imported = 0
     skipped = 0
+    items = []
     with db() as conn:
-        for fpath in sorted(import_dir.glob("*.xlsx")):
+        for upload_file in files:
             try:
-                wb = load_workbook(fpath, read_only=True, data_only=True)
+                wb = load_workbook(BytesIO(upload_file.read()), read_only=True, data_only=True)
                 ws = wb.active
                 rows = list(ws.iter_rows(min_row=1, max_row=min(ws.max_row, 2000), values_only=True))
+                wb.close()
+
                 if len(rows) < 2:
-                    wb.close()
+                    skipped += 1
                     continue
 
-                # Extract: col 2=填表时间, col 3=表单编号, col 4=二维码名称
                 name = ""
                 record_date = ""
                 source_ref = ""
                 for row in rows[1:]:
-                    if not name and row[4]:
+                    if not name and len(row) > 4 and row[4]:
                         name = str(row[4]).strip()
-                    if not record_date and row[1]:
+                    if not record_date and len(row) > 1 and row[1]:
                         val = str(row[1]).strip()
                         record_date = val[:10] if len(val) >= 10 else val
-                    if not source_ref and row[3]:
+                    if not source_ref and len(row) > 3 and row[3]:
                         source_ref = str(row[3]).strip()
                     if name and record_date and source_ref:
                         break
 
                 participant_count = len([r for r in rows[1:] if any(c is not None for c in r)])
-
-                wb.close()
 
                 if not name:
                     skipped += 1
@@ -3217,10 +3217,11 @@ def feedback_import():
                     (name, record_date, "经验反馈", "", participant_count, source_ref, now),
                 )
                 imported += 1
+                items.append({"name": name, "participant_count": participant_count})
             except Exception:
                 skipped += 1
 
-    return jsonify(ok=True, imported=imported, skipped=skipped)
+    return jsonify(ok=True, imported=imported, skipped=skipped, items=items)
 
 
 @app.post("/api/feedback/export")

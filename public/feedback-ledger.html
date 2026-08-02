@@ -104,6 +104,23 @@
     </div>
   </div>
 
+  <div class="modal" id="importModal" aria-hidden="true">
+    <div class="dialog">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">IMPORT FEEDBACK</p><h2>导入经验反馈宣贯记录</h2>
+      <p>拖入或选择宣贯记录 Excel 文件，每个文件生成一条反馈记录。</p>
+      <label class="dropzone" id="importDropzone" style="min-height:140px">
+        <input id="importFileInput" type="file" accept=".xlsx,.xls" multiple>
+        <span class="upload-icon">⇧</span>
+        <b>选择或拖入 XLSX 文件</b>
+        <small>支持批量导入多个文件</small>
+      </label>
+      <div id="importQueue" class="file-queue"></div>
+      <button class="primary wide" id="importStartBtn" disabled>开始导入</button>
+      <div id="importResult" style="display:none;padding:14px;border-radius:9px;background:var(--mint);margin-top:14px;font-size:13px;line-height:1.8"></div>
+    </div>
+  </div>
+
   <div class="modal" id="docxPreviewModal" aria-hidden="true">
     <div class="dialog docx-preview-modal">
       <button type="button" class="close" data-close>×</button>

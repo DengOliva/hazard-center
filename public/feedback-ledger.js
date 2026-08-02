@@ -264,17 +264,72 @@ function setStatsDefaults() {
 
 // ── Import ──────────────────────────────────────────────────────────────
 
-$('importBtn').onclick = async () => {
-  if (!confirm('将从「经验反馈导入数据」目录扫描并导入所有宣贯记录文件，确认继续？')) return;
-  $('importBtn').disabled = true;
-  $('importBtn').textContent = '正在导入…';
+let importFiles = [];
+
+$('importBtn').onclick = () => {
+  importFiles = [];
+  renderImportQueue();
+  $('importResult').style.display = 'none';
+  $('importFileInput').value = '';
+  openModal('importModal');
+};
+
+$('importFileInput').onchange = e => { addImportFiles(e.target.files); };
+['dragenter', 'dragover'].forEach(name => $('importDropzone').addEventListener(name, e => {
+  e.preventDefault();
+  $('importDropzone').classList.add('dragging');
+}));
+['dragleave', 'drop'].forEach(name => $('importDropzone').addEventListener(name, e => {
+  e.preventDefault();
+  $('importDropzone').classList.remove('dragging');
+}));
+$('importDropzone').addEventListener('drop', e => { addImportFiles(e.dataTransfer.files); });
+
+function addImportFiles(files) {
+  const xlsx = Array.from(files || []).filter(f => f.name.toLowerCase().endsWith('.xlsx') || f.name.toLowerCase().endsWith('.xls'));
+  importFiles.push(...xlsx);
+  renderImportQueue();
+}
+
+function renderImportQueue() {
+  $('importQueue').innerHTML = importFiles.length
+    ? importFiles.map((f, i) => `<div><span>xlsx</span><b>${esc(f.name)}</b><small>${sizeText(f.size)}</small><button onclick="removeImportFile(${i})">×</button></div>`).join('')
+    : '';
+  $('importStartBtn').disabled = !importFiles.length;
+}
+
+function removeImportFile(index) { importFiles.splice(index, 1); renderImportQueue(); }
+
+$('importStartBtn').onclick = async () => {
+  if (!importFiles.length) return;
+  const resultDiv = $('importResult');
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = '正在导入…';
+  $('importStartBtn').disabled = true;
+  const body = new FormData();
+  body.append('password', adminPassword);
+  importFiles.forEach(f => body.append('files', f));
   try {
-    const data = await api('/api/feedback/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: adminPassword }) });
-    toast(`导入完成：新增 ${data.imported} 条，跳过 ${data.skipped} 条`);
+    const response = await fetch('/api/feedback/import', { method: 'POST', body });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '导入失败');
+    let lines = [];
+    if (data.items && data.items.length) {
+      lines = data.items.map(item => `<div>+ ${esc(item.name)} · ${item.participant_count} 人</div>`);
+    }
+    if (data.skipped) lines.push(`<div style="color:var(--muted)">跳过 ${data.skipped} 条已存在</div>`);
+    resultDiv.innerHTML = lines.join('') || `导入完成：新增 ${data.imported} 条`;
+    toast(`导入 ${data.imported} 条，跳过 ${data.skipped} 条`);
+    importFiles = [];
+    renderImportQueue();
     await loadEvents();
     loadStats().catch(() => {});
-  } catch (error) { toast(error.message); }
-  finally { $('importBtn').disabled = false; $('importBtn').textContent = '导入台账'; }
+  } catch (error) {
+    resultDiv.innerHTML = `<b style="color:#b33b32">${esc(error.message)}</b>`;
+    toast(error.message);
+  } finally {
+    $('importStartBtn').disabled = false;
+  }
 };
 
 // ── Export ──────────────────────────────────────────────────────────────

@@ -43,6 +43,32 @@ function fileIcon(file) {
   return ext.length <= 4 ? ext : 'FILE';
 }
 
+function openLedgerExport() {
+  if (!loadedEvents.length) { toast('当前没有可导出的培训记录'); return; }
+  $('exportEventList').innerHTML = loadedEvents.map(event => `
+    <label class="export-event">
+      <input type="checkbox" value="${event.id}">
+      <time>${esc(event.training_date)}</time>
+      <b>${esc(event.name)}</b>
+      <small>${esc(event.audience || '未填写对象')}</small>
+    </label>`).join('');
+  $('exportEventList').querySelectorAll('input').forEach(input => input.onchange = updateExportSelection);
+  updateExportSelection();
+  openModal('ledgerExportModal');
+}
+
+function selectedExportEvents() {
+  const ids = new Set(Array.from($('exportEventList').querySelectorAll('input:checked')).map(input => Number(input.value)));
+  return loadedEvents.filter(event => ids.has(event.id)).sort((a, b) => a.training_date.localeCompare(b.training_date) || a.id - b.id);
+}
+
+function updateExportSelection() {
+  const selected = selectedExportEvents();
+  $('exportSelectedCount').textContent = `已选择 ${selected.length} 项`;
+  $('exportConfirmBtn').disabled = !selected.length;
+  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
+  $('selectAllExportBtn').textContent = inputs.length && inputs.every(input => input.checked) ? '取消全选' : '全选';
+}
 
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
@@ -155,36 +181,36 @@ function createLedgerImage(events) {
   return canvas;
 }
 
-async function exportFullLedger() {
-  $('generateLedgerBtn').disabled = true;
-  $('generateLedgerBtn').textContent = '正在生成…';
+async function exportSelectedLedger() {
+  const events = selectedExportEvents();
+  if (!events.length) return;
+  $('exportConfirmBtn').disabled = true;
+  $('exportConfirmBtn').textContent = '正在生成…';
   try {
-    // First fetch all events for PNG generation
-    const allData = await api('/api/training-ledger/events');
-    const events = allData.items.sort((a, b) => a.training_date.localeCompare(b.training_date) || a.id - b.id);
     const response = await fetch('/api/training-ledger/export', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({}),
+      body:JSON.stringify({ids:events.map(event => event.id)}),
     });
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || 'Excel 生成失败');
     }
+    const primary = categories.length ? categories[0].name : '专题培训';
+    const prefix = currentCategory !== primary ? `${currentCategory}台账` : '培训台账';
     const dateStr = new Date().toISOString().slice(0, 10);
-    downloadBlob(await response.blob(), `培训台账_${dateStr}.xlsx`);
-    if (events.length) {
-      const canvas = createLedgerImage(events);
-      canvas.toBlob(blob => {
-        if (blob) downloadBlob(blob, `培训台账_${dateStr}.png`);
-      }, 'image/png');
-    }
+    downloadBlob(await response.blob(), `${prefix}_${dateStr}.xlsx`);
+    const canvas = createLedgerImage(events);
+    canvas.toBlob(blob => {
+      if (blob) downloadBlob(blob, `${prefix}_${dateStr}.png`);
+    }, 'image/png');
+    closeModals();
     toast(`已生成 ${events.length} 场培训的 Excel 和图片`);
   } catch (error) {
     toast(error.message);
   } finally {
-    $('generateLedgerBtn').disabled = false;
-    $('generateLedgerBtn').textContent = '生成台账';
+    $('exportConfirmBtn').disabled = false;
+    $('exportConfirmBtn').textContent = '生成 Excel ＋ 美化图片';
   }
 }
 
@@ -315,7 +341,7 @@ function removeQueued(index) {
 }
 
 $('adminBtn').onclick = () => adminPassword ? toast('当前已是管理模式') : openModal('passwordModal');
-$('generateLedgerBtn').onclick = exportFullLedger;
+$('generateLedgerBtn').onclick = openLedgerExport;
 const CATEGORY_DEFAULTS = {
   '入场培训': { location: '党群活动室', instructor: '徐荣', audience: '入场培训人员' },
 };
@@ -327,6 +353,13 @@ function applyCategoryDefaults(category) {
   $('eventAudience').value = defs?.audience || '';
 }
 
+$('selectAllExportBtn').onclick = () => {
+  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
+  const shouldSelect = !inputs.every(input => input.checked);
+  inputs.forEach(input => { input.checked = shouldSelect; });
+  updateExportSelection();
+};
+$('exportConfirmBtn').onclick = exportSelectedLedger;
 $('newEventBtn').onclick = () => {
   $('eventEditId').value = '';
   $('eventFormTitle').textContent = '新增培训名目';

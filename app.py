@@ -1809,27 +1809,22 @@ def training_ledger_events():
 
 @app.post("/api/training-ledger/export")
 def training_ledger_export():
-    body = request.get_json(force=True) or {}
+    body = request.get_json(force=True)
     raw_ids = body.get("ids") or []
     try:
         event_ids = [int(value) for value in raw_ids]
     except (TypeError, ValueError):
         return jsonify(error="培训记录选择无效"), 400
+    if not event_ids:
+        return jsonify(error="请至少选择一项培训记录"), 400
+    placeholders = ",".join("?" for _ in event_ids)
     with db() as conn:
-        if event_ids:
-            placeholders = ",".join("?" for _ in event_ids)
-            rows = conn.execute(f"""
-                SELECT id,name,audience,training_location,instructor,participant_count,training_date
-                FROM training_ledger_events
-                WHERE id IN ({placeholders})
-                ORDER BY training_date,id
-            """, event_ids).fetchall()
-        else:
-            rows = conn.execute("""
-                SELECT id,name,audience,training_location,instructor,participant_count,training_date
-                FROM training_ledger_events
-                ORDER BY training_date,id
-            """).fetchall()
+        rows = conn.execute(f"""
+            SELECT id,name,audience,training_location,instructor,participant_count,training_date
+            FROM training_ledger_events
+            WHERE id IN ({placeholders})
+            ORDER BY training_date,id
+        """, event_ids).fetchall()
     if not rows:
         return jsonify(error="未找到所选培训记录"), 404
     workbook = Workbook()

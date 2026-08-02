@@ -68,7 +68,21 @@
       "Bash(python -c \"from app import app; print\\('App imported OK'\\); print\\('Routes:'\\); [print\\(f'  {r.rule} -> {r.methods}'\\) for r in app.url_map.iter_rules\\(\\) if 'collection' in r.rule]\")",
       "Bash(curl -s http://localhost:8010/api/collection/departments)",
       "Bash(curl *)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(sqlite3 hazard.db \".schema\")",
+      "Bash(ping *)",
+      "Bash(GIT_TRACE=1 GIT_HTTP_LOW_SPEED_LIMIT=0 GIT_HTTP_LOW_SPEED_TIME=999999 git push)",
+      "Bash(GIT_TRACE=1 git push)",
+      "Bash(grep -oP '.{0,30}CCFFCC.{0,30}' public/training-ledger.css)",
+      "Bash(grep -oE '.{0,30}CCFFCC.{0,30}' public/training-ledger.css)",
+      "Bash(grep -oE '.{0,30}CCFFCC.{0,30}' public/admin/index.html)",
+      "Bash(grep -oE '.{0,20}\\(00AA00|008000\\).{0,20}' public/training-ledger.css)",
+      "Bash(PYTHONIOENCODING=utf-8 python -)",
+      "Bash(head -c 600 data/training_overrides.json)",
+      "Bash(head -c 400 data/training_materials.json)",
+      "Bash(.venv/Scripts/python.exe -c ' *)",
+      "Bash(ls -la data/*.db)",
+      "Bash(ls -la *.db)"
     ]
   }
 }

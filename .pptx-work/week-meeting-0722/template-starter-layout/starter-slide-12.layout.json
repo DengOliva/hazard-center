@@ -1,0 +1,1353 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/drtjgj",
+    "id": "drtjgj",
+    "slide": 12,
+    "layoutId": "/ppt/slideLayouts/slideLayout6.xml",
+    "layoutName": "仅标题",
+    "layoutType": "titleOnly",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "WPS",
+    "colors": {
+      "accent1": "#4874CB",
+      "accent2": "#EE822F",
+      "accent3": "#F2BA02",
+      "accent4": "#75BD42",
+      "accent5": "#30C0B4",
+      "accent6": "#E54C5E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0026E5",
+      "folHlink": "#7E1FAD"
+    },
+    "fontScheme": {
+      "name": "WPS",
+      "majorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout6.xml",
+      "name": "仅标题",
+      "type": "titleOnly",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/2",
+          "id": "2",
+          "name": "标题 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/3",
+          "id": "3",
+          "name": "日期占位符 2",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/4",
+          "id": "4",
+          "name": "页脚占位符 3",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/5",
+          "id": "5",
+          "name": "灯片编号占位符 4",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "标题占位符 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.93,
+              "right": 9.47,
+              "bottom": 4.93,
+              "left": 9.47
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "文本占位符 2",
+          "bbox": [
+            63.87,
+            156.47,
+            1151.62,
+            499.65
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版文本样式\n第二级\n第三级\n第四级\n第五级",
+          "textPreview": "单击此处编辑母版文本样式 | 第二级 | 第三级 | 第四级 | 第五级",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版文本样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版文本样式"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "第二级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第二级"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "第三级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第三级"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "第四级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第四级"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "第五级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第五级"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "日期占位符 3",
+          "bbox": [
+            64.25,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "页脚占位符 4",
+          "bbox": [
+            432.13,
+            662.93,
+            415.75,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "灯片编号占位符 5",
+          "bbox": [
+            932.03,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/07ypkri5",
+      "id": "24",
+      "name": "任意多边形 8",
+      "bbox": [
+        21,
+        64.13,
+        43.13,
+        45.33
+      ],
+      "rotation": 0,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ny9snuto",
+      "id": "3",
+      "name": "任意多边形 7",
+      "bbox": [
+        75.07,
+        103.8,
+        1096.07,
+        5.67
+      ],
+      "rotation": 0,
+      "verticalFlip": true,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u5w76h8f",
+      "id": "13",
+      "name": "文本框 12",
+      "bbox": [
+        74.2,
+        55.2,
+        1103.93,
+        48.33
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "一、部门任务跟踪",
+      "textPreview": "一、部门任务跟踪",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "一、部门任务跟踪"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "一、部门任务跟踪",
+          "runs": [
+            {
+              "index": 1,
+              "text": "一、",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#0599D9",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "部门任务跟踪",
+              "fontSize": 32,
+              "color": "rgba(5, 153, 217, 1)",
+              "bold": true
+            }
+          ],
+          "marginLeft": 457200
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l8rqdwzq",
+      "id": "25",
+      "name": "标题 3",
+      "bbox": [
+        46.01,
+        118.05,
+        1179.34,
+        45.13
+      ],
+      "geometry": "rect",
+      "text": "8、整改单关闭情况（7月15日--7月21日）",
+      "textPreview": "8、整改单关闭情况（7月15日--7月21日）",
+      "resolvedFontSize": 58.67,
+      "resolvedTextStyle": {
+        "fontSize": 58.67,
+        "typeface": "Arial",
+        "color": "tx2",
+        "alignment": "center",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "8、整改单关闭情况（7月15日--7月21日）"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "8、整改单关闭情况（7月15日--7月21日）",
+          "runs": [
+            {
+              "index": 1,
+              "text": "8",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "、整改单关闭情况（",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "7",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 4,
+              "text": "月",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 5,
+              "text": "15",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 6,
+              "text": "日",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 7,
+              "text": "--7",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 8,
+              "text": "月",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 9,
+              "text": "21",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 10,
+              "text": "日",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 11,
+              "text": "）",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/doba9gzq",
+      "id": "26",
+      "name": "表格 3",
+      "bbox": [
+        33,
+        214.47,
+        1216.14,
+        104
+      ],
+      "text": "序号 | 整改单 | 责任部门 | 责任人 | 下发日期 | 到期日期 | 是否按时关闭 | 跟踪责任人\n1 | 关于对BOP队在BDL11段钢筋墙体防倾覆与作业脚手架违规连接的整改通知单 | BOP队 | 段龙飞 | 2026/7/19 | 2026/7/25 | 未到期 | 刘友三",
+      "textPreview": "序号 | 整改单 | 责任部门 | 责任人 | 下发日期 | 到期日期 | 是否按时关闭 | 跟踪责任人 | 1 | 关于对BOP队在BDL11段钢筋墙体防倾覆与作业脚手架违规连接的整改通知单 | BOP队 | 段龙飞 | 2026/7/19 | 2026/7/25 | 未...",
+      "rows": 2,
+      "cols": 8,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            33,
+            214.47,
+            59,
+            45.2
+          ],
+          "text": "序号",
+          "textPreview": "序号",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "序号",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "序号",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            92,
+            214.47,
+            364.6,
+            45.2
+          ],
+          "text": "整改单",
+          "textPreview": "整改单",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "整改单",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "整改单",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            456.6,
+            214.47,
+            136.33,
+            45.2
+          ],
+          "text": "责任部门",
+          "textPreview": "责任部门",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "责任部门",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "责任部门",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            592.93,
+            214.47,
+            107.33,
+            45.2
+          ],
+          "text": "责任人",
+          "textPreview": "责任人",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "责任人",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "责任人",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 1,
+          "column": 5,
+          "bbox": [
+            700.27,
+            214.47,
+            135.87,
+            45.2
+          ],
+          "text": "下发日期",
+          "textPreview": "下发日期",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "下发日期",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "下发日期",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 1,
+          "column": 6,
+          "bbox": [
+            836.13,
+            214.47,
+            130.27,
+            45.2
+          ],
+          "text": "到期日期",
+          "textPreview": "到期日期",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "到期日期",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "到期",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "日期",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 1,
+          "column": 7,
+          "bbox": [
+            966.4,
+            214.47,
+            157.27,
+            45.2
+          ],
+          "text": "是否按时关闭",
+          "textPreview": "是否按时关闭",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "是否按时关闭",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "是否",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "按时关闭",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 1,
+          "column": 8,
+          "bbox": [
+            1123.67,
+            214.47,
+            125.47,
+            45.2
+          ],
+          "text": "跟踪责任人",
+          "textPreview": "跟踪责任人",
+          "textDirection": "horz",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "跟踪责任人",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "跟踪责任人",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "bg1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            33,
+            259.67,
+            59,
+            58.8
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            92,
+            259.67,
+            364.6,
+            58.8
+          ],
+          "text": "关于对BOP队在BDL11段钢筋墙体防倾覆与作业脚手架违规连接的整改通知单",
+          "textPreview": "关于对BOP队在BDL11段钢筋墙体防倾覆与作业脚手架违规连接的整改通知单",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "关于对BOP队在BDL11段钢筋墙体防倾覆与作业脚手架违规连接的整改通知单",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "关于对BOP队在BDL11段钢筋墙体防倾覆与作业脚手架违规连接的整改通知单",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            456.6,
+            259.67,
+            136.33,
+            58.8
+          ],
+          "text": "BOP队",
+          "textPreview": "BOP队",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "BOP队",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "BOP队",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            592.93,
+            259.67,
+            107.33,
+            58.8
+          ],
+          "text": "段龙飞",
+          "textPreview": "段龙飞",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "段龙飞",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "段龙飞",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "row": 2,
+          "column": 5,
+          "bbox": [
+            700.27,
+            259.67,
+            135.87,
+            58.8
+          ],
+          "text": "2026/7/19",
+          "textPreview": "2026/7/19",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026/7/19",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026/7/19",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 2,
+          "column": 6,
+          "bbox": [
+            836.13,
+            259.67,
+            130.27,
+            58.8
+          ],
+          "text": "2026/7/25",
+          "textPreview": "2026/7/25",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026/7/25",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026/7/25",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 2,
+          "column": 7,
+          "bbox": [
+            966.4,
+            259.67,
+            157.27,
+            58.8
+          ],
+          "text": "未到期",
+          "textPreview": "未到期",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "未到期",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "未到期",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 2,
+          "column": 8,
+          "bbox": [
+            1123.67,
+            259.67,
+            125.47,
+            58.8
+          ],
+          "text": "刘友三",
+          "textPreview": "刘友三",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "刘友三",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "刘友三",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mx0bepcj",
+      "id": "2",
+      "name": "文本框 1",
+      "bbox": [
+        105.53,
+        166.13,
+        1155.53,
+        48.33
+      ],
+      "geometry": "rect",
+      "text": "本报告周期内，安监部发出及延期整改通知单1份、整改通知单关闭0份、还剩1份整改通知单未关闭。",
+      "textPreview": "本报告周期内，安监部发出及延期整改通知单1份、整改通知单关闭0份、还剩1份整改通知单未关闭。",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "本报告周期内，安监部发出及延期整改通知单1份、整改通知单关闭0份、还剩1份整改通知单未关闭。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "本报告周期内，安监部发出及延期整改通知单1份、整改通知单关闭0份、还剩1份整改通知单未关闭。",
+          "runs": [
+            {
+              "index": 1,
+              "text": "本报告周期内，安监部发出及延期整改通知单",
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "1",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#FF0000",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "份",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#FF0000",
+              "bold": true
+            },
+            {
+              "index": 4,
+              "text": "、",
+              "typeface": "微软雅黑",
+              "color": "tx1",
+              "bold": true
+            },
+            {
+              "index": 5,
+              "text": "整改通知单",
+              "typeface": "微软雅黑",
+              "bold": true
+            },
+            {
+              "index": 6,
+              "text": "关闭",
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 7,
+              "text": "0",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#FF0000",
+              "bold": true
+            },
+            {
+              "index": 8,
+              "text": "份",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#FF0000",
+              "bold": true
+            },
+            {
+              "index": 9,
+              "text": "、还剩",
+              "typeface": "微软雅黑",
+              "color": "tx1",
+              "bold": true
+            },
+            {
+              "index": 10,
+              "text": "1",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#FF0000",
+              "bold": true
+            },
+            {
+              "index": 11,
+              "text": "份",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#FF0000",
+              "bold": true
+            },
+            {
+              "index": 12,
+              "text": "整改通知单",
+              "typeface": "微软雅黑",
+              "color": "tx1",
+              "bold": true
+            },
+            {
+              "index": 13,
+              "text": "未关闭。",
+              "typeface": "微软雅黑",
+              "color": "tx1",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

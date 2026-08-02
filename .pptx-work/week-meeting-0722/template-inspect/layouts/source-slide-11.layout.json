@@ -1,0 +1,5291 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/jetc3ut0",
+    "id": "jetc3ut0",
+    "slide": 11,
+    "layoutId": "/ppt/slideLayouts/slideLayout6.xml",
+    "layoutName": "仅标题",
+    "layoutType": "titleOnly",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "WPS",
+    "colors": {
+      "accent1": "#4874CB",
+      "accent2": "#EE822F",
+      "accent3": "#F2BA02",
+      "accent4": "#75BD42",
+      "accent5": "#30C0B4",
+      "accent6": "#E54C5E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0026E5",
+      "folHlink": "#7E1FAD"
+    },
+    "fontScheme": {
+      "name": "WPS",
+      "majorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "宋体",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout6.xml",
+      "name": "仅标题",
+      "type": "titleOnly",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/2",
+          "id": "2",
+          "name": "标题 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/3",
+          "id": "3",
+          "name": "日期占位符 2",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/4",
+          "id": "4",
+          "name": "页脚占位符 3",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/5",
+          "id": "5",
+          "name": "灯片编号占位符 4",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "标题占位符 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.93,
+              "right": 9.47,
+              "bottom": 4.93,
+              "left": 9.47
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "文本占位符 2",
+          "bbox": [
+            63.87,
+            156.47,
+            1151.62,
+            499.65
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版文本样式\n第二级\n第三级\n第四级\n第五级",
+          "textPreview": "单击此处编辑母版文本样式 | 第二级 | 第三级 | 第四级 | 第五级",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版文本样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版文本样式"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "第二级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第二级"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "第三级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第三级"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "第四级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第四级"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "第五级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第五级"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "日期占位符 3",
+          "bbox": [
+            64.25,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "页脚占位符 4",
+          "bbox": [
+            432.13,
+            662.93,
+            415.75,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "灯片编号占位符 5",
+          "bbox": [
+            932.03,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l43ilgn2",
+      "id": "24",
+      "name": "任意多边形 8",
+      "bbox": [
+        21,
+        64.13,
+        43.13,
+        45.33
+      ],
+      "rotation": 0,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wbih4b6d",
+      "id": "3",
+      "name": "任意多边形 7",
+      "bbox": [
+        75.07,
+        103.8,
+        1096.07,
+        5.67
+      ],
+      "rotation": 0,
+      "verticalFlip": true,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nehs7iho",
+      "id": "13",
+      "name": "文本框 12",
+      "bbox": [
+        74.2,
+        55.2,
+        1103.93,
+        48.33
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "一、部门任务跟踪",
+      "textPreview": "一、部门任务跟踪",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "一、部门任务跟踪"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "一、部门任务跟踪",
+          "runs": [
+            {
+              "index": 1,
+              "text": "一、",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#0599D9",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "部门任务跟踪",
+              "fontSize": 32,
+              "color": "rgba(5, 153, 217, 1)",
+              "bold": true
+            }
+          ],
+          "marginLeft": 457200
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3uhcb6h",
+      "id": "25",
+      "name": "标题 3",
+      "bbox": [
+        74.2,
+        116.93,
+        1096.93,
+        45.13
+      ],
+      "geometry": "rect",
+      "text": "7、本周刹车预警机制接收情况",
+      "textPreview": "7、本周刹车预警机制接收情况",
+      "resolvedFontSize": 58.67,
+      "resolvedTextStyle": {
+        "fontSize": 58.67,
+        "typeface": "Arial",
+        "color": "tx2",
+        "alignment": "center",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "7、本周刹车预警机制接收情况"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "7、本周刹车预警机制接收情况",
+          "runs": [
+            {
+              "index": 1,
+              "text": "7",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "、",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "本周刹车预警机制接收情况",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/87mlwnyl",
+      "id": "26",
+      "name": "表格 4",
+      "bbox": [
+        66.07,
+        183.67,
+        1105.07,
+        462.46
+      ],
+      "text": "统计单位 | 监理 | 工程公司\n接收区域 | 现场区域 | 临建区 | 大件库 | 现场区域 | 临建区 | 大件库\n统计周期 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月\n整改单 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 3 | 0 | 3 | 0 | 0\n通报 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 2 | 3 | 0 | 0\n挂牌督办 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0\n违章培训 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 13 | 9 | 25 | 0 | 0\n停工令 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0\n管理约谈 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0\n红牌 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0\n黄牌 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0\n激励 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0",
+      "textPreview": "统计单位 | 监理 | 工程公司 | 接收区域 | 现场区域 | 临建区 | 大件库 | 现场区域 | 临建区 | 大件库 | 统计周期 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月 | 本周 | 本月 | 整改单 | ...",
+      "rows": 12,
+      "cols": 13,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            66.07,
+            183.67,
+            171.67,
+            38.6
+          ],
+          "text": "统计单位",
+          "textPreview": "统计单位",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "统计单位",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "统计单位",
+                  "fontSize": 26.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "colSpan": 6,
+          "bbox": [
+            237.73,
+            183.67,
+            448.07,
+            38.6
+          ],
+          "text": "监理",
+          "textPreview": "监理",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "监理",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "监理",
+                  "fontSize": 26.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            313.87,
+            183.67,
+            76.07,
+            38.6
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            389.93,
+            183.67,
+            76.13,
+            38.6
+          ]
+        },
+        {
+          "index": 5,
+          "row": 1,
+          "column": 5,
+          "bbox": [
+            466.07,
+            183.67,
+            76.13,
+            38.6
+          ]
+        },
+        {
+          "index": 6,
+          "row": 1,
+          "column": 6,
+          "bbox": [
+            542.2,
+            183.67,
+            66.2,
+            38.6
+          ]
+        },
+        {
+          "index": 7,
+          "row": 1,
+          "column": 7,
+          "bbox": [
+            608.4,
+            183.67,
+            77.4,
+            38.6
+          ]
+        },
+        {
+          "index": 8,
+          "row": 1,
+          "column": 8,
+          "colSpan": 6,
+          "bbox": [
+            685.8,
+            183.67,
+            485.33,
+            38.6
+          ],
+          "text": "工程公司",
+          "textPreview": "工程公司",
+          "fillColor": "#00B0F0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "工程公司",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "工程公司",
+                  "fontSize": 26.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 1,
+          "column": 9,
+          "bbox": [
+            767,
+            183.67,
+            80.67,
+            38.6
+          ]
+        },
+        {
+          "index": 10,
+          "row": 1,
+          "column": 10,
+          "bbox": [
+            847.67,
+            183.67,
+            75.93,
+            38.6
+          ]
+        },
+        {
+          "index": 11,
+          "row": 1,
+          "column": 11,
+          "bbox": [
+            923.6,
+            183.67,
+            74.27,
+            38.6
+          ]
+        },
+        {
+          "index": 12,
+          "row": 1,
+          "column": 12,
+          "bbox": [
+            997.87,
+            183.67,
+            91.13,
+            38.6
+          ]
+        },
+        {
+          "index": 13,
+          "row": 1,
+          "column": 13,
+          "bbox": [
+            1089,
+            183.67,
+            82.13,
+            38.6
+          ]
+        },
+        {
+          "index": 14,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            66.07,
+            222.27,
+            171.67,
+            38.6
+          ],
+          "text": "接收区域",
+          "textPreview": "接收区域",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "接收区域",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "接收区域",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 2,
+          "column": 2,
+          "colSpan": 2,
+          "bbox": [
+            237.73,
+            222.27,
+            152.2,
+            38.6
+          ],
+          "text": "现场区域",
+          "textPreview": "现场区域",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "现场区域",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "现场区域",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            313.87,
+            222.27,
+            76.07,
+            38.6
+          ]
+        },
+        {
+          "index": 17,
+          "row": 2,
+          "column": 4,
+          "colSpan": 2,
+          "bbox": [
+            389.93,
+            222.27,
+            152.27,
+            38.6
+          ],
+          "text": "临建区",
+          "textPreview": "临建区",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "临建区",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "临建区",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "row": 2,
+          "column": 5,
+          "bbox": [
+            466.07,
+            222.27,
+            76.13,
+            38.6
+          ]
+        },
+        {
+          "index": 19,
+          "row": 2,
+          "column": 6,
+          "colSpan": 2,
+          "bbox": [
+            542.2,
+            222.27,
+            143.6,
+            38.6
+          ],
+          "text": "大件库",
+          "textPreview": "大件库",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "大件库",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "大件库",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 2,
+          "column": 7,
+          "bbox": [
+            608.4,
+            222.27,
+            77.4,
+            38.6
+          ]
+        },
+        {
+          "index": 21,
+          "row": 2,
+          "column": 8,
+          "colSpan": 2,
+          "bbox": [
+            685.8,
+            222.27,
+            161.87,
+            38.6
+          ],
+          "text": "现场区域",
+          "textPreview": "现场区域",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "现场区域",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "现场区域",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 22,
+          "row": 2,
+          "column": 9,
+          "bbox": [
+            767,
+            222.27,
+            80.67,
+            38.6
+          ]
+        },
+        {
+          "index": 23,
+          "row": 2,
+          "column": 10,
+          "colSpan": 2,
+          "bbox": [
+            847.67,
+            222.27,
+            150.2,
+            38.6
+          ],
+          "text": "临建区",
+          "textPreview": "临建区",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "临建区",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "临建区",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 24,
+          "row": 2,
+          "column": 11,
+          "bbox": [
+            923.6,
+            222.27,
+            74.27,
+            38.6
+          ]
+        },
+        {
+          "index": 25,
+          "row": 2,
+          "column": 12,
+          "colSpan": 2,
+          "bbox": [
+            997.87,
+            222.27,
+            173.27,
+            38.6
+          ],
+          "text": "大件库",
+          "textPreview": "大件库",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "大件库",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "大件库",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 26,
+          "row": 2,
+          "column": 13,
+          "bbox": [
+            1089,
+            222.27,
+            82.13,
+            38.6
+          ]
+        },
+        {
+          "index": 27,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            66.07,
+            260.87,
+            171.67,
+            38.6
+          ],
+          "text": "统计周期",
+          "textPreview": "统计周期",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "统计周期",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "统计周期",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 28,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            237.73,
+            260.87,
+            76.13,
+            38.6
+          ],
+          "text": "本周",
+          "textPreview": "本周",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本周",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本周",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 29,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            313.87,
+            260.87,
+            76.07,
+            38.6
+          ],
+          "text": "本月",
+          "textPreview": "本月",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本月",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本月",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 30,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            389.93,
+            260.87,
+            76.13,
+            38.6
+          ],
+          "text": "本周",
+          "textPreview": "本周",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本周",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本周",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 31,
+          "row": 3,
+          "column": 5,
+          "bbox": [
+            466.07,
+            260.87,
+            76.13,
+            38.6
+          ],
+          "text": "本月",
+          "textPreview": "本月",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本月",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本月",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 32,
+          "row": 3,
+          "column": 6,
+          "bbox": [
+            542.2,
+            260.87,
+            66.2,
+            38.6
+          ],
+          "text": "本周",
+          "textPreview": "本周",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本周",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本周",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 33,
+          "row": 3,
+          "column": 7,
+          "bbox": [
+            608.4,
+            260.87,
+            77.4,
+            38.6
+          ],
+          "text": "本月",
+          "textPreview": "本月",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本月",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本月",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 34,
+          "row": 3,
+          "column": 8,
+          "bbox": [
+            685.8,
+            260.87,
+            81.2,
+            38.6
+          ],
+          "text": "本周",
+          "textPreview": "本周",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本周",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本周",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 35,
+          "row": 3,
+          "column": 9,
+          "bbox": [
+            767,
+            260.87,
+            80.67,
+            38.6
+          ],
+          "text": "本月",
+          "textPreview": "本月",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本月",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本月",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 36,
+          "row": 3,
+          "column": 10,
+          "bbox": [
+            847.67,
+            260.87,
+            75.93,
+            38.6
+          ],
+          "text": "本周",
+          "textPreview": "本周",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本周",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本周",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 37,
+          "row": 3,
+          "column": 11,
+          "bbox": [
+            923.6,
+            260.87,
+            74.27,
+            38.6
+          ],
+          "text": "本月",
+          "textPreview": "本月",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本月",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本月",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 38,
+          "row": 3,
+          "column": 12,
+          "bbox": [
+            997.87,
+            260.87,
+            91.13,
+            38.6
+          ],
+          "text": "本周",
+          "textPreview": "本周",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本周",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本周",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 39,
+          "row": 3,
+          "column": 13,
+          "bbox": [
+            1089,
+            260.87,
+            82.13,
+            38.6
+          ],
+          "text": "本月",
+          "textPreview": "本月",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本月",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本月",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 40,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            66.07,
+            299.47,
+            171.67,
+            38.6
+          ],
+          "text": "整改单",
+          "textPreview": "整改单",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "整改单",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "整改单",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 41,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            237.73,
+            299.47,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 42,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            313.87,
+            299.47,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 43,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            389.93,
+            299.47,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 44,
+          "row": 4,
+          "column": 5,
+          "bbox": [
+            466.07,
+            299.47,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 45,
+          "row": 4,
+          "column": 6,
+          "bbox": [
+            542.2,
+            299.47,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 46,
+          "row": 4,
+          "column": 7,
+          "bbox": [
+            608.4,
+            299.47,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 47,
+          "row": 4,
+          "column": 8,
+          "bbox": [
+            685.8,
+            299.47,
+            81.2,
+            38.6
+          ],
+          "text": "3",
+          "textPreview": "3",
+          "fillColor": "#FFFF00",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "3",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "3",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 48,
+          "row": 4,
+          "column": 9,
+          "bbox": [
+            767,
+            299.47,
+            80.67,
+            38.6
+          ],
+          "text": "3",
+          "textPreview": "3",
+          "fillColor": "#FFFF00",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "3",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "3",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 49,
+          "row": 4,
+          "column": 10,
+          "bbox": [
+            847.67,
+            299.47,
+            75.93,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "fillColor": "#FFFF00",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 50,
+          "row": 4,
+          "column": 11,
+          "bbox": [
+            923.6,
+            299.47,
+            74.27,
+            38.6
+          ],
+          "text": "3",
+          "textPreview": "3",
+          "fillColor": "#FFFF00",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "3",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "3",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 51,
+          "row": 4,
+          "column": 12,
+          "bbox": [
+            997.87,
+            299.47,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 52,
+          "row": 4,
+          "column": 13,
+          "bbox": [
+            1089,
+            299.47,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 53,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            66.07,
+            338.07,
+            171.67,
+            38.6
+          ],
+          "text": "通报",
+          "textPreview": "通报",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "通报",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "通报",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 54,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            237.73,
+            338.07,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "tx1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 55,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            313.87,
+            338.07,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 56,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            389.93,
+            338.07,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 57,
+          "row": 5,
+          "column": 5,
+          "bbox": [
+            466.07,
+            338.07,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 58,
+          "row": 5,
+          "column": 6,
+          "bbox": [
+            542.2,
+            338.07,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 59,
+          "row": 5,
+          "column": 7,
+          "bbox": [
+            608.4,
+            338.07,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 60,
+          "row": 5,
+          "column": 8,
+          "bbox": [
+            685.8,
+            338.07,
+            81.2,
+            38.6
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 61,
+          "row": 5,
+          "column": 9,
+          "bbox": [
+            767,
+            338.07,
+            80.67,
+            38.6
+          ],
+          "text": "3",
+          "textPreview": "3",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "3",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "3",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 62,
+          "row": 5,
+          "column": 10,
+          "bbox": [
+            847.67,
+            338.07,
+            75.93,
+            38.6
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 63,
+          "row": 5,
+          "column": 11,
+          "bbox": [
+            923.6,
+            338.07,
+            74.27,
+            38.6
+          ],
+          "text": "3",
+          "textPreview": "3",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "3",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "3",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 64,
+          "row": 5,
+          "column": 12,
+          "bbox": [
+            997.87,
+            338.07,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 65,
+          "row": 5,
+          "column": 13,
+          "bbox": [
+            1089,
+            338.07,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 66,
+          "row": 6,
+          "column": 1,
+          "bbox": [
+            66.07,
+            376.67,
+            171.67,
+            37.87
+          ],
+          "text": "挂牌督办",
+          "textPreview": "挂牌督办",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "挂牌督办",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "挂牌督办",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 67,
+          "row": 6,
+          "column": 2,
+          "bbox": [
+            237.73,
+            376.67,
+            76.13,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 68,
+          "row": 6,
+          "column": 3,
+          "bbox": [
+            313.87,
+            376.67,
+            76.07,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 69,
+          "row": 6,
+          "column": 4,
+          "bbox": [
+            389.93,
+            376.67,
+            76.13,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 70,
+          "row": 6,
+          "column": 5,
+          "bbox": [
+            466.07,
+            376.67,
+            76.13,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 71,
+          "row": 6,
+          "column": 6,
+          "bbox": [
+            542.2,
+            376.67,
+            66.2,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 72,
+          "row": 6,
+          "column": 7,
+          "bbox": [
+            608.4,
+            376.67,
+            77.4,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 73,
+          "row": 6,
+          "column": 8,
+          "bbox": [
+            685.8,
+            376.67,
+            81.2,
+            37.87
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 74,
+          "row": 6,
+          "column": 9,
+          "bbox": [
+            767,
+            376.67,
+            80.67,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 75,
+          "row": 6,
+          "column": 10,
+          "bbox": [
+            847.67,
+            376.67,
+            75.93,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 76,
+          "row": 6,
+          "column": 11,
+          "bbox": [
+            923.6,
+            376.67,
+            74.27,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 77,
+          "row": 6,
+          "column": 12,
+          "bbox": [
+            997.87,
+            376.67,
+            91.13,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 78,
+          "row": 6,
+          "column": 13,
+          "bbox": [
+            1089,
+            376.67,
+            82.13,
+            37.87
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 79,
+          "row": 7,
+          "column": 1,
+          "bbox": [
+            66.07,
+            414.53,
+            171.67,
+            38.6
+          ],
+          "text": "违章培训",
+          "textPreview": "违章培训",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "违章培训",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "违章培训",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 80,
+          "row": 7,
+          "column": 2,
+          "bbox": [
+            237.73,
+            414.53,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 81,
+          "row": 7,
+          "column": 3,
+          "bbox": [
+            313.87,
+            414.53,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 82,
+          "row": 7,
+          "column": 4,
+          "bbox": [
+            389.93,
+            414.53,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 83,
+          "row": 7,
+          "column": 5,
+          "bbox": [
+            466.07,
+            414.53,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 84,
+          "row": 7,
+          "column": 6,
+          "bbox": [
+            542.2,
+            414.53,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 85,
+          "row": 7,
+          "column": 7,
+          "bbox": [
+            608.4,
+            414.53,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 86,
+          "row": 7,
+          "column": 8,
+          "bbox": [
+            685.8,
+            414.53,
+            81.2,
+            38.6
+          ],
+          "text": "5",
+          "textPreview": "5",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "5",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "5",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 87,
+          "row": 7,
+          "column": 9,
+          "bbox": [
+            767,
+            414.53,
+            80.67,
+            38.6
+          ],
+          "text": "13",
+          "textPreview": "13",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "13",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "13",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 88,
+          "row": 7,
+          "column": 10,
+          "bbox": [
+            847.67,
+            414.53,
+            75.93,
+            38.6
+          ],
+          "text": "9",
+          "textPreview": "9",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "9",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "9",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 89,
+          "row": 7,
+          "column": 11,
+          "bbox": [
+            923.6,
+            414.53,
+            74.27,
+            38.6
+          ],
+          "text": "25",
+          "textPreview": "25",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "25",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "25",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 90,
+          "row": 7,
+          "column": 12,
+          "bbox": [
+            997.87,
+            414.53,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 91,
+          "row": 7,
+          "column": 13,
+          "bbox": [
+            1089,
+            414.53,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 92,
+          "row": 8,
+          "column": 1,
+          "bbox": [
+            66.07,
+            453.13,
+            171.67,
+            38.6
+          ],
+          "text": "停工令",
+          "textPreview": "停工令",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "停工令",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "停工令",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 93,
+          "row": 8,
+          "column": 2,
+          "bbox": [
+            237.73,
+            453.13,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 94,
+          "row": 8,
+          "column": 3,
+          "bbox": [
+            313.87,
+            453.13,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 95,
+          "row": 8,
+          "column": 4,
+          "bbox": [
+            389.93,
+            453.13,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 96,
+          "row": 8,
+          "column": 5,
+          "bbox": [
+            466.07,
+            453.13,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 97,
+          "row": 8,
+          "column": 6,
+          "bbox": [
+            542.2,
+            453.13,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 98,
+          "row": 8,
+          "column": 7,
+          "bbox": [
+            608.4,
+            453.13,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 99,
+          "row": 8,
+          "column": 8,
+          "bbox": [
+            685.8,
+            453.13,
+            81.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 100,
+          "row": 8,
+          "column": 9,
+          "bbox": [
+            767,
+            453.13,
+            80.67,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 101,
+          "row": 8,
+          "column": 10,
+          "bbox": [
+            847.67,
+            453.13,
+            75.93,
+            38.6
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 102,
+          "row": 8,
+          "column": 11,
+          "bbox": [
+            923.6,
+            453.13,
+            74.27,
+            38.6
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 103,
+          "row": 8,
+          "column": 12,
+          "bbox": [
+            997.87,
+            453.13,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 104,
+          "row": 8,
+          "column": 13,
+          "bbox": [
+            1089,
+            453.13,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 105,
+          "row": 9,
+          "column": 1,
+          "bbox": [
+            66.07,
+            491.73,
+            171.67,
+            38.6
+          ],
+          "text": "管理约谈",
+          "textPreview": "管理约谈",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "管理约谈",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "管理约谈",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 106,
+          "row": 9,
+          "column": 2,
+          "bbox": [
+            237.73,
+            491.73,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 107,
+          "row": 9,
+          "column": 3,
+          "bbox": [
+            313.87,
+            491.73,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 108,
+          "row": 9,
+          "column": 4,
+          "bbox": [
+            389.93,
+            491.73,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 109,
+          "row": 9,
+          "column": 5,
+          "bbox": [
+            466.07,
+            491.73,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 110,
+          "row": 9,
+          "column": 6,
+          "bbox": [
+            542.2,
+            491.73,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 111,
+          "row": 9,
+          "column": 7,
+          "bbox": [
+            608.4,
+            491.73,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 112,
+          "row": 9,
+          "column": 8,
+          "bbox": [
+            685.8,
+            491.73,
+            81.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 113,
+          "row": 9,
+          "column": 9,
+          "bbox": [
+            767,
+            491.73,
+            80.67,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 114,
+          "row": 9,
+          "column": 10,
+          "bbox": [
+            847.67,
+            491.73,
+            75.93,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 115,
+          "row": 9,
+          "column": 11,
+          "bbox": [
+            923.6,
+            491.73,
+            74.27,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 116,
+          "row": 9,
+          "column": 12,
+          "bbox": [
+            997.87,
+            491.73,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 117,
+          "row": 9,
+          "column": 13,
+          "bbox": [
+            1089,
+            491.73,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 118,
+          "row": 10,
+          "column": 1,
+          "bbox": [
+            66.07,
+            530.33,
+            171.67,
+            38.6
+          ],
+          "text": "红牌",
+          "textPreview": "红牌",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "红牌",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "红牌",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 119,
+          "row": 10,
+          "column": 2,
+          "bbox": [
+            237.73,
+            530.33,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 120,
+          "row": 10,
+          "column": 3,
+          "bbox": [
+            313.87,
+            530.33,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 121,
+          "row": 10,
+          "column": 4,
+          "bbox": [
+            389.93,
+            530.33,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 122,
+          "row": 10,
+          "column": 5,
+          "bbox": [
+            466.07,
+            530.33,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 123,
+          "row": 10,
+          "column": 6,
+          "bbox": [
+            542.2,
+            530.33,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 124,
+          "row": 10,
+          "column": 7,
+          "bbox": [
+            608.4,
+            530.33,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 125,
+          "row": 10,
+          "column": 8,
+          "bbox": [
+            685.8,
+            530.33,
+            81.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 126,
+          "row": 10,
+          "column": 9,
+          "bbox": [
+            767,
+            530.33,
+            80.67,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 127,
+          "row": 10,
+          "column": 10,
+          "bbox": [
+            847.67,
+            530.33,
+            75.93,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 128,
+          "row": 10,
+          "column": 11,
+          "bbox": [
+            923.6,
+            530.33,
+            74.27,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 129,
+          "row": 10,
+          "column": 12,
+          "bbox": [
+            997.87,
+            530.33,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 130,
+          "row": 10,
+          "column": 13,
+          "bbox": [
+            1089,
+            530.33,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 131,
+          "row": 11,
+          "column": 1,
+          "bbox": [
+            66.07,
+            568.93,
+            171.67,
+            38.6
+          ],
+          "text": "黄牌",
+          "textPreview": "黄牌",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "黄牌",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "黄牌",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 132,
+          "row": 11,
+          "column": 2,
+          "bbox": [
+            237.73,
+            568.93,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 133,
+          "row": 11,
+          "column": 3,
+          "bbox": [
+            313.87,
+            568.93,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 134,
+          "row": 11,
+          "column": 4,
+          "bbox": [
+            389.93,
+            568.93,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 135,
+          "row": 11,
+          "column": 5,
+          "bbox": [
+            466.07,
+            568.93,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 136,
+          "row": 11,
+          "column": 6,
+          "bbox": [
+            542.2,
+            568.93,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 137,
+          "row": 11,
+          "column": 7,
+          "bbox": [
+            608.4,
+            568.93,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 138,
+          "row": 11,
+          "column": 8,
+          "bbox": [
+            685.8,
+            568.93,
+            81.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 139,
+          "row": 11,
+          "column": 9,
+          "bbox": [
+            767,
+            568.93,
+            80.67,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 140,
+          "row": 11,
+          "column": 10,
+          "bbox": [
+            847.67,
+            568.93,
+            75.93,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 141,
+          "row": 11,
+          "column": 11,
+          "bbox": [
+            923.6,
+            568.93,
+            74.27,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 142,
+          "row": 11,
+          "column": 12,
+          "bbox": [
+            997.87,
+            568.93,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 143,
+          "row": 11,
+          "column": 13,
+          "bbox": [
+            1089,
+            568.93,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 144,
+          "row": 12,
+          "column": 1,
+          "bbox": [
+            66.07,
+            607.53,
+            171.67,
+            38.6
+          ],
+          "text": "激励",
+          "textPreview": "激励",
+          "fillColor": "accent1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "激励",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "激励",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 145,
+          "row": 12,
+          "column": 2,
+          "bbox": [
+            237.73,
+            607.53,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 146,
+          "row": 12,
+          "column": 3,
+          "bbox": [
+            313.87,
+            607.53,
+            76.07,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 147,
+          "row": 12,
+          "column": 4,
+          "bbox": [
+            389.93,
+            607.53,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 148,
+          "row": 12,
+          "column": 5,
+          "bbox": [
+            466.07,
+            607.53,
+            76.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 149,
+          "row": 12,
+          "column": 6,
+          "bbox": [
+            542.2,
+            607.53,
+            66.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 150,
+          "row": 12,
+          "column": 7,
+          "bbox": [
+            608.4,
+            607.53,
+            77.4,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 151,
+          "row": 12,
+          "column": 8,
+          "bbox": [
+            685.8,
+            607.53,
+            81.2,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 152,
+          "row": 12,
+          "column": 9,
+          "bbox": [
+            767,
+            607.53,
+            80.67,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 153,
+          "row": 12,
+          "column": 10,
+          "bbox": [
+            847.67,
+            607.53,
+            75.93,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 154,
+          "row": 12,
+          "column": 11,
+          "bbox": [
+            923.6,
+            607.53,
+            74.27,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 155,
+          "row": 12,
+          "column": 12,
+          "bbox": [
+            997.87,
+            607.53,
+            91.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 156,
+          "row": 12,
+          "column": 13,
+          "bbox": [
+            1089,
+            607.53,
+            82.13,
+            38.6
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 13.33,
+                  "typeface": "宋体",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

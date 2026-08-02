@@ -1,0 +1,125 @@
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"安监部部门会议","textShapes":1}
+{"kind":"shape","id":"sh/k3yl0zql","slide":1,"name":"Freeform 5","bbox":[-2.2,14,1282,247]}
+{"kind":"textbox","id":"sh/65g3298r","slide":1,"textChars":18,"textLines":2}
+{"kind":"shape","id":"sh/ts7md4r2","slide":1,"name":"直接连接符 24","bbox":[0.73,533.2,1278.6,0.13]}
+{"kind":"shape","id":"sh/fu94fe98","slide":1,"name":"直接连接符 27","bbox":[0.73,576.4,474,1.33]}
+{"kind":"shape","id":"sh/utg3698n","slide":1,"name":"直接连接符 29","bbox":[0.73,583.22,474,1.33]}
+{"kind":"shape","id":"sh/wn6dc7eh","slide":1,"name":"直接连接符 31","bbox":[0.73,590.2,474,1.33]}
+{"kind":"shape","id":"sh/ul4vaxgb","slide":1,"name":"直接连接符 39","bbox":[796.87,577.53,482.47,1.37]}
+{"kind":"shape","id":"sh/vmdcj2xw","slide":1,"name":"直接连接符 40","bbox":[796.87,584.56,482.47,1.37]}
+{"kind":"shape","id":"sh/4r6dg7et","slide":1,"name":"直接连接符 41","bbox":[796.87,593.13,482.47,0]}
+{"kind":"image","id":"im/alovadw3","slide":1,"name":"图片 1","bbox":[473.87,572,319.6,30.93]}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"目录","textShapes":12}
+{"kind":"shape","id":"sh/hcvy14ne","slide":2,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/ozy1ofad","slide":2,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/nu58f2hs","slide":2,"textChars":2,"textLines":1}
+{"kind":"shape","id":"sh/9072xkry","slide":2,"name":"Freeform 11","bbox":[372.85,208.99,96.63,12.21]}
+{"kind":"shape","id":"sh/b29kza94","slide":2,"name":"Freeform 10","bbox":[355.12,217.43,713.79,58.87]}
+{"kind":"shape","id":"sh/a10jqpsj","slide":2,"name":"Rectangle 12","bbox":[382.14,203.33,73.17,64.99]}
+{"kind":"textbox","id":"sh/9wnqhczy","slide":2,"textChars":6,"textLines":1}
+{"kind":"textbox","id":"sh/wjy9sry9","slide":2,"textChars":1,"textLines":1}
+{"kind":"shape","id":"sh/fadgzu58","slide":2,"name":"Freeform 11","bbox":[372.85,292.07,96.63,12.21]}
+{"kind":"shape","id":"sh/u94fqp4n","slide":2,"name":"Freeform 10","bbox":[355.12,301.68,724.86,59.21]}
+{"kind":"shape","id":"sh/p0vy54na","slide":2,"name":"Rectangle 12","bbox":[382.14,292.05,71.8,59.76]}
+{"kind":"textbox","id":"sh/4zmxwzmp","slide":2,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/je9crql0","slide":2,"textChars":1,"textLines":1}
+{"kind":"shape","id":"sh/exgvmlcv","slide":2,"name":"Freeform 11","bbox":[371.2,383.95,96.63,12.21]}
+{"kind":"shape","id":"sh/q5ozitov","slide":2,"name":"Freeform 10","bbox":[353.47,393.56,724.86,62.03]}
+{"kind":"shape","id":"sh/r6x0rypg","slide":2,"name":"Rectangle 12","bbox":[380.49,383.93,74.82,62.58]}
+{"kind":"textbox","id":"sh/w3a1wn65","slide":2,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/xoji5s7q","slide":2,"textChars":1,"textLines":1}
+{"kind":"shape","id":"sh/5kfipszu","slide":2,"name":"Freeform 11","bbox":[372.85,475.9,96.63,12.21]}
+{"kind":"shape","id":"sh/kj6hgny9","slide":2,"name":"Freeform 10","bbox":[355.12,485.5,724.86,62.51]}
+{"kind":"shape","id":"sh/jix0niho","slide":2,"name":"Rectangle 12","bbox":[382.14,475.88,73.17,62.38]}
+{"kind":"textbox","id":"sh/ihozedgj","slide":2,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/xgfil8zy","slide":2,"textChars":1,"textLines":1}
+{"kind":"shape","id":"sh/ahwrqhgj","slide":2,"name":"文本框 15","bbox":[415.27,569.87,426.67,38.67]}
+{"kind":"shape","id":"sh/s72xofmh","slide":2,"name":"同心圆 20","bbox":[67.49,269.27,211.2,211.2]}
+{"kind":"shape","id":"sh/76twva5c","slide":2,"name":"椭圆 21","bbox":[72.1,273.88,201.98,201.98]}
+{"kind":"shape","id":"sh/65kfmpor","slide":2,"name":"椭圆 22","bbox":[86.73,466.8,28.87,28.87]}
+{"kind":"shape","id":"sh/x4r21kru","slide":2,"name":"椭圆 5","bbox":[126.4,479.8,14.4,14.4]}
+{"kind":"shape","id":"sh/gbmxszmt","slide":2,"name":"椭圆 24","bbox":[144.67,459.4,28.87,28.87]}
+{"kind":"shape","id":"sh/r65knqtk","slide":2,"name":"椭圆 7","bbox":[211.07,472.13,14.4,14.4]}
+{"kind":"shape","id":"sh/ove9o7yd","slide":2,"name":"椭圆 9","bbox":[57.93,447,28.87,28.87]}
+{"kind":"shape","id":"sh/mtwrmxg7","slide":2,"name":"椭圆 11","bbox":[88.67,451.53,14.4,14.4]}
+{"kind":"shape","id":"sh/mlgvq147","slide":2,"name":"椭圆 29","bbox":[250,465.33,28.87,28.87]}
+{"kind":"shape","id":"sh/a1cba1wb","slide":2,"name":"椭圆 48","bbox":[288.4,427.4,17.53,17.53]}
+{"kind":"shape","id":"sh/0vq1o36x","slide":2,"name":"椭圆 49","bbox":[266.87,439.8,14.4,14.4]}
+{"kind":"textbox","id":"sh/xk7qlczu","slide":2,"textChars":3,"textLines":1}
+{"kind":"shape","id":"sh/bip8jmho","slide":2,"name":"Freeform 11","bbox":[373.18,561.23,96.63,12.21]}
+{"kind":"shape","id":"sh/cnupgny5","slide":2,"name":"Freeform 10","bbox":[355.45,570.84,724.86,62.51]}
+{"kind":"shape","id":"sh/do3q9szq","slide":2,"name":"Rectangle 12","bbox":[382.48,561.21,73.17,62.38]}
+{"kind":"textbox","id":"sh/nmpcj6ls","slide":2,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/onydsbmd","slide":2,"textChars":1,"textLines":1}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/6d0fytg3","slide":3,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/d0jax03i","slide":3,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/83ulovat","slide":3,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/re9g7yxo","slide":3,"textChars":19,"textLines":2}
+{"kind":"table","id":"tb/j6ps72lo","slide":3,"name":"表格 11","rows":9,"cols":7,"preview":"年度计划书7月清单","bbox":[11,202.27,1241,360.4]}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/1wbapc7q","slide":4,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/0ba143al","slide":4,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/jadsz2xk","slide":4,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/gv29g7q5","slide":4,"textChars":23,"textLines":2}
+{"kind":"table","id":"tb/wnqxwf25","slide":4,"name":"表格 11","rows":7,"cols":7,"preview":"年度计划书6月清单","bbox":[42.53,184.93,1146.8,292.4]}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/pkr6tgjy","slide":5,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/cf2tcr61","slide":5,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/v2twb6dw","slide":5,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/4ji5kbid","slide":5,"textChars":11,"textLines":1}
+{"kind":"table","id":"tb/gjutwb61","slide":5,"name":"表格 11","rows":7,"cols":7,"preview":"部门会议任务跟踪","bbox":[9.8,161.2,1261.53,496.2]}
+{"kind":"slide","id":"sl/x8f69ofe","slide":6,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/0fy5k3id","slide":6,"name":"任意多边形 8","bbox":[21.87,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/zi98nu94","slide":6,"name":"任意多边形 7","bbox":[75.93,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/u1kbu1ov","slide":6,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/lg76d8zy","slide":6,"textChars":25,"textLines":1}
+{"kind":"table","id":"tb/hgv6dwfm","slide":6,"name":"表格 3","rows":6,"cols":6,"preview":"序号 | 内容 | 现场 | 临建区 | 大件库 | 合计","bbox":[73.8,160.2,1098.27,437.07]}
+{"kind":"slide","id":"sl/gnmp4jqx","slide":7,"title":"一、部门任务跟踪","textShapes":3}
+{"kind":"shape","id":"sh/q143ylov","slide":7,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/dcbud0ra","slide":7,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/cbq1sv25","slide":7,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/r2dkrq5g","slide":7,"textChars":27,"textLines":1}
+{"kind":"textbox","id":"sh/eh0ba1sr","slide":7,"textChars":45,"textLines":1}
+{"kind":"table","id":"tb/vm9czels","slide":7,"name":"表格 13","rows":5,"cols":4,"preview":"内部录入行为偏差统计","bbox":[624.2,223.93,536.2,402]}
+{"kind":"table","id":"tb/ul0bqt4n","slide":7,"name":"表格 1","rows":5,"cols":4,"preview":"工程公司行为偏差统计","bbox":[42.73,223.93,509.2,221]}
+{"kind":"slide","id":"sl/fu1gfa1s","slide":8,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/5sne5wne","slide":8,"name":"任意多边形 8","bbox":[21,46.67,43.13,45.33]}
+{"kind":"shape","id":"sh/g72x4zyd","slide":8,"name":"任意多边形 7","bbox":[75.07,86.33,1096.07,5.67]}
+{"kind":"textbox","id":"sh/n6pwfmd8","slide":8,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/kredcr6t","slide":8,"textChars":24,"textLines":1}
+{"kind":"table","id":"tb/0z6pgzup","slide":8,"name":"表格 9","rows":21,"cols":7,"preview":"隐患录入情况（每人每天10条） | 区域 | 人员 | 隐患录入数量 | 平均每人/每天录入 隐患数量（条/日） | 是否达标 | 隐患录入 优秀人员","bbox":[79.67,150.2,590.27,523.07]}
+{"kind":"table","id":"tb/10fqp4ba","slide":8,"name":"表格 5","rows":8,"cols":6,"preview":"区域 | 人员 | 隐患录入数量 | 平均每人/每天录入 隐患数量（条/日） | 是否达标 | 隐患录入 优秀人员","bbox":[669.93,150.2,508.13,496.07]}
+{"kind":"table","id":"tb/q947apcn","slide":8,"name":"表格 8","rows":1,"cols":4,"preview":"部门合计人数 | 24 | 部门合计隐患数量 | 1010","bbox":[85.27,676.27,1106.4,19.73]}
+{"kind":"slide","id":"sl/udsvah03","slide":9,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/hcji5o7a","slide":9,"name":"任意多边形 8","bbox":[21,46.67,42.36,45.33]}
+{"kind":"shape","id":"sh/0b65obm9","slide":9,"name":"任意多边形 7","bbox":[74.09,86.33,1076.3,5.67]}
+{"kind":"textbox","id":"sh/3y107axw","slide":9,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/wba1cjqp","slide":9,"textChars":26,"textLines":1}
+{"kind":"table","id":"tb/4j2p4rud","slide":9,"name":"表格 5","rows":3,"cols":5,"preview":"序号 | 提交内容 | 班组 | 检查人 | 问题描述","bbox":[69.87,164.93,1153.4,273.73]}
+{"kind":"slide","id":"sl/m90b6t0r","slide":10,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/lk7ut0va","slide":10,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/cbu58j2h","slide":10,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/r6pcv6lw","slide":10,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/kjytkvup","slide":10,"textChars":31,"textLines":1}
+{"kind":"table","id":"tb/gj6h43it","slide":10,"name":"表格 3","rows":2,"cols":4,"preview":"序号 | 隐患录入内容 | 隐患录入问题 | 检查人","bbox":[97.87,162.07,1074.47,111.47]}
+{"kind":"slide","id":"sl/jetc3ut0","slide":11,"title":"一、部门任务跟踪","textShapes":2}
+{"kind":"shape","id":"sh/l43ilgn2","slide":11,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/wbih4b6d","slide":11,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/nehs7iho","slide":11,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/k3uhcb6h","slide":11,"textChars":14,"textLines":1}
+{"kind":"table","id":"tb/87mlwnyl","slide":11,"name":"表格 4","rows":12,"cols":13,"preview":"统计单位 | 监理 | 工程公司","bbox":[66.07,183.67,1105.07,462.47]}
+{"kind":"slide","id":"sl/8f2psfyx","slide":12,"title":"一、部门任务跟踪","textShapes":3}
+{"kind":"shape","id":"sh/tgrm1wzy","slide":12,"name":"任意多边形 8","bbox":[21,64.13,43.13,45.33]}
+{"kind":"shape","id":"sh/0f2lgnmp","slide":12,"name":"任意多边形 7","bbox":[75.07,103.8,1096.07,5.67]}
+{"kind":"textbox","id":"sh/bulo7u58","slide":12,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/sfi58ryd","slide":12,"textChars":23,"textLines":1}
+{"kind":"textbox","id":"sh/1gbm9s3a","slide":12,"textChars":46,"textLines":1}
+{"kind":"table","id":"tb/83y14nyh","slide":12,"name":"表格 3","rows":2,"cols":8,"preview":"序号 | 整改单 | 责任部门 | 责任人 | 下发日期 | 到期日期 | 是否按时关闭 | 跟踪责任人","bbox":[33,214.47,1216.13,295.13]}
+{"kind":"slide","id":"sl/hgzapcr6","slide":13,"title":"一、部门任务跟踪","textShapes":3}
+{"kind":"shape","id":"sh/oz6x4vul","slide":13,"name":"任意多边形 8","bbox":[21.87,55.8,43.13,45.33]}
+{"kind":"shape","id":"sh/bq9orito","slide":13,"name":"任意多边形 7","bbox":[75.93,95.47,1096.07,5.67]}
+{"kind":"textbox","id":"sh/u9ofyp43","slide":13,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/p0zyd0b6","slide":13,"textChars":22,"textLines":1}
+{"kind":"textbox","id":"sh/q50nydsj","slide":13,"textChars":35,"textLines":1}
+{"kind":"notice","message":"Truncated: omitted 70 lines. Increase maxChars or narrow target."}

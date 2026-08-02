@@ -1,0 +1,823 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/nid43ytk",
+    "id": "nid43ytk",
+    "slide": 19,
+    "layoutId": "/ppt/slideLayouts/slideLayout6.xml",
+    "layoutName": "仅标题",
+    "layoutType": "titleOnly",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "WPS",
+    "colors": {
+      "accent1": "#4874CB",
+      "accent2": "#EE822F",
+      "accent3": "#F2BA02",
+      "accent4": "#75BD42",
+      "accent5": "#30C0B4",
+      "accent6": "#E54C5E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0026E5",
+      "folHlink": "#7E1FAD"
+    },
+    "fontScheme": {
+      "name": "WPS",
+      "majorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout6.xml",
+      "name": "仅标题",
+      "type": "titleOnly",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/2",
+          "id": "2",
+          "name": "标题 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/3",
+          "id": "3",
+          "name": "日期占位符 2",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/4",
+          "id": "4",
+          "name": "页脚占位符 3",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/5",
+          "id": "5",
+          "name": "灯片编号占位符 4",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "标题占位符 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.93,
+              "right": 9.47,
+              "bottom": 4.93,
+              "left": 9.47
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "文本占位符 2",
+          "bbox": [
+            63.87,
+            156.47,
+            1151.62,
+            499.65
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版文本样式\n第二级\n第三级\n第四级\n第五级",
+          "textPreview": "单击此处编辑母版文本样式 | 第二级 | 第三级 | 第四级 | 第五级",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版文本样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版文本样式"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "第二级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第二级"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "第三级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第三级"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "第四级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第四级"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "第五级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第五级"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "日期占位符 3",
+          "bbox": [
+            64.25,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "页脚占位符 4",
+          "bbox": [
+            432.13,
+            662.93,
+            415.75,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "灯片编号占位符 5",
+          "bbox": [
+            932.03,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/54ri5wje",
+      "id": "24",
+      "name": "任意多边形 8",
+      "bbox": [
+        21,
+        64.13,
+        43.13,
+        45.33
+      ],
+      "rotation": 0,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8v2pobax",
+      "id": "3",
+      "name": "任意多边形 7",
+      "bbox": [
+        75.07,
+        103.8,
+        1096.07,
+        5.67
+      ],
+      "rotation": 0,
+      "verticalFlip": true,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rqp07290",
+      "id": "13",
+      "name": "文本框 12",
+      "bbox": [
+        74.2,
+        55.2,
+        1103.93,
+        48.33
+      ],
+      "geometry": "rect",
+      "text": "三、近期典型事件经验反馈",
+      "textPreview": "三、近期典型事件经验反馈",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "三、近期典型事件经验反馈"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "三、近期典型事件经验反馈",
+          "runs": [
+            {
+              "index": 1,
+              "text": "三、",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#0599D9",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "近期典型事件经验反馈",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#00B0F0",
+              "bold": true
+            }
+          ],
+          "marginLeft": 457200
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/j2dkb6do",
+      "id": "25",
+      "name": "表格 1",
+      "bbox": [
+        73,
+        133.2,
+        1126.74,
+        507.53
+      ],
+      "text": "事件主题 | 工程大厦惠阳建筑7月9日火险事件的经验反馈\n       2026年7月9日14时21分，工程大厦C座5楼西侧一空置房间烟感报警触发报警提示，物业人员在消防中控室发现报警提示后安排附近工作人员前往现场查看，发现房间内存在明火并立即开展扑救，14时23分明火被扑灭，现场墙壁约0.15㎡过火损伤。本次事件未造成人员伤亡及其他财产损失。\n原因分析 |        起火原因为施工人员违反大厦管理规定，擅自在该房间内吸烟，并将未熄灭的烟头丢弃至现场塑料杂物中，引燃杂物导致火情。\n反馈要点 |     禁止在非吸烟区吸烟。",
+      "textPreview": "事件主题 | 工程大厦惠阳建筑7月9日火险事件的经验反馈 |        2026年7月9日14时21分，工程大厦C座5楼西侧一空置房间烟感报警触发报警提示，物业人员在消防中控室发现报警提示后安排附近工作人员前往现场查看，发现房间内存在明火并立即开展扑救，14时23分明火...",
+      "rows": 4,
+      "cols": 2,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            73,
+            133.2,
+            117.27,
+            41.6
+          ],
+          "text": "事件主题",
+          "textPreview": "事件主题",
+          "fillColor": "#0091F6",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "事件主题",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "事件主题",
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            190.27,
+            133.2,
+            1009.47,
+            41.6
+          ],
+          "text": "工程大厦惠阳建筑7月9日火险事件的经验反馈",
+          "textPreview": "工程大厦惠阳建筑7月9日火险事件的经验反馈",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "工程大厦惠阳建筑7月9日火险事件的经验反馈",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "工程大厦惠阳建筑7月9日火险事件的经验反馈",
+                  "fontSize": 26.67,
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 2,
+          "column": 1,
+          "colSpan": 2,
+          "bbox": [
+            73,
+            174.8,
+            1126.73,
+            221.6
+          ],
+          "text": "       2026年7月9日14时21分，工程大厦C座5楼西侧一空置房间烟感报警触发报警提示，物业人员在消防中控室发现报警提示后安排附近工作人员前往现场查看，发现房间内存在明火并立即开展扑救，14时23分明火被扑灭，现场墙壁约0.15㎡过火损伤。本次事件未造成人员伤亡及其他财产损失。",
+          "textPreview": "2026年7月9日14时21分，工程大厦C座5楼西侧一空置房间烟感报警触发报警提示，物业人员在消防中控室发现报警提示后安排附近工作人员前往现场查看，发现房间内存在明火并立即开展扑救，14时23分明火被扑灭，现场墙壁约0.15㎡过火损伤。本次事件未造成人员伤亡及其他财产损失。",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "       2026年7月9日14时21分，工程大厦C座5楼西侧一空置房间烟感报警触发报警提示，物业人员在消防中控室发现报警提示后安排附近工作人员前往现场查看，发现房间内存在明火并立即开展扑救，14时23分明火被扑灭，现场墙壁约0.15㎡过火损伤。本次事件未造成人员伤亡及其他财产损失。",
+              "resolvedTextStyle": {
+                "alignment": "left"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "       2026年7月9日14时21分，工程大厦",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑"
+                },
+                {
+                  "index": 2,
+                  "text": "C",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑"
+                },
+                {
+                  "index": 3,
+                  "text": "座5楼西侧一",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑"
+                },
+                {
+                  "index": 4,
+                  "text": "空置房间烟感报警触发报警提示",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000"
+                },
+                {
+                  "index": 5,
+                  "text": "，物业人员在消防中控室发现报警提示后安排附近工作人员前往现场查看，",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑"
+                },
+                {
+                  "index": 6,
+                  "text": "发现房间内存在明火并立即开展扑救",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000"
+                },
+                {
+                  "index": 7,
+                  "text": "，14时23分明火被扑灭，现场墙壁约0.15㎡过火损伤。本次事件未造成人员伤亡及其他财产损失。",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            190.27,
+            174.8,
+            1009.47,
+            221.6
+          ]
+        },
+        {
+          "index": 5,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            73,
+            396.4,
+            117.27,
+            96
+          ],
+          "text": "原因分析",
+          "textPreview": "原因分析",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "原因分析",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "原因分析",
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            190.27,
+            396.4,
+            1009.47,
+            96
+          ],
+          "text": "       起火原因为施工人员违反大厦管理规定，擅自在该房间内吸烟，并将未熄灭的烟头丢弃至现场塑料杂物中，引燃杂物导致火情。",
+          "textPreview": "起火原因为施工人员违反大厦管理规定，擅自在该房间内吸烟，并将未熄灭的烟头丢弃至现场塑料杂物中，引燃杂物导致火情。",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "       起火原因为施工人员违反大厦管理规定，擅自在该房间内吸烟，并将未熄灭的烟头丢弃至现场塑料杂物中，引燃杂物导致火情。",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": " ",
+                  "typeface": "微软雅黑",
+                  "color": "tx1"
+                },
+                {
+                  "index": 2,
+                  "text": "      ",
+                  "typeface": "微软雅黑",
+                  "color": "tx1"
+                },
+                {
+                  "index": 3,
+                  "text": "起火原因为施工人员违反大厦管理规定，",
+                  "typeface": "微软雅黑",
+                  "color": "tx1"
+                },
+                {
+                  "index": 4,
+                  "text": "擅自在该房间内吸烟，并将未熄灭的烟头丢弃至现场塑料杂物中，引燃杂物导致火情",
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000"
+                },
+                {
+                  "index": 5,
+                  "text": "。",
+                  "typeface": "微软雅黑",
+                  "color": "tx1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            73,
+            492.4,
+            117.27,
+            148.33
+          ],
+          "text": "反馈要点",
+          "textPreview": "反馈要点",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "反馈要点",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "反馈要点",
+                  "typeface": "微软雅黑",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            190.27,
+            492.4,
+            1009.47,
+            148.33
+          ],
+          "text": "    禁止在非吸烟区吸烟。",
+          "textPreview": "禁止在非吸烟区吸烟。",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "    禁止在非吸烟区吸烟。",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "left"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "    ",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000"
+                },
+                {
+                  "index": 2,
+                  "text": "禁止在非吸烟区吸烟。",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

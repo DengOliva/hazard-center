@@ -1,0 +1,4430 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/qmzp3s",
+    "id": "qmzp3s",
+    "slide": 15,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "标题幻灯片",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "WPS",
+    "colors": {
+      "accent1": "#4874CB",
+      "accent2": "#EE822F",
+      "accent3": "#F2BA02",
+      "accent4": "#75BD42",
+      "accent5": "#30C0B4",
+      "accent6": "#E54C5E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0026E5",
+      "folHlink": "#7E1FAD"
+    },
+    "fontScheme": {
+      "name": "WPS",
+      "majorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "标题幻灯片",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/2",
+          "id": "2",
+          "name": "标题 1",
+          "bbox": [
+            125.86,
+            96,
+            1028.79,
+            269.86
+          ],
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 3,
+            "verticalAlignment": "bottom",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/3",
+          "id": "3",
+          "name": "副标题 2",
+          "bbox": [
+            125.86,
+            373.8,
+            1028.79,
+            154.58
+          ],
+          "text": "单击此处编辑母版副标题样式",
+          "textPreview": "单击此处编辑母版副标题样式",
+          "resolvedTextStyle": {
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版副标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版副标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/16",
+          "id": "16",
+          "name": "日期占位符 15",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/17",
+          "id": "17",
+          "name": "页脚占位符 16",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout1.xml/18",
+          "id": "18",
+          "name": "灯片编号占位符 17",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "标题占位符 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.93,
+              "right": 9.47,
+              "bottom": 4.93,
+              "left": 9.47
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "文本占位符 2",
+          "bbox": [
+            63.87,
+            156.47,
+            1151.62,
+            499.65
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版文本样式\n第二级\n第三级\n第四级\n第五级",
+          "textPreview": "单击此处编辑母版文本样式 | 第二级 | 第三级 | 第四级 | 第五级",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版文本样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版文本样式"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "第二级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第二级"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "第三级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第三级"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "第四级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第四级"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "第五级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第五级"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "日期占位符 3",
+          "bbox": [
+            64.25,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "页脚占位符 4",
+          "bbox": [
+            432.13,
+            662.93,
+            415.75,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "灯片编号占位符 5",
+          "bbox": [
+            932.03,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/j690z2tc",
+      "id": "2",
+      "name": "PA-文本框 1",
+      "bbox": [
+        19.67,
+        82,
+        576,
+        50.2
+      ],
+      "geometry": "rect",
+      "text": "1、证件办理情况（7月16日--7月21日）1",
+      "textPreview": "1、证件办理情况（7月16日--7月21日）1",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "1、证件办理情况（7月16日--7月21日）1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "1、证件办理情况（7月16日--7月21日）1",
+          "runs": [
+            {
+              "index": 1,
+              "text": "1",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "、证件办理情况（",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "7",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 4,
+              "text": "月",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 5,
+              "text": "16",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 6,
+              "text": "日",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 7,
+              "text": "--7",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 8,
+              "text": "月",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 9,
+              "text": "21",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 10,
+              "text": "日）",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 11,
+              "text": "1",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "bg1",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gbidk7qd",
+      "id": "16",
+      "name": "PA-文本框 15",
+      "bbox": [
+        12.5,
+        473.72,
+        86.3,
+        41.87
+      ],
+      "geometry": "rect",
+      "text": "1",
+      "textPreview": "1",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "1",
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "1",
+              "fontSize": 26.67,
+              "typeface": "微软雅黑",
+              "color": "bg1"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/apkfeps7",
+      "id": "40",
+      "name": "表格 2",
+      "bbox": [
+        102.87,
+        148.8,
+        421.33,
+        381.07
+      ],
+      "text": "序号 | 证件类型 | 办理证件数量 | 证件回收数量\n1 | 人员长期通行证 | 47 | 32\n2 | 人员临时通行证 | 1 | 1\n3 | 车辆长期通行证 | 1 | 0\n4 | 临时车辆通行证 | 21 | 1\n5 | 访客通行证 | 35 | 5\n6 | 一期证件 | 0 | 0\n7 | 合计 | 105 | 39",
+      "textPreview": "序号 | 证件类型 | 办理证件数量 | 证件回收数量 | 1 | 人员长期通行证 | 47 | 32 | 2 | 人员临时通行证 | 1 | 1 | 3 | 车辆长期通行证 | 1 | 0 | 4 | 临时车辆通行证 | 21 | 1 | 5 | 访客通行证 | 35 |...",
+      "rows": 8,
+      "cols": 4,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            102.87,
+            148.8,
+            64.4,
+            107.2
+          ],
+          "text": "序号",
+          "textPreview": "序号",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "序号",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "序号",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            167.27,
+            148.8,
+            162.4,
+            107.2
+          ],
+          "text": "证件类型",
+          "textPreview": "证件类型",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "证件类型",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "证件类型",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            329.67,
+            148.8,
+            95.53,
+            107.2
+          ],
+          "text": "办理证件数量",
+          "textPreview": "办理证件数量",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "办理证件数量",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "办理证件数量",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            425.2,
+            148.8,
+            99,
+            107.2
+          ],
+          "text": "证件回收数量",
+          "textPreview": "证件回收数量",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "证件回收数量",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "证件回收数量",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            102.87,
+            256,
+            64.4,
+            42.73
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            167.27,
+            256,
+            162.4,
+            42.73
+          ],
+          "text": "人员长期通行证",
+          "textPreview": "人员长期通行证",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "人员长期通行证",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "人员长期通行证",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            329.67,
+            256,
+            95.53,
+            42.73
+          ],
+          "text": "47",
+          "textPreview": "47",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "47",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "47",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            425.2,
+            256,
+            99,
+            42.73
+          ],
+          "text": "32",
+          "textPreview": "32",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "32",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "32",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            102.87,
+            298.73,
+            64.4,
+            42.73
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            167.27,
+            298.73,
+            162.4,
+            42.73
+          ],
+          "text": "人员临时通行证",
+          "textPreview": "人员临时通行证",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "人员临时通行证",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "人员临时通行证",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            329.67,
+            298.73,
+            95.53,
+            42.73
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            425.2,
+            298.73,
+            99,
+            42.73
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            102.87,
+            341.47,
+            64.4,
+            42.67
+          ],
+          "text": "3",
+          "textPreview": "3",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "3",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "3",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            167.27,
+            341.47,
+            162.4,
+            42.67
+          ],
+          "text": "车辆长期通行证",
+          "textPreview": "车辆长期通行证",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "车辆长期通行证",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "车辆长期通行证",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            329.67,
+            341.47,
+            95.53,
+            42.67
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            425.2,
+            341.47,
+            99,
+            42.67
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 17,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            102.87,
+            384.13,
+            64.4,
+            42.8
+          ],
+          "text": "4",
+          "textPreview": "4",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "4",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "4",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            167.27,
+            384.13,
+            162.4,
+            42.8
+          ],
+          "text": "临时车辆通行证",
+          "textPreview": "临时车辆通行证",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "临时车辆通行证",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "临时",
+                  "fontSize": 21.33,
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "车辆通行证",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            329.67,
+            384.13,
+            95.53,
+            42.8
+          ],
+          "text": "21",
+          "textPreview": "21",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "21",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "21",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            425.2,
+            384.13,
+            99,
+            42.8
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 21,
+          "row": 6,
+          "column": 1,
+          "bbox": [
+            102.87,
+            426.93,
+            64.4,
+            34.2
+          ],
+          "text": "5",
+          "textPreview": "5",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "5",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "5",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 22,
+          "row": 6,
+          "column": 2,
+          "bbox": [
+            167.27,
+            426.93,
+            162.4,
+            34.2
+          ],
+          "text": "访客通行证",
+          "textPreview": "访客通行证",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "访客通行证",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "访客通行证",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 23,
+          "row": 6,
+          "column": 3,
+          "bbox": [
+            329.67,
+            426.93,
+            95.53,
+            34.2
+          ],
+          "text": "35",
+          "textPreview": "35",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "35",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "35",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 24,
+          "row": 6,
+          "column": 4,
+          "bbox": [
+            425.2,
+            426.93,
+            99,
+            34.2
+          ],
+          "text": "5",
+          "textPreview": "5",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "5",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "5",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 25,
+          "row": 7,
+          "column": 1,
+          "bbox": [
+            102.87,
+            461.13,
+            64.4,
+            34.53
+          ],
+          "text": "6",
+          "textPreview": "6",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "6",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "6",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 26,
+          "row": 7,
+          "column": 2,
+          "bbox": [
+            167.27,
+            461.13,
+            162.4,
+            34.53
+          ],
+          "text": "一期证件",
+          "textPreview": "一期证件",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "一期证件",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "一期证件",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 27,
+          "row": 7,
+          "column": 3,
+          "bbox": [
+            329.67,
+            461.13,
+            95.53,
+            34.53
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 28,
+          "row": 7,
+          "column": 4,
+          "bbox": [
+            425.2,
+            461.13,
+            99,
+            34.53
+          ],
+          "text": "0",
+          "textPreview": "0",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 29,
+          "row": 8,
+          "column": 1,
+          "bbox": [
+            102.87,
+            495.67,
+            64.4,
+            34.2
+          ],
+          "text": "7",
+          "textPreview": "7",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "7",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "7",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 30,
+          "row": 8,
+          "column": 2,
+          "bbox": [
+            167.27,
+            495.67,
+            162.4,
+            34.2
+          ],
+          "text": "合计",
+          "textPreview": "合计",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "合计",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "合计",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 31,
+          "row": 8,
+          "column": 3,
+          "bbox": [
+            329.67,
+            495.67,
+            95.53,
+            34.2
+          ],
+          "text": "105",
+          "textPreview": "105",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "105",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "105",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 32,
+          "row": 8,
+          "column": 4,
+          "bbox": [
+            425.2,
+            495.67,
+            99,
+            34.2
+          ],
+          "text": "39",
+          "textPreview": "39",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "39",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "39",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/twbi5cbe",
+      "id": "4",
+      "name": "圆角矩形 3",
+      "bbox": [
+        33.58,
+        159.85,
+        61.51,
+        286.21
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "text": "整改",
+      "textPreview": "整改",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "dk1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "整改"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "整改",
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "整改",
+              "fontSize": 1.8
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": {
+        "type": "theme",
+        "value": "bg1",
+        "transform": {
+          "darken": 0.15
+        }
+      },
+      "lineColor": "tx1",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8zih0nup",
+      "id": "9",
+      "name": "文本框 8",
+      "bbox": [
+        40.96,
+        176.8,
+        54.04,
+        242.24
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "证件办理回收",
+      "textPreview": "证件办理回收",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "证"
+          },
+          {
+            "index": 2,
+            "text": "件"
+          },
+          {
+            "index": 3,
+            "text": "办"
+          },
+          {
+            "index": 4,
+            "text": "理"
+          },
+          {
+            "index": 5,
+            "text": "回"
+          },
+          {
+            "index": 6,
+            "text": "收"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "证件办理回收",
+          "runs": [
+            {
+              "index": 1,
+              "text": "证件办理回收",
+              "fontSize": 32
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/vqdgnuts",
+      "id": "41",
+      "name": "表格 30",
+      "bbox": [
+        632.67,
+        74.87,
+        587.6,
+        622
+      ],
+      "text": "证件类型 | 办理证件数量 | 证件类型 | 办理证件数量 | 证件类型 | 办理证件数量\n安全监督人员 | 设备安装工 | 油漆工\nQA | 机械操作工 | 2 | 钢筋工 | 1\nQC | 机修工 | 木工\n工程师 | 其他起重工 | 2 | 架子工\n工长 | 钳工/铆工 | 5 | 预应力工\n队长 | 焊工 | 1 | 其他普工\n综合管理 | 1 | 管工 | 后勤人员\n技术员 | 电工 | 辅助工 | 1\n车辆司机 | 2 | 混凝土工 | 保卫人员\n塔式起重机司机 | 测量防线工 | 2 | 射线检验员（RT)\n清扫工 | 装修工 | 防水工\n库管工 | 经理部 | 理化试验员",
+      "textPreview": "证件类型 | 办理证件数量 | 证件类型 | 办理证件数量 | 证件类型 | 办理证件数量 | 安全监督人员 | 设备安装工 | 油漆工 | QA | 机械操作工 | 2 | 钢筋工 | 1 | QC | 机修工 | 木工 | 工程师 | 其他起重工 | 2 | 架子工 |...",
+      "rows": 13,
+      "cols": 6,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            632.67,
+            74.87,
+            112.8,
+            84.13
+          ],
+          "text": "证件类型",
+          "textPreview": "证件类型",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "证件类型",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "证件类型",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            745.47,
+            74.87,
+            77.33,
+            84.13
+          ],
+          "text": "办理证件数量",
+          "textPreview": "办理证件数量",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "办理证件数量",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "办理证件数量",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            822.8,
+            74.87,
+            126.4,
+            84.13
+          ],
+          "text": "证件类型",
+          "textPreview": "证件类型",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "证件类型",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "证件类型",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            949.2,
+            74.87,
+            81.27,
+            84.13
+          ],
+          "text": "办理证件数量",
+          "textPreview": "办理证件数量",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "办理证件数量",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "办理证件数量",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 1,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            74.87,
+            115.6,
+            84.13
+          ],
+          "text": "证件类型",
+          "textPreview": "证件类型",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "证件类型",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "证件类型",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 1,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            74.87,
+            74.2,
+            84.13
+          ],
+          "text": "办理证件数量",
+          "textPreview": "办理证件数量",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "办理证件数量",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "办理证件数量",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            632.67,
+            159,
+            112.8,
+            66.67
+          ],
+          "text": "安全监督人员",
+          "textPreview": "安全监督人员",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "安全监督人员",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "安全监督人员",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            745.47,
+            159,
+            77.33,
+            66.67
+          ]
+        },
+        {
+          "index": 9,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            822.8,
+            159,
+            126.4,
+            66.67
+          ],
+          "text": "设备安装工",
+          "textPreview": "设备安装工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "设备安装工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "设备安装工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            949.2,
+            159,
+            81.27,
+            66.67
+          ]
+        },
+        {
+          "index": 11,
+          "row": 2,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            159,
+            115.6,
+            66.67
+          ],
+          "text": "油漆工",
+          "textPreview": "油漆工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "油漆工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "油漆工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 2,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            159,
+            74.2,
+            66.67
+          ]
+        },
+        {
+          "index": 13,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            632.67,
+            225.67,
+            112.8,
+            40.27
+          ],
+          "text": "QA",
+          "textPreview": "QA",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "QA",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "QA",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            745.47,
+            225.67,
+            77.33,
+            40.27
+          ]
+        },
+        {
+          "index": 15,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            822.8,
+            225.67,
+            126.4,
+            40.27
+          ],
+          "text": "机械操作工",
+          "textPreview": "机械操作工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "机械操作工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "机械操作工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            949.2,
+            225.67,
+            81.27,
+            40.27
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 17,
+          "row": 3,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            225.67,
+            115.6,
+            40.27
+          ],
+          "text": "钢筋工",
+          "textPreview": "钢筋工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "钢筋工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "钢筋工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "row": 3,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            225.67,
+            74.2,
+            40.27
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            632.67,
+            265.93,
+            112.8,
+            37.13
+          ],
+          "text": "QC",
+          "textPreview": "QC",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "QC",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "QC",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            745.47,
+            265.93,
+            77.33,
+            37.13
+          ]
+        },
+        {
+          "index": 21,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            822.8,
+            265.93,
+            126.4,
+            37.13
+          ],
+          "text": "机修工",
+          "textPreview": "机修工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "机修工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "机修工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 22,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            949.2,
+            265.93,
+            81.27,
+            37.13
+          ]
+        },
+        {
+          "index": 23,
+          "row": 4,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            265.93,
+            115.6,
+            37.13
+          ],
+          "text": "木工",
+          "textPreview": "木工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "木工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "木工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 24,
+          "row": 4,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            265.93,
+            74.2,
+            37.13
+          ]
+        },
+        {
+          "index": 25,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            632.67,
+            303.07,
+            112.8,
+            39.73
+          ],
+          "text": "工程师",
+          "textPreview": "工程师",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "工程师",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "工程师",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 26,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            745.47,
+            303.07,
+            77.33,
+            39.73
+          ]
+        },
+        {
+          "index": 27,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            822.8,
+            303.07,
+            126.4,
+            39.73
+          ],
+          "text": "其他起重工",
+          "textPreview": "其他起重工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "其他起重工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "其他起重工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 28,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            949.2,
+            303.07,
+            81.27,
+            39.73
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 29,
+          "row": 5,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            303.07,
+            115.6,
+            39.73
+          ],
+          "text": "架子工",
+          "textPreview": "架子工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "架子工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "架子工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 30,
+          "row": 5,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            303.07,
+            74.2,
+            39.73
+          ]
+        },
+        {
+          "index": 31,
+          "row": 6,
+          "column": 1,
+          "bbox": [
+            632.67,
+            342.8,
+            112.8,
+            35.13
+          ],
+          "text": "工长",
+          "textPreview": "工长",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "工长",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "工长",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 32,
+          "row": 6,
+          "column": 2,
+          "bbox": [
+            745.47,
+            342.8,
+            77.33,
+            35.13
+          ]
+        },
+        {
+          "index": 33,
+          "row": 6,
+          "column": 3,
+          "bbox": [
+            822.8,
+            342.8,
+            126.4,
+            35.13
+          ],
+          "text": "钳工/铆工",
+          "textPreview": "钳工/铆工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "钳工/铆工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "钳工",
+                  "fontSize": 21.33,
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "/",
+                  "fontSize": 21.33,
+                  "bold": true
+                },
+                {
+                  "index": 3,
+                  "text": "铆工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 34,
+          "row": 6,
+          "column": 4,
+          "bbox": [
+            949.2,
+            342.8,
+            81.27,
+            35.13
+          ],
+          "text": "5",
+          "textPreview": "5",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "5",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "5",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 35,
+          "row": 6,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            342.8,
+            115.6,
+            35.13
+          ],
+          "text": "预应力工",
+          "textPreview": "预应力工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "预应力工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "预应力工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 36,
+          "row": 6,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            342.8,
+            74.2,
+            35.13
+          ]
+        },
+        {
+          "index": 37,
+          "row": 7,
+          "column": 1,
+          "bbox": [
+            632.67,
+            377.93,
+            112.8,
+            35.27
+          ],
+          "text": "队长",
+          "textPreview": "队长",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "队长",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "队长",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 38,
+          "row": 7,
+          "column": 2,
+          "bbox": [
+            745.47,
+            377.93,
+            77.33,
+            35.27
+          ]
+        },
+        {
+          "index": 39,
+          "row": 7,
+          "column": 3,
+          "bbox": [
+            822.8,
+            377.93,
+            126.4,
+            35.27
+          ],
+          "text": "焊工",
+          "textPreview": "焊工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "焊工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "焊工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 40,
+          "row": 7,
+          "column": 4,
+          "bbox": [
+            949.2,
+            377.93,
+            81.27,
+            35.27
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 41,
+          "row": 7,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            377.93,
+            115.6,
+            35.27
+          ],
+          "text": "其他普工",
+          "textPreview": "其他普工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "其他普工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "其他普工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 42,
+          "row": 7,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            377.93,
+            74.2,
+            35.27
+          ]
+        },
+        {
+          "index": 43,
+          "row": 8,
+          "column": 1,
+          "bbox": [
+            632.67,
+            413.2,
+            112.8,
+            35.07
+          ],
+          "text": "综合管理",
+          "textPreview": "综合管理",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "综合管理",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "综合管理",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 44,
+          "row": 8,
+          "column": 2,
+          "bbox": [
+            745.47,
+            413.2,
+            77.33,
+            35.07
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 45,
+          "row": 8,
+          "column": 3,
+          "bbox": [
+            822.8,
+            413.2,
+            126.4,
+            35.07
+          ],
+          "text": "管工",
+          "textPreview": "管工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "管工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "管工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 46,
+          "row": 8,
+          "column": 4,
+          "bbox": [
+            949.2,
+            413.2,
+            81.27,
+            35.07
+          ]
+        },
+        {
+          "index": 47,
+          "row": 8,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            413.2,
+            115.6,
+            35.07
+          ],
+          "text": "后勤人员",
+          "textPreview": "后勤人员",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "后勤人员",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "后勤人员",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 48,
+          "row": 8,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            413.2,
+            74.2,
+            35.07
+          ]
+        },
+        {
+          "index": 49,
+          "row": 9,
+          "column": 1,
+          "bbox": [
+            632.67,
+            448.27,
+            112.8,
+            36
+          ],
+          "text": "技术员",
+          "textPreview": "技术员",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "技术员",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "技术员",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 50,
+          "row": 9,
+          "column": 2,
+          "bbox": [
+            745.47,
+            448.27,
+            77.33,
+            36
+          ]
+        },
+        {
+          "index": 51,
+          "row": 9,
+          "column": 3,
+          "bbox": [
+            822.8,
+            448.27,
+            126.4,
+            36
+          ],
+          "text": "电工",
+          "textPreview": "电工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "电工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "电工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 52,
+          "row": 9,
+          "column": 4,
+          "bbox": [
+            949.2,
+            448.27,
+            81.27,
+            36
+          ]
+        },
+        {
+          "index": 53,
+          "row": 9,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            448.27,
+            115.6,
+            36
+          ],
+          "text": "辅助工",
+          "textPreview": "辅助工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "辅助工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "辅助工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 54,
+          "row": 9,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            448.27,
+            74.2,
+            36
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 55,
+          "row": 10,
+          "column": 1,
+          "bbox": [
+            632.67,
+            484.27,
+            112.8,
+            38.13
+          ],
+          "text": "车辆司机",
+          "textPreview": "车辆司机",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "车辆司机",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "车辆司机",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 56,
+          "row": 10,
+          "column": 2,
+          "bbox": [
+            745.47,
+            484.27,
+            77.33,
+            38.13
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 57,
+          "row": 10,
+          "column": 3,
+          "bbox": [
+            822.8,
+            484.27,
+            126.4,
+            38.13
+          ],
+          "text": "混凝土工",
+          "textPreview": "混凝土工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "混凝土工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "混凝土工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 58,
+          "row": 10,
+          "column": 4,
+          "bbox": [
+            949.2,
+            484.27,
+            81.27,
+            38.13
+          ]
+        },
+        {
+          "index": 59,
+          "row": 10,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            484.27,
+            115.6,
+            38.13
+          ],
+          "text": "保卫人员",
+          "textPreview": "保卫人员",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "保卫人员",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "保卫人员",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 60,
+          "row": 10,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            484.27,
+            74.2,
+            38.13
+          ]
+        },
+        {
+          "index": 61,
+          "row": 11,
+          "column": 1,
+          "bbox": [
+            632.67,
+            522.4,
+            112.8,
+            59.27
+          ],
+          "text": "塔式起重机司机",
+          "textPreview": "塔式起重机司机",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "塔式起重机司机",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "塔式起重机司机",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 62,
+          "row": 11,
+          "column": 2,
+          "bbox": [
+            745.47,
+            522.4,
+            77.33,
+            59.27
+          ]
+        },
+        {
+          "index": 63,
+          "row": 11,
+          "column": 3,
+          "bbox": [
+            822.8,
+            522.4,
+            126.4,
+            59.27
+          ],
+          "text": "测量防线工",
+          "textPreview": "测量防线工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "测量防线工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "测量防线工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 64,
+          "row": 11,
+          "column": 4,
+          "bbox": [
+            949.2,
+            522.4,
+            81.27,
+            59.27
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 65,
+          "row": 11,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            522.4,
+            115.6,
+            59.27
+          ],
+          "text": "射线检验员（RT)",
+          "textPreview": "射线检验员（RT)",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "射线检验员（RT)",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "射线检验员（",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "RT)",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 66,
+          "row": 11,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            522.4,
+            74.2,
+            59.27
+          ]
+        },
+        {
+          "index": 67,
+          "row": 12,
+          "column": 1,
+          "bbox": [
+            632.67,
+            581.67,
+            112.8,
+            57.6
+          ],
+          "text": "清扫工",
+          "textPreview": "清扫工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "清扫工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "清扫工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 68,
+          "row": 12,
+          "column": 2,
+          "bbox": [
+            745.47,
+            581.67,
+            77.33,
+            57.6
+          ]
+        },
+        {
+          "index": 69,
+          "row": 12,
+          "column": 3,
+          "bbox": [
+            822.8,
+            581.67,
+            126.4,
+            57.6
+          ],
+          "text": "装修工",
+          "textPreview": "装修工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "装修工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "装修工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 70,
+          "row": 12,
+          "column": 4,
+          "bbox": [
+            949.2,
+            581.67,
+            81.27,
+            57.6
+          ]
+        },
+        {
+          "index": 71,
+          "row": 12,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            581.67,
+            115.6,
+            57.6
+          ],
+          "text": "防水工",
+          "textPreview": "防水工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "防水工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "防水工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 72,
+          "row": 12,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            581.67,
+            74.2,
+            57.6
+          ]
+        },
+        {
+          "index": 73,
+          "row": 13,
+          "column": 1,
+          "bbox": [
+            632.67,
+            639.27,
+            112.8,
+            57.6
+          ],
+          "text": "库管工",
+          "textPreview": "库管工",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "库管工",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "库管工",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 74,
+          "row": 13,
+          "column": 2,
+          "bbox": [
+            745.47,
+            639.27,
+            77.33,
+            57.6
+          ]
+        },
+        {
+          "index": 75,
+          "row": 13,
+          "column": 3,
+          "bbox": [
+            822.8,
+            639.27,
+            126.4,
+            57.6
+          ],
+          "text": "经理部",
+          "textPreview": "经理部",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "经理部",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "经理部",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 76,
+          "row": 13,
+          "column": 4,
+          "bbox": [
+            949.2,
+            639.27,
+            81.27,
+            57.6
+          ]
+        },
+        {
+          "index": 77,
+          "row": 13,
+          "column": 5,
+          "bbox": [
+            1030.47,
+            639.27,
+            115.6,
+            57.6
+          ],
+          "text": "理化试验员",
+          "textPreview": "理化试验员",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "理化试验员",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "理化试验员",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 78,
+          "row": 13,
+          "column": 6,
+          "bbox": [
+            1146.07,
+            639.27,
+            74.2,
+            57.6
+          ]
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wnu94jm9",
+      "id": "38",
+      "name": "圆角矩形 37",
+      "bbox": [
+        553.8,
+        148.8,
+        65.87,
+        297.2
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "dk1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": {
+        "type": "theme",
+        "value": "bg1",
+        "transform": {
+          "darken": 0.15
+        }
+      },
+      "lineColor": "tx1",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x83qxonu",
+      "id": "39",
+      "name": "文本框 38",
+      "bbox": [
+        559.22,
+        168.02,
+        54.04,
+        215.07
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "各工种证件办理",
+      "textPreview": "各工种证件办理",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 7,
+        "lines": [
+          {
+            "index": 1,
+            "text": "各"
+          },
+          {
+            "index": 2,
+            "text": "工"
+          },
+          {
+            "index": 3,
+            "text": "种"
+          },
+          {
+            "index": 4,
+            "text": "证"
+          },
+          {
+            "index": 5,
+            "text": "件"
+          },
+          {
+            "index": 6,
+            "text": "办"
+          },
+          {
+            "index": 7,
+            "text": "理"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "各工种证件办理",
+          "runs": [
+            {
+              "index": 1,
+              "text": "各工种证件办理",
+              "fontSize": 32
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rut032t8",
+      "id": "6",
+      "name": "文本框 5",
+      "bbox": [
+        576.73,
+        36.2,
+        426.67,
+        38.67
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hwretcry",
+      "id": "17",
+      "name": "任意多边形 8",
+      "bbox": [
+        14.8,
+        12.8,
+        45.34,
+        45.33
+      ],
+      "rotation": 0,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2x0vmh8j",
+      "id": "18",
+      "name": "任意多边形 7",
+      "bbox": [
+        68.06,
+        52.67,
+        1152.2,
+        5.67
+      ],
+      "rotation": 0,
+      "verticalFlip": true,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3y9wvm94",
+      "id": "19",
+      "name": "文本框 18",
+      "bbox": [
+        68.06,
+        5.33,
+        1160.47,
+        48.33
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "三、上周主要工作",
+      "textPreview": "三、上周主要工作",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "三、上周主要工作"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "三、上周主要工作",
+          "runs": [
+            {
+              "index": 1,
+              "text": "三、",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#0599D9",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "上周主要工作",
+              "fontSize": 32,
+              "color": "rgba(5, 153, 217, 1)",
+              "bold": true
+            }
+          ],
+          "marginLeft": 457200
+        }
+      ]
+    },
+    {
+      "order": 13,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/wbmxgzax",
+      "id": "42",
+      "name": "表格 7",
+      "bbox": [
+        104.93,
+        538.6,
+        414,
+        68.66
+      ],
+      "text": "序号 | 新入场人数 | 帽贴制作数量\n1 | 17 | 62",
+      "textPreview": "序号 | 新入场人数 | 帽贴制作数量 | 1 | 17 | 62",
+      "rows": 2,
+      "cols": 3,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            104.93,
+            538.6,
+            93.07,
+            43.13
+          ],
+          "text": "序号",
+          "textPreview": "序号",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "序号",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "序号",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            198,
+            538.6,
+            143.73,
+            43.13
+          ],
+          "text": "新入场人数",
+          "textPreview": "新入场人数",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "新入场人数",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "新入场",
+                  "fontSize": 21.33
+                },
+                {
+                  "index": 2,
+                  "text": "人数",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            341.73,
+            538.6,
+            177.2,
+            43.13
+          ],
+          "text": "帽贴制作数量",
+          "textPreview": "帽贴制作数量",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "帽贴制作数量",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "帽贴制作",
+                  "fontSize": 21.33
+                },
+                {
+                  "index": 2,
+                  "text": "数量",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            104.93,
+            581.73,
+            93.07,
+            25.53
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            198,
+            581.73,
+            143.73,
+            25.53
+          ],
+          "text": "17",
+          "textPreview": "17",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "17",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "17",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            341.73,
+            581.73,
+            177.2,
+            25.53
+          ],
+          "text": "62",
+          "textPreview": "62",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "62",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "62",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 14,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/xcvyp4bi",
+      "id": "43",
+      "name": "表格 6",
+      "bbox": [
+        104.93,
+        623.93,
+        414,
+        74.14
+      ],
+      "text": "序号 | 办证台账人数 | 工程部人数\n1 | 1608 | 1568",
+      "textPreview": "序号 | 办证台账人数 | 工程部人数 | 1 | 1608 | 1568",
+      "rows": 2,
+      "cols": 3,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            104.93,
+            623.93,
+            93.07,
+            40.07
+          ],
+          "text": "序号",
+          "textPreview": "序号",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "序号",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "序号",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            198,
+            623.93,
+            143.73,
+            40.07
+          ],
+          "text": "办证台账人数",
+          "textPreview": "办证台账人数",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "办证台账人数",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "办证台账",
+                  "fontSize": 21.33
+                },
+                {
+                  "index": 2,
+                  "text": "人数",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            341.73,
+            623.93,
+            177.2,
+            40.07
+          ],
+          "text": "工程部人数",
+          "textPreview": "工程部人数",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "工程部人数",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "工程部",
+                  "fontSize": 21.33
+                },
+                {
+                  "index": 2,
+                  "text": "人数",
+                  "fontSize": 21.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            104.93,
+            664,
+            93.07,
+            34.07
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 21.33,
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            198,
+            664,
+            143.73,
+            34.07
+          ],
+          "text": "1608",
+          "textPreview": "1608",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1608",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1608",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            341.73,
+            664,
+            177.2,
+            34.07
+          ],
+          "text": "1568",
+          "textPreview": "1568",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1568",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1568",
+                  "fontSize": 21.33,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

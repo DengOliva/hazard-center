@@ -1,0 +1,1933 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/gnmp4jqx",
+    "id": "gnmp4jqx",
+    "slide": 7,
+    "layoutId": "/ppt/slideLayouts/slideLayout6.xml",
+    "layoutName": "仅标题",
+    "layoutType": "titleOnly",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "WPS",
+    "colors": {
+      "accent1": "#4874CB",
+      "accent2": "#EE822F",
+      "accent3": "#F2BA02",
+      "accent4": "#75BD42",
+      "accent5": "#30C0B4",
+      "accent6": "#E54C5E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0026E5",
+      "folHlink": "#7E1FAD"
+    },
+    "fontScheme": {
+      "name": "WPS",
+      "majorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial",
+        "eastAsianTypeface": "微软雅黑"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout6.xml",
+      "name": "仅标题",
+      "type": "titleOnly",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/2",
+          "id": "2",
+          "name": "标题 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/3",
+          "id": "3",
+          "name": "日期占位符 2",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/4",
+          "id": "4",
+          "name": "页脚占位符 3",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout6.xml/5",
+          "id": "5",
+          "name": "灯片编号占位符 4",
+          "bbox": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "标题占位符 1",
+          "bbox": [
+            63.87,
+            63.87,
+            1151.62,
+            74.08
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.93,
+              "right": 9.47,
+              "bottom": 4.93,
+              "left": 9.47
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "文本占位符 2",
+          "bbox": [
+            63.87,
+            156.47,
+            1151.62,
+            499.65
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版文本样式\n第二级\n第三级\n第四级\n第五级",
+          "textPreview": "单击此处编辑母版文本样式 | 第二级 | 第三级 | 第四级 | 第五级",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.91,
+              "right": 9.45,
+              "bottom": 4.91,
+              "left": 9.45
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版文本样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版文本样式"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "第二级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第二级"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "第三级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第三级"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "第四级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第四级"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "第五级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "第五级"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "日期占位符 3",
+          "bbox": [
+            64.25,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "页脚占位符 4",
+          "bbox": [
+            432.13,
+            662.93,
+            415.75,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "灯片编号占位符 5",
+          "bbox": [
+            932.03,
+            662.93,
+            283.46,
+            33.26
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/q143ylov",
+      "id": "24",
+      "name": "任意多边形 8",
+      "bbox": [
+        21,
+        64.13,
+        43.13,
+        45.33
+      ],
+      "rotation": 0,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dcbud0ra",
+      "id": "3",
+      "name": "任意多边形 7",
+      "bbox": [
+        75.07,
+        103.8,
+        1096.07,
+        5.67
+      ],
+      "rotation": 0,
+      "verticalFlip": true,
+      "geometry": "custom",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "rotation": 0,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 3.52,
+          "right": 7.04,
+          "bottom": 3.52,
+          "left": 7.04
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "#0599D9",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cbq1sv25",
+      "id": "13",
+      "name": "文本框 12",
+      "bbox": [
+        74.2,
+        55.2,
+        1103.93,
+        48.33
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "一、部门任务跟踪",
+      "textPreview": "一、部门任务跟踪",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "一、部门任务跟踪"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "一、部门任务跟踪",
+          "runs": [
+            {
+              "index": 1,
+              "text": "一、",
+              "fontSize": 32,
+              "typeface": "微软雅黑",
+              "color": "#0599D9",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "部门任务跟踪",
+              "fontSize": 32,
+              "color": "rgba(5, 153, 217, 1)",
+              "bold": true
+            }
+          ],
+          "marginLeft": 457200
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r2dkrq5g",
+      "id": "25",
+      "name": "标题 3",
+      "bbox": [
+        73.01,
+        118.05,
+        1179.34,
+        45.13
+      ],
+      "geometry": "rect",
+      "text": "3、本周内外部行为偏差统计（7月15日--7月21日）",
+      "textPreview": "3、本周内外部行为偏差统计（7月15日--7月21日）",
+      "resolvedFontSize": 58.67,
+      "resolvedTextStyle": {
+        "fontSize": 58.67,
+        "typeface": "Arial",
+        "color": "tx2",
+        "alignment": "center",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "3、本周内外部行为偏差统计（7月15日--7月21日）"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "3、本周内外部行为偏差统计（7月15日--7月21日）",
+          "runs": [
+            {
+              "index": 1,
+              "text": "3",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "、",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "本周",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 4,
+              "text": "内外部行为偏差统计（",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 5,
+              "text": "7",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 6,
+              "text": "月",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 7,
+              "text": "15",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 8,
+              "text": "日",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 9,
+              "text": "--7",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 10,
+              "text": "月",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 11,
+              "text": "21",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 12,
+              "text": "日",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            },
+            {
+              "index": 13,
+              "text": "）",
+              "fontSize": 29.33,
+              "typeface": "微软雅黑",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/vm9czels",
+      "id": "26",
+      "name": "表格 13",
+      "bbox": [
+        624.2,
+        223.93,
+        536.2,
+        281.33
+      ],
+      "text": "内部录入行为偏差统计\n序号 | 行为偏差类型 | 违章人数 | 备注\n1 | 通用违章行为 | 9\n2 | 其他 | 10\n合计 | 19",
+      "textPreview": "内部录入行为偏差统计 | 序号 | 行为偏差类型 | 违章人数 | 备注 | 1 | 通用违章行为 | 9 | 2 | 其他 | 10 | 合计 | 19",
+      "rows": 5,
+      "cols": 4,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "colSpan": 4,
+          "bbox": [
+            624.2,
+            223.93,
+            536.2,
+            45
+          ],
+          "text": "内部录入行为偏差统计",
+          "textPreview": "内部录入行为偏差统计",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "内部录入行为偏差统计",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "内部录入行为偏",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "差统计",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            681.2,
+            223.93,
+            251.73,
+            45
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            932.93,
+            223.93,
+            131.27,
+            45
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            1064.2,
+            223.93,
+            96.2,
+            45
+          ],
+          "fillColor": "accent1"
+        },
+        {
+          "index": 5,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            624.2,
+            268.93,
+            57,
+            60.33
+          ],
+          "text": "序号",
+          "textPreview": "序号",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "序号",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "序号",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            681.2,
+            268.93,
+            251.73,
+            60.33
+          ],
+          "text": "行为偏差类型",
+          "textPreview": "行为偏差类型",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "行为偏差类型",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "行为",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "偏差类型",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            932.93,
+            268.93,
+            131.27,
+            60.33
+          ],
+          "text": "违章人数",
+          "textPreview": "违章人数",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "违章人数",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "违章人数",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            1064.2,
+            268.93,
+            96.2,
+            60.33
+          ],
+          "text": "备注",
+          "textPreview": "备注",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "备注",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "备注",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            624.2,
+            329.27,
+            57,
+            60.33
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "tx1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            681.2,
+            329.27,
+            251.73,
+            60.33
+          ],
+          "text": "通用违章行为",
+          "textPreview": "通用违章行为",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "通用违章行为",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "通用违章行为",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            932.93,
+            329.27,
+            131.27,
+            60.33
+          ],
+          "text": "9",
+          "textPreview": "9",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "9",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "9",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "tx1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            1064.2,
+            329.27,
+            96.2,
+            60.33
+          ],
+          "fillColor": "#E7F1FB"
+        },
+        {
+          "index": 13,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            624.2,
+            389.6,
+            57,
+            60.33
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "tx1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            681.2,
+            389.6,
+            251.73,
+            60.33
+          ],
+          "text": "其他",
+          "textPreview": "其他",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "其他",
+              "lineSpacingPercent": 100000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "其他",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            932.93,
+            389.6,
+            131.27,
+            60.33
+          ],
+          "text": "10",
+          "textPreview": "10",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "10",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "10",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "tx1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            1064.2,
+            389.6,
+            96.2,
+            60.33
+          ],
+          "fillColor": "#E7F1FB"
+        },
+        {
+          "index": 17,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            624.2,
+            449.93,
+            57,
+            55.33
+          ],
+          "fillColor": "#E7F1FB"
+        },
+        {
+          "index": 18,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            681.2,
+            449.93,
+            251.73,
+            55.33
+          ],
+          "text": "合计",
+          "textPreview": "合计",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "合计",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "合计",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            932.93,
+            449.93,
+            131.27,
+            55.33
+          ],
+          "text": "19",
+          "textPreview": "19",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "19",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "19",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            1064.2,
+            449.93,
+            96.2,
+            55.33
+          ],
+          "fillColor": "#E7F1FB"
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/eh0ba1sr",
+      "id": "8",
+      "name": "文本框 7",
+      "bbox": [
+        73,
+        163.2,
+        1109.67,
+        53.2
+      ],
+      "geometry": "rect",
+      "text": "本周内部行为偏差共计19人次，已培训15人还有4人未培训，工程公司录入行为偏差共计19人。",
+      "textPreview": "本周内部行为偏差共计19人次，已培训15人还有4人未培训，工程公司录入行为偏差共计19人。",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "本周内部行为偏差共计19人次，已培训15人还有4人未培训，工程公司录入行为偏差共计19人。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "本周内部行为偏差共计19人次，已培训15人还有4人未培训，工程公司录入行为偏差共计19人。",
+          "lineSpacingPercent": 150000,
+          "runs": [
+            {
+              "index": 1,
+              "text": "本周",
+              "typeface": "微软雅黑",
+              "color": "#000000"
+            },
+            {
+              "index": 2,
+              "text": "内部行为偏差共",
+              "typeface": "微软雅黑",
+              "color": "#000000"
+            },
+            {
+              "index": 3,
+              "text": "计",
+              "typeface": "微软雅黑",
+              "color": "tx1"
+            },
+            {
+              "index": 4,
+              "text": "19",
+              "typeface": "微软雅黑",
+              "color": "#FF0000"
+            },
+            {
+              "index": 5,
+              "text": "人",
+              "typeface": "微软雅黑",
+              "color": "#FF0000"
+            },
+            {
+              "index": 6,
+              "text": "次，已培训",
+              "typeface": "微软雅黑",
+              "color": "#000000"
+            },
+            {
+              "index": 7,
+              "text": "15",
+              "typeface": "微软雅黑",
+              "color": "#FF0000"
+            },
+            {
+              "index": 8,
+              "text": "人",
+              "typeface": "微软雅黑",
+              "color": "#FF0000"
+            },
+            {
+              "index": 9,
+              "text": "还有",
+              "typeface": "微软雅黑",
+              "color": "#000000"
+            },
+            {
+              "index": 10,
+              "text": "4人",
+              "typeface": "微软雅黑",
+              "color": "#FF0000"
+            },
+            {
+              "index": 11,
+              "text": "未培训，工程公司录入行为偏差共计",
+              "typeface": "微软雅黑",
+              "color": "#000000"
+            },
+            {
+              "index": 12,
+              "text": "19",
+              "typeface": "微软雅黑",
+              "color": "#FF0000"
+            },
+            {
+              "index": 13,
+              "text": "人。",
+              "typeface": "微软雅黑",
+              "color": "#FF0000"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/ul0bqt4n",
+      "id": "27",
+      "name": "表格 1",
+      "bbox": [
+        42.73,
+        223.93,
+        509.21,
+        221
+      ],
+      "text": "工程公司行为偏差统计\n序号 | 行为偏差类型 | 违章人数 | 备注\n1 | 作业行为 | 10\n2 | 管理行为 | 9\n合计 | 19",
+      "textPreview": "工程公司行为偏差统计 | 序号 | 行为偏差类型 | 违章人数 | 备注 | 1 | 作业行为 | 10 | 2 | 管理行为 | 9 | 合计 | 19",
+      "rows": 5,
+      "cols": 4,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "colSpan": 4,
+          "bbox": [
+            42.73,
+            223.93,
+            509.2,
+            44
+          ],
+          "text": "工程公司行为偏差统计",
+          "textPreview": "工程公司行为偏差统计",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "工程公司行为偏差统计",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "工程公司行为",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "偏差统计",
+                  "fontSize": 24,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            100.53,
+            223.93,
+            232,
+            44
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            332.53,
+            223.93,
+            129.73,
+            44
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            462.27,
+            223.93,
+            89.67,
+            44
+          ],
+          "fillColor": "accent1"
+        },
+        {
+          "index": 5,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            42.73,
+            267.93,
+            57.8,
+            58.67
+          ],
+          "text": "序号",
+          "textPreview": "序号",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "序号",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "序号",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            100.53,
+            267.93,
+            232,
+            58.67
+          ],
+          "text": "行为偏差类型",
+          "textPreview": "行为偏差类型",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "行为偏差类型",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "行为偏差",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "类型",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            332.53,
+            267.93,
+            129.73,
+            58.67
+          ],
+          "text": "违章人数",
+          "textPreview": "违章人数",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "违章人数",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "违章人数",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            462.27,
+            267.93,
+            89.67,
+            58.67
+          ],
+          "text": "备注",
+          "textPreview": "备注",
+          "fillColor": "#00AAE8",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "备注",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "备注",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FFFFFF",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            42.73,
+            326.6,
+            57.8,
+            39.67
+          ],
+          "text": "1",
+          "textPreview": "1",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            100.53,
+            326.6,
+            232,
+            39.67
+          ],
+          "text": "作业行为",
+          "textPreview": "作业行为",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "作业行为",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "作业行为",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            332.53,
+            326.6,
+            129.73,
+            39.67
+          ],
+          "text": "10",
+          "textPreview": "10",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "10",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "10",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "tx1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            462.27,
+            326.6,
+            89.67,
+            39.67
+          ],
+          "fillColor": "#E7F1FB"
+        },
+        {
+          "index": 13,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            42.73,
+            366.27,
+            57.8,
+            39.33
+          ],
+          "text": "2",
+          "textPreview": "2",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            100.53,
+            366.27,
+            232,
+            39.33
+          ],
+          "text": "管理行为",
+          "textPreview": "管理行为",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "管理行为",
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "管理",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#000000",
+                  "bold": true
+                },
+                {
+                  "index": 2,
+                  "text": "行为",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#000000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            332.53,
+            366.27,
+            129.73,
+            39.33
+          ],
+          "text": "9",
+          "textPreview": "9",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "9",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "9",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "tx1",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            462.27,
+            366.27,
+            89.67,
+            39.33
+          ],
+          "fillColor": "#E7F1FB"
+        },
+        {
+          "index": 17,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            42.73,
+            405.6,
+            57.8,
+            39.33
+          ],
+          "fillColor": "#E7F1FB"
+        },
+        {
+          "index": 18,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            100.53,
+            405.6,
+            232,
+            39.33
+          ],
+          "text": "合计",
+          "textPreview": "合计",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "合计",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "合计",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#404040",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            332.53,
+            405.6,
+            129.73,
+            39.33
+          ],
+          "text": "19",
+          "textPreview": "19",
+          "textDirection": "horz",
+          "fillColor": "#E7F1FB",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "19",
+              "lineSpacingPercent": 120000,
+              "resolvedTextStyle": {
+                "alignment": "center"
+              },
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "19",
+                  "fontSize": 18.67,
+                  "typeface": "微软雅黑",
+                  "color": "#FF0000",
+                  "bold": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            462.27,
+            405.6,
+            89.67,
+            39.33
+          ],
+          "fillColor": "#E7F1FB"
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

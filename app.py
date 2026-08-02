@@ -3180,7 +3180,8 @@ def feedback_import():
     with db() as conn:
         for upload_file in files:
             try:
-                wb = load_workbook(BytesIO(upload_file.read()), read_only=True, data_only=True)
+                file_bytes = upload_file.read()
+                wb = load_workbook(BytesIO(file_bytes), read_only=True, data_only=True)
                 ws = wb.active
                 rows = list(ws.iter_rows(min_row=1, max_row=min(ws.max_row, 2000), values_only=True))
                 wb.close()
@@ -3218,9 +3219,27 @@ def feedback_import():
                     continue
 
                 now = datetime.now().isoformat(timespec="seconds")
-                conn.execute(
+                cursor = conn.execute(
                     "INSERT INTO feedback_events (name, record_date, category, content, participant_count, source_ref, created_at) VALUES (?,?,?,?,?,?,?)",
                     (name, record_date, "经验反馈", "", participant_count, source_ref, now),
+                )
+                event_id = cursor.lastrowid
+
+                # Save the uploaded xlsx as an attachment
+                original = Path(upload_file.filename).name
+                safe_original = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", original).strip(" .") or "文件"
+                suffix = Path(safe_original).suffix.lower()
+                stored_name = f"{event_id}_{uuid.uuid4().hex}{suffix}"
+                target = FEEDBACK_DIR / stored_name
+                target.write_bytes(file_bytes)
+                try:
+                    year, month, day = map(int, record_date.split("-"))
+                except (ValueError, AttributeError):
+                    year, month, day = 2026, 1, 1
+                display_name = f"{year}年{month}月{day}日{name}文件{suffix}"
+                conn.execute(
+                    "INSERT INTO feedback_files (event_id, original_name, stored_name, display_name, kind, content_type, size, created_at) VALUES (?,?,?,?,?,?,?,?)",
+                    (event_id, original, stored_name, display_name, "file", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", len(file_bytes), now),
                 )
                 imported += 1
                 items.append({"name": name, "participant_count": participant_count})

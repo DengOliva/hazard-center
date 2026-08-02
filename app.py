@@ -2708,6 +2708,9 @@ def brake_ledger_import():
         skipped_filter=skipped_filter,
         category=category if imported else "",
     )
+
+
+@app.post("/api/brake-ledger/export")
 def brake_ledger_export():
     body = request.get_json(force=True) or {}
     raw_ids = body.get("ids") or []

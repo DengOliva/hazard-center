@@ -334,67 +334,30 @@ $('importStartBtn').onclick = async () => {
 
 // ── Export ──────────────────────────────────────────────────────────────
 
-function openFeedbackExport() {
-  if (!loadedEvents.length) { toast('当前没有可导出的记录'); return; }
-  $('exportEventList').innerHTML = loadedEvents.map(event => `
-    <label class="export-event">
-      <input type="checkbox" value="${event.id}">
-      <time>${esc(event.record_date)}</time>
-      <b>${esc(event.name)}</b>
-      <small>${event.participant_count || 0} 人</small>
-    </label>`).join('');
-  $('exportEventList').querySelectorAll('input').forEach(input => input.onchange = updateFeedbackExportSelection);
-  updateFeedbackExportSelection();
-  openModal('exportModal');
-}
-
-function selectedFeedbackExportEvents() {
-  const ids = new Set(Array.from($('exportEventList').querySelectorAll('input:checked')).map(i => Number(i.value)));
-  return loadedEvents.filter(e => ids.has(e.id)).sort((a, b) => a.record_date.localeCompare(b.record_date) || a.id - b.id);
-}
-
-function updateFeedbackExportSelection() {
-  const selected = selectedFeedbackExportEvents();
-  $('exportSelectedCount').textContent = `已选择 ${selected.length} 项`;
-  $('exportConfirmBtn').disabled = !selected.length;
-  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
-  $('selectAllExportBtn').textContent = inputs.length && inputs.every(i => i.checked) ? '取消全选' : '全选';
-}
-
 async function exportFeedbackLedger() {
-  const events = selectedFeedbackExportEvents();
-  if (!events.length) return;
-  $('exportConfirmBtn').disabled = true;
-  $('exportConfirmBtn').textContent = '正在生成…';
+  $('exportBtn').disabled = true;
+  $('exportBtn').textContent = '正在生成…';
   try {
     const response = await fetch('/api/feedback/export', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: events.map(e => e.id) }),
+      body: JSON.stringify({}),
     });
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || '生成失败');
     }
     downloadBlob(await response.blob(), `经验反馈台账_${new Date().toISOString().slice(0, 10)}.xlsx`);
-    closeModals();
-    toast(`已导出 ${events.length} 条记录`);
+    toast('台账已生成');
   } catch (error) {
     toast(error.message);
   } finally {
-    $('exportConfirmBtn').disabled = false;
-    $('exportConfirmBtn').textContent = '生成 Excel 台账';
+    $('exportBtn').disabled = false;
+    $('exportBtn').textContent = '导出台账';
   }
 }
 
-$('exportBtn').onclick = openFeedbackExport;
-$('selectAllExportBtn').onclick = () => {
-  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
-  const shouldSelect = !inputs.every(i => i.checked);
-  inputs.forEach(i => { i.checked = shouldSelect; });
-  updateFeedbackExportSelection();
-};
-$('exportConfirmBtn').onclick = exportFeedbackLedger;
+$('exportBtn').onclick = exportFeedbackLedger;
 
 // ── Categories ────────────────────────────────────────────────────────
 

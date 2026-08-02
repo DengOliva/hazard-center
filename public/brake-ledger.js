@@ -314,56 +314,26 @@ $('copyDocxBtn').onclick = () => {
 
 // ── Export ────────────────────────────────────────────────────────────
 
-function openLedgerExport() {
-  if (!loadedEvents.length) { toast('当前没有可导出的记录'); return; }
-  $('exportEventList').innerHTML = loadedEvents.map(event => `
-    <label class="export-event">
-      <input type="checkbox" value="${event.id}">
-      <time>${esc(event.record_date)}</time>
-      <b>${esc(event.name)}</b>
-      <small>${esc(event.category)}</small>
-    </label>`).join('');
-  $('exportEventList').querySelectorAll('input').forEach(input => input.onchange = updateExportSelection);
-  updateExportSelection();
-  openModal('exportModal');
-}
-
-function selectedExportEvents() {
-  const ids = new Set(Array.from($('exportEventList').querySelectorAll('input:checked')).map(i => Number(i.value)));
-  return loadedEvents.filter(e => ids.has(e.id)).sort((a, b) => a.record_date.localeCompare(b.record_date) || a.id - b.id);
-}
-
-function updateExportSelection() {
-  const selected = selectedExportEvents();
-  $('exportSelectedCount').textContent = `已选择 ${selected.length} 项`;
-  $('exportConfirmBtn').disabled = !selected.length;
-  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
-  $('selectAllExportBtn').textContent = inputs.length && inputs.every(i => i.checked) ? '取消全选' : '全选';
-}
-
-async function exportSelectedLedger() {
-  const events = selectedExportEvents();
-  if (!events.length) return;
-  $('exportConfirmBtn').disabled = true;
-  $('exportConfirmBtn').textContent = '正在生成…';
+async function exportFullLedger() {
+  $('exportLedgerBtn').disabled = true;
+  $('exportLedgerBtn').textContent = '正在生成…';
   try {
     const response = await fetch('/api/brake-ledger/export', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: events.map(e => e.id) }),
+      body: JSON.stringify({}),
     });
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || '生成失败');
     }
     downloadBlob(await response.blob(), `外部刹车预警台账_${new Date().toISOString().slice(0, 10)}.xlsx`);
-    closeModals();
-    toast(`已生成 ${events.length} 条记录的台账`);
+    toast('台账已生成');
   } catch (error) {
     toast(error.message);
   } finally {
-    $('exportConfirmBtn').disabled = false;
-    $('exportConfirmBtn').textContent = '生成 Excel 台账';
+    $('exportLedgerBtn').disabled = false;
+    $('exportLedgerBtn').textContent = '生成台账';
   }
 }
 
@@ -575,15 +545,8 @@ $('addCategoryBtn').onclick = async () => {
 
 // ── Event Listeners ───────────────────────────────────────────────────
 
-$('exportLedgerBtn').onclick = openLedgerExport;
+$('exportLedgerBtn').onclick = exportFullLedger;
 $('importBtn').onclick = () => { openModal('importModal'); $('importResult').style.display = 'none'; $('importFileInput').value = ''; };
-$('selectAllExportBtn').onclick = () => {
-  const inputs = Array.from($('exportEventList').querySelectorAll('input'));
-  const shouldSelect = !inputs.every(i => i.checked);
-  inputs.forEach(i => { i.checked = shouldSelect; });
-  updateExportSelection();
-};
-$('exportConfirmBtn').onclick = exportSelectedLedger;
 $('refreshBtn').onclick = loadEvents;
 $('keyword').addEventListener('input', (() => {
   let timer;

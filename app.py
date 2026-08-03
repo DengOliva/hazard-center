@@ -2457,6 +2457,21 @@ def brake_ledger_stats():
     return jsonify(records=row["records"], files=row["files"])
 
 
+@app.post("/api/brake-ledger/clear")
+def brake_ledger_clear():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        files = conn.execute("SELECT stored_name FROM brake_ledger_files").fetchall()
+        conn.execute("DELETE FROM brake_ledger_events")
+        conn.execute("DELETE FROM brake_ledger_files")
+    for row in files:
+        target = BRAKE_LEDGER_DIR / row["stored_name"]
+        if target.parent == BRAKE_LEDGER_DIR and target.is_file():
+            target.unlink()
+    return jsonify(ok=True, deleted=len(files))
+
+
 @app.post("/api/brake-ledger/import")
 def brake_ledger_import():
     if not ledger_password_ok():

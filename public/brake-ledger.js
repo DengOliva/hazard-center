@@ -557,6 +557,27 @@ $('statsRefreshBtn').onclick = () => loadStats().catch(() => {});
 $('statsDateFrom').addEventListener('change', () => loadStats().catch(() => {}));
 $('statsDateTo').addEventListener('change', () => loadStats().catch(() => {}));
 
+$('clearLedgerBtn').onclick = async () => {
+  if (!confirm('确定清除全部外部刹车预警记录和文件吗？此操作无法撤销。')) return;
+  try {
+    const response = await fetch('/api/brake-ledger/clear', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '清除失败');
+    closeModals();
+    await loadCategories();
+    renderCategoryTabs();
+    bindCategoryTabClicks();
+    populateDropdowns();
+    await loadEvents();
+    loadStats().catch(() => {});
+    toast(`已清除 ${data.deleted} 个文件，可重新导入`);
+  } catch (error) { toast(error.message); }
+};
+
 document.querySelectorAll('[data-close]').forEach(btn => btn.onclick = closeModals);
 document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', e => { if (e.target === modal) closeModals(); }));
 

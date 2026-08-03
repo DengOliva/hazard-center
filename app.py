@@ -3099,12 +3099,20 @@ def team_auth_import():
         file.save(str(filepath))
         counts = _parse_auth_counts(filepath)
 
-        # Build auth type list (sorted by total count desc)
+        # Build auth type list: priority items first, then sorted by total count desc
+        PRIORITY_AUTHS = ["司索", "动火作业监护", "有限空间作业", "倒车指挥", "有限空间作业监护", "手拉葫芦", "起重作业监护", "高处作业监护"]
         auth_totals = {}
         for team, auths in counts.items():
             for auth, cnt in auths.items():
                 auth_totals[auth] = auth_totals.get(auth, 0) + cnt
-        auth_columns = sorted(auth_totals.keys(), key=lambda a: -auth_totals[a])
+
+        def _auth_sort_key(auth):
+            try:
+                return (0, PRIORITY_AUTHS.index(auth))
+            except ValueError:
+                return (1, -auth_totals.get(auth, 0))
+
+        auth_columns = sorted(auth_totals.keys(), key=_auth_sort_key)
 
         # Determine thresholds
         def is_over(auth_name, team_name, count):

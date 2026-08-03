@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>班组授权人数</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#f3f6f3;--card:#fff;--text:#24332e;--muted:#7a8e84;--teal:#267b67;--red:#b83b32;--green:#2d8a56;--border:#e0eae5;--mint:#eef6f2;--radius:10px;font-size:15px}
+    body{font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:var(--card);border-bottom:1px solid var(--border)}
+    .topbar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+    .topbar .brand span{width:36px;height:36px;background:var(--teal);color:#fff;display:grid;place-items:center;border-radius:8px;font-weight:700;font-size:16px}
+    .topbar .brand b{font-size:16px;display:block}.topbar .brand small{font-size:10px;color:var(--muted);letter-spacing:.5px}
+    .topbar .back{color:var(--muted);text-decoration:none;font-size:13px}
+    main{max-width:100%;padding:20px 24px}
+    .hero{margin-bottom:20px}.hero h1{font-size:22px}.hero p{color:var(--muted);font-size:14px;margin-top:4px}
+    .upload-panel{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
+    .upload-panel .file-box{display:flex;align-items:center;gap:10px;padding:10px 16px;border:1px dashed var(--border);border-radius:8px;cursor:pointer;flex:1;min-width:280px}
+    .upload-panel .file-box input[type=file]{display:none}
+    .upload-panel .file-box .file-icon{width:32px;height:32px;background:var(--mint);border-radius:6px;display:grid;place-items:center;font-size:14px}
+    .upload-panel .file-box em{font-size:11px;color:var(--muted)}
+    .upload-panel button{padding:10px 24px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;white-space:nowrap}
+    .upload-panel button:disabled{opacity:.5;cursor:default}
+    .rule{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--mint);border-radius:7px;font-size:12px;margin-bottom:16px}
+    .rule span{background:var(--teal);color:#fff;padding:2px 8px;border-radius:4px;font-size:11px}
+    .legend{display:flex;gap:16px;align-items:center;font-size:13px;margin-bottom:12px}
+    .legend .dot{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:middle}
+    .table-container{overflow:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);max-height:75vh}
+    table{border-collapse:collapse;font-size:13px}
+    thead th{position:sticky;top:0;z-index:2;background:var(--teal);color:#fff;font-weight:600;padding:8px 10px;text-align:center;white-space:nowrap;min-width:56px;border-right:1px solid rgba(255,255,255,.2)}
+    thead th:first-child{position:sticky;left:0;z-index:3;min-width:140px;text-align:left}
+    tbody td{padding:6px 10px;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--mint);font-weight:600;font-variant-numeric:tabular-nums}
+    tbody td:first-child{position:sticky;left:0;z-index:1;background:var(--card);text-align:left;font-weight:600;white-space:nowrap}
+    tbody tr:nth-child(even) td:first-child{background:#f9fbf9}
+    tbody tr:hover td:first-child{background:var(--mint)}
+    tbody tr:hover td{background:var(--mint)}
+    td.red{background:#ffe8e6!important;color:var(--red)}td.red:hover{background:#ffd6d3!important}
+    td.green{background:#e3f5ea!important;color:var(--green)}td.green:hover{background:#d0efdc!important}
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#24332e;color:#fff;padding:10px 24px;border-radius:20px;font-size:14px;pointer-events:none;opacity:0;transition:opacity .3s;z-index:100}
+    #toast.show{opacity:1}
+    .file-status{font-size:13px;color:var(--muted)}
+    .file-status.ready{color:var(--teal);font-weight:600}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="/team-auth" class="brand"><span>授</span><div><b>班组授权人数</b><small>TEAM AUTHORIZATION</small></div></a>
+    <a href="/" class="back">返回数据中心</a>
+  </header>
+
+  <main>
+    <section class="hero"><h1>班组授权人数看板</h1><p>按班组统计各项授权的持证人数。默认 >15 人标红；铆工班、钢筋班的司索/角磨机/千斤顶 >25 人标红。</p></section>
+
+    <label class="upload-panel" id="uploadPanel">
+      <div class="file-box" id="fileBox">
+        <input type="file" id="authFile" accept=".xlsx">
+        <span class="file-icon">授</span>
+        <div><b>授权列表文件</b><p class="file-status" id="fileText">选择"授权列表文件_xxxxx.xlsx"</p></div>
+        <em>拖入或点击</em>
+      </div>
+      <button id="importBtn">导入统计</button>
+    </label>
+
+    <div id="results" style="display:none">
+      <div class="rule"><span>说明</span><b id="sourceInfo"></b></div>
+      <div class="legend"><span>颜色规则：</span><span class="dot" style="background:var(--green)"></span>未超标 <span class="dot" style="background:var(--red)"></span>已超标<span style="color:var(--muted);margin-left:12px">铆工/钢筋班的司索、角磨机、千斤顶 >25 标红，其余 >15 标红</span></div>
+      <div class="table-container">
+        <table>
+          <thead><tr><th id="teamHeader">班组</th></tr></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="emptyState" style="text-align:center;padding:60px 20px;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:12px">表</div>
+      <h2>尚未导入授权列表</h2><p>选择"授权列表文件_xxxxx.xlsx"导入统计。</p>
+    </div>
+  </main>
+
+  <div id="toast"></div>
+  <script src="/team-auth.js"></script>
+</body>
+</html>

@@ -297,6 +297,12 @@ def init_db():
             sort_order INTEGER NOT NULL DEFAULT 0,
             created_at TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS team_auth_dashboard (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            auth_filename TEXT NOT NULL DEFAULT '',
+            result_json TEXT NOT NULL DEFAULT '{}',
+            imported_at TEXT NOT NULL
+        );
         CREATE TABLE IF NOT EXISTS feedback_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
@@ -3042,6 +3048,113 @@ def brake_ledger_export():
         output, as_attachment=True, download_name=filename,
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
+
+
+# ── Team Authorization Dashboard ──────────────────────────────────────
+
+AUTH_FILE_GLOB = "授权列表文件_*.xlsx"
+
+
+def _parse_auth_counts(filepath):
+    """Parse an authorization Excel file, return {team: {auth_name: count}}."""
+    wb = load_workbook(filepath, data_only=True)
+    ws = wb.active
+    rows = list(ws.iter_rows(min_row=2, values_only=True))
+    wb.close()
+
+    # team → auth_name → set of person_ids (for dedup)
+    team_auth_persons = {}
+    for row in rows:
+        name_raw = str(row[0]).strip() if row[0] else ""
+        # Extract person ID from "[C517863]裴悦情" format
+        pid = name_raw
+        team = str(row[5]).strip() if row[5] else ""  # col 6: 班组
+        auth = str(row[11]).strip() if row[11] else ""  # col 12: 授权名称
+        if not team or not auth:
+            continue
+        team_auth_persons.setdefault(team, {}).setdefault(auth, set()).add(pid)
+
+    result = {}
+    for team, auth_map in team_auth_persons.items():
+        result[team] = {auth: len(persons) for auth, persons in auth_map.items()}
+    return result
+
+
+@app.get("/team-auth")
+def team_auth_page():
+    return send_from_directory("public", "team-auth.html")
+
+
+@app.post("/api/team-auth/import")
+def team_auth_import():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    file = request.files.get("file")
+    if not file:
+        return jsonify(error="请选择授权列表文件"), 400
+    if not file.filename:
+        return jsonify(error="文件名无效"), 400
+    try:
+        filepath = ROOT / file.filename
+        file.save(str(filepath))
+        counts = _parse_auth_counts(filepath)
+
+        # Build auth type list (sorted by total count desc)
+        auth_totals = {}
+        for team, auths in counts.items():
+            for auth, cnt in auths.items():
+                auth_totals[auth] = auth_totals.get(auth, 0) + cnt
+        auth_columns = sorted(auth_totals.keys(), key=lambda a: -auth_totals[a])
+
+        # Determine thresholds
+        def is_over(auth_name, team_name, count):
+            is_mao = "铆工" in team_name
+            is_gang = "钢筋" in team_name
+            is_special_auth = any(k in auth_name for k in ["司索", "角磨机", "千斤顶"])
+            if (is_mao or is_gang) and is_special_auth:
+                return count > 25
+            return count > 15
+
+        # Build matrix
+        teams_sorted = sorted(counts.keys())
+        matrix = []
+        for team in teams_sorted:
+            row_data = []
+            for auth in auth_columns:
+                cnt = counts[team].get(auth, 0)
+                over = is_over(auth, team, cnt)
+                row_data.append({"auth": auth, "count": cnt, "over": over, "team": team})
+            matrix.append({"team": team, "cells": row_data})
+
+        result = {
+            "auth_columns": auth_columns,
+            "matrix": matrix,
+            "auth_totals": auth_totals,
+        }
+
+        now = datetime.now().isoformat(timespec="seconds")
+        with db() as conn:
+            conn.execute("DELETE FROM team_auth_dashboard")
+            conn.execute(
+                "INSERT INTO team_auth_dashboard (id, auth_filename, result_json, imported_at) VALUES (1,?,?,?)",
+                (file.filename, json.dumps(result, ensure_ascii=False), now),
+            )
+
+        return jsonify(ok=True, filename=file.filename, **result)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
+@app.get("/api/team-auth/current")
+def team_auth_current():
+    with db() as conn:
+        row = conn.execute("SELECT auth_filename, result_json, imported_at FROM team_auth_dashboard WHERE id=1").fetchone()
+    if not row or not row["result_json"]:
+        return jsonify(error="尚未导入授权列表数据"), 404
+    data = json.loads(row["result_json"])
+    data["auth_filename"] = row["auth_filename"]
+    data["imported_at"] = row["imported_at"]
+    return jsonify(data)
 
 
 # ── Experience Feedback Ledger ────────────────────────────────────────

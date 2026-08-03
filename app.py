@@ -2551,11 +2551,6 @@ def brake_ledger_import():
                 continue
 
             if file_type == "deviation":
-                # Filter: 责任单位 must be 中建二局
-                responsible = val(row, "责任单位")
-                if "中建二局" not in responsible:
-                    skipped_filter += 1
-                    continue
                 status = val(row, "状态")
                 if status == "作废":
                     skipped_filter += 1
@@ -2575,8 +2570,8 @@ def brake_ledger_import():
                 responsible_person = val(row, "责任人")
                 responsible_dept = val(row, "责任部门")
                 area = val(row, "发生地点")
-                subcontractor = val(row, "责任单位")
-                team = val(row, "责任班组")
+                subcontractor = ""
+                team = ""
 
             elif file_type == "interview":
                 # Filter: 被约谈方 contains 中建二局

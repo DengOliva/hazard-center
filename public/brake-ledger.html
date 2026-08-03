@@ -79,7 +79,7 @@
       <button type="button" class="close" data-close>×</button>
       <p class="eyebrow">IMPORT FROM EXTERNAL</p><h2>导入外部台账</h2>
       <p>选择外部系统导出的 Excel 文件，系统自动识别类型并导入。</p>
-      <p style="font-size:11px;color:var(--muted);margin-top:-14px">过滤作废记录。偏差记录按处理措施自动拆分为行为偏差和红黄牌。</p>
+      <p style="font-size:11px;color:var(--muted);margin-top:-14px">只导入责任单位为中建二局、状态非作废的记录。偏差记录按处理措施拆分为行为偏差和红黄牌，责任人和班组自动匹配分包信息。</p>
       <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;cursor:pointer"><input type="checkbox" id="importOverwrite" style="width:auto;accent-color:var(--red)"><span>覆盖已存在的记录（以本次导入的分类、日期等字段为准）</span></label>
       <label class="dropzone" id="importDropzone" style="min-height:120px">
         <input id="importFileInput" type="file" accept=".xlsx,.xls">
@@ -88,6 +88,11 @@
         <small>支持 .xlsx / .xls 格式</small>
       </label>
       <div id="importResult" style="display:none;padding:14px;border-radius:9px;background:var(--mint);margin-top:14px;font-size:13px;line-height:1.8"></div>
+      <div style="margin-top:14px;padding:12px;background:var(--mint);border-radius:9px;font-size:13px">
+        <b>分包/班组匹配表</b>
+        <p style="color:var(--muted);margin:4px 0 8px">导入偏差记录时按责任人和责任班组自动匹配分包名称。</p>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="file" id="matchingTableFile" accept=".xlsx" style="display:none"><button id="uploadMatchingBtn" style="background:var(--teal);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer">上传匹配台账</button><span id="matchingStatus" style="color:var(--muted)"></span></label>
+      </div>
       <button id="clearLedgerBtn" style="margin-top:12px;background:var(--red);color:#fff;border:none;padding:8px 18px;border-radius:7px;font-size:13px;cursor:pointer;width:100%">清除全部记录并重新导入</button>
     </div>
   </div>

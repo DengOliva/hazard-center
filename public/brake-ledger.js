@@ -582,6 +582,27 @@ async function clearAllLedger() {
 $('clearLedgerBtn').onclick = clearAllLedger;
 $('clearLedgerTopBtn').onclick = clearAllLedger;
 
+$('uploadMatchingBtn').onclick = () => $('matchingTableFile').click();
+$('matchingTableFile').onchange = async () => {
+  const file = $('matchingTableFile').files[0];
+  if (!file) return;
+  $('matchingStatus').textContent = '正在上传…';
+  try {
+    const body = new FormData();
+    body.append('password', adminPassword);
+    body.append('file', file);
+    const response = await fetch('/api/brake-ledger/matching-table', { method: 'POST', body });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '上传失败');
+    $('matchingStatus').textContent = `已更新，${data.people_count} 人`;
+    toast(`匹配台账已更新（${data.people_count} 人）`);
+  } catch (error) {
+    $('matchingStatus').textContent = '上传失败';
+    toast(error.message);
+  }
+  $('matchingTableFile').value = '';
+};
+
 document.querySelectorAll('[data-close]').forEach(btn => btn.onclick = closeModals);
 document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', e => { if (e.target === modal) closeModals(); }));
 

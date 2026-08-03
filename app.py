@@ -2472,6 +2472,101 @@ def brake_ledger_clear():
     return jsonify(ok=True, deleted=len(files))
 
 
+# ── Matching table for subcontractor lookup ──────────────────────────
+
+_matching_cache = None  # {name: [{sub, team, group, team_code}], team_code: [{sub, ...}]}
+
+
+MATCHING_TABLE_PATH = ROOT / "匹配台账.xlsx"
+
+
+def _load_matching_table():
+    """Parse 匹配台账.xlsx and return a lookup dict."""
+    global _matching_cache
+    if not MATCHING_TABLE_PATH.is_file():
+        return None
+    try:
+        wb = load_workbook(MATCHING_TABLE_PATH, data_only=True)
+        ws = wb.active
+        rows = list(ws.iter_rows(min_row=4, values_only=True))
+        wb.close()
+    except Exception:
+        return _matching_cache  # return stale cache if any
+
+    by_name = {}
+    by_team = {}
+    for row in rows:
+        name = str(row[7]).strip() if row[7] else ""  # col 8 (0-indexed: 7)
+        if not name:
+            continue
+        group_code = str(row[4]).strip() if row[4] else ""  # col 5
+        team_code = str(row[5]).strip() if row[5] else ""  # col 6
+        sub = str(row[36]).strip() if row[36] else ""  # col 37: 分包名称（大班组名称）
+        entry = {"sub": sub, "group": group_code, "team_code": team_code}
+
+        by_name.setdefault(name, []).append(entry)
+        if team_code:
+            by_team.setdefault(team_code, []).append(entry)
+
+    _matching_cache = {"by_name": by_name, "by_team": by_team}
+    return _matching_cache
+
+
+def _get_matching_table():
+    global _matching_cache
+    if _matching_cache is None:
+        _load_matching_table()
+    return _matching_cache
+
+
+def match_subcontractor(person_name, team_name):
+    """Look up subcontractor and team from matching table.
+    Returns (subcontractor_str, team_str) — comma-separated if multiple matches.
+    """
+    table = _get_matching_table()
+    if not table:
+        return "", ""
+    subs = set()
+    teams = set()
+
+    # Match by person name
+    if person_name:
+        entries = table.get("by_name", {}).get(person_name, [])
+        for e in entries:
+            if e["sub"]:
+                subs.add(e["sub"])
+            if e["team_code"]:
+                teams.add(e["team_code"])
+
+    # Match by team name (search in team_code and sub)
+    if team_name:
+        for e in table.get("by_team", {}).get(team_name, []):
+            if e["sub"]:
+                subs.add(e["sub"])
+            if e["team_code"]:
+                teams.add(e["team_code"])
+
+    return ", ".join(sorted(subs)), ", ".join(sorted(teams))
+
+
+@app.post("/api/brake-ledger/matching-table")
+def brake_ledger_matching_table():
+    """Upload/update the matching reference table."""
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    file = request.files.get("file")
+    if not file:
+        return jsonify(error="请选择匹配台账 Excel 文件"), 400
+    try:
+        file.save(str(MATCHING_TABLE_PATH))
+        _matching_cache = None
+        table = _load_matching_table()
+        count = len(table.get("by_name", {})) if table else 0
+        return jsonify(ok=True, people_count=count)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
 @app.post("/api/brake-ledger/import")
 def brake_ledger_import():
     if not ledger_password_ok():
@@ -2545,12 +2640,20 @@ def brake_ledger_import():
     skipped_filter = 0
     file_attached = False
 
+    # Pre-load matching table for deviation imports
+    _get_matching_table()
+
     with db() as conn:
         for row in rows[1:]:
             if not row or all(c is None for c in row):
                 continue
 
             if file_type == "deviation":
+                # Filter: 责任单位 must be 中建二局
+                responsible = val(row, "责任单位")
+                if "中建二局" not in responsible:
+                    skipped_filter += 1
+                    continue
                 status = val(row, "状态")
                 if status == "作废":
                     skipped_filter += 1
@@ -2570,8 +2673,11 @@ def brake_ledger_import():
                 responsible_person = val(row, "责任人")
                 responsible_dept = val(row, "责任部门")
                 area = val(row, "发生地点")
-                subcontractor = ""
-                team = ""
+                team = val(row, "责任班组")
+                # Look up subcontractor and team from matching table
+                subcontractor, matched_team = match_subcontractor(responsible_person, team)
+                if matched_team:
+                    team = matched_team
 
             elif file_type == "interview":
                 # Filter: 被约谈方 contains 中建二局

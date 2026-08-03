@@ -625,6 +625,114 @@ def add_annual_retraining(events):
     return events
 
 
+# ── August Training Schedule ──────────────────────────────────────────
+
+AUGUST_SCHEDULE_FILE = DATA_DIR / "august_schedule.json"
+
+
+def _generate_august_schedule():
+    """Generate August 2026 schedule: Mon/Wed/Fri=公司级, Tue/Thu/Sat=项目级, Sun off."""
+    import calendar as _cal
+    days = []
+    for d in range(1, 32):
+        wd = _cal.weekday(2026, 8, d)  # 0=Mon..6=Sun
+        if wd == 6:  # Sunday
+            continue
+        level = "公司级" if wd in (0, 2, 4) else "项目级"
+        weekdays_cn = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        days.append({
+            "date": f"2026-08-{d:02d}",
+            "weekday": weekdays_cn[wd],
+            "level": level,
+            "title": "",
+            "time": "19:00-20:30",
+            "location": "",
+            "instructor": "",
+            "note": "",
+        })
+    return {"year": 2026, "month": 8, "days": days, "week_overrides": {}}
+
+
+def _load_august_schedule():
+    if AUGUST_SCHEDULE_FILE.exists():
+        try:
+            return json.loads(AUGUST_SCHEDULE_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    data = _generate_august_schedule()
+    _save_august_schedule(data)
+    return data
+
+
+def _save_august_schedule(data):
+    AUGUST_SCHEDULE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    AUGUST_SCHEDULE_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+@app.get("/api/training/august-schedule")
+def august_schedule_get():
+    return jsonify(_load_august_schedule())
+
+
+@app.post("/api/training/august-schedule/update-day")
+def august_schedule_update_day():
+    if not training_password_ok():
+        return jsonify(error="编辑密码错误"), 403
+    body = request.get_json(force=True) or {}
+    date_str = str(body.get("date") or "").strip()
+    if not date_str:
+        return jsonify(error="缺少日期"), 400
+    data = _load_august_schedule()
+    for d in data["days"]:
+        if d["date"] == date_str:
+            for k in ("title", "time", "location", "instructor", "note", "level"):
+                if k in body:
+                    d[k] = str(body[k] or "").strip()
+            _save_august_schedule(data)
+            return jsonify(ok=True, day=d)
+    return jsonify(error="日期未找到"), 404
+
+
+@app.post("/api/training/august-schedule/override-week")
+def august_schedule_override_week():
+    """Override an entire week: {week_start: '2026-08-03', days: [{weekday,level,title,...}]}"""
+    if not training_password_ok():
+        return jsonify(error="编辑密码错误"), 403
+    body = request.get_json(force=True) or {}
+    week_start = str(body.get("week_start") or "").strip()
+    custom_days = body.get("days") or []
+    if not week_start or not custom_days:
+        return jsonify(error="缺少 week_start 或 days"), 400
+    data = _load_august_schedule()
+    overrides = data.setdefault("week_overrides", {})
+    overrides[week_start] = custom_days
+    _save_august_schedule(data)
+    return jsonify(ok=True)
+
+
+@app.post("/api/training/august-schedule/reset-week")
+def august_schedule_reset_week():
+    """Reset a week back to the default pattern."""
+    if not training_password_ok():
+        return jsonify(error="编辑密码错误"), 403
+    body = request.get_json(force=True) or {}
+    week_start = str(body.get("week_start") or "").strip()
+    if not week_start:
+        return jsonify(error="缺少 week_start"), 400
+    data = _load_august_schedule()
+    data.get("week_overrides", {}).pop(week_start, None)
+    _save_august_schedule(data)
+    return jsonify(ok=True)
+
+
+def training_password_ok():
+    body = request.get_json(force=True) or {}
+    pwd = str(body.get("password") or request.args.get("password", ""))
+    return pwd == TRAINING_EDIT_PASSWORD
+
+
+# ── Training Schedule (legacy Excel-based) ────────────────────────────
+
 def read_training_schedule():
     events = []
     if TRAINING_SCHEDULE_FILE.exists():

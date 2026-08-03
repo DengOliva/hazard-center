@@ -2507,7 +2507,10 @@ def brake_ledger_import():
         return jsonify(error="无法识别台账类型，请确认文件内容"), 400
 
     def col(name, default=""):
-        """Find column index by header name (partial match)."""
+        """Find column index by header name (exact match first, then partial match)."""
+        for i, h in enumerate(headers):
+            if h == name:
+                return i
         for i, h in enumerate(headers):
             if name in h:
                 return i

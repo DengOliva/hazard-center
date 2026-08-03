@@ -131,4 +131,16 @@ async function loadSaved() {
   } catch (e) { /* saved data not available */ }
 }
 
+// ── Export over-threshold ─────────────────────────────────────────────
+
+$('exportOverBtn').onclick = () => {
+  const link = document.createElement('a');
+  link.href = '/api/team-auth/export-over';
+  link.download = '';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  toast('正在生成超标台账…');
+};
+
 loadSaved();

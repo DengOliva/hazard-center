@@ -3165,6 +3165,81 @@ def team_auth_current():
     return jsonify(data)
 
 
+@app.get("/api/team-auth/export-over")
+def team_auth_export_over():
+    with db() as conn:
+        row = conn.execute("SELECT auth_filename, result_json FROM team_auth_dashboard WHERE id=1").fetchone()
+    if not row or not row["result_json"]:
+        return jsonify(error="暂无数据"), 404
+    data = json.loads(row["result_json"])
+    matrix = data.get("matrix", [])
+
+    def is_over(auth_name, team_name, count):
+        is_mao = "铆工" in team_name
+        is_gang = "钢筋" in team_name
+        is_special = any(k in auth_name for k in ["司索", "角磨机", "千斤顶"])
+        if (is_mao or is_gang) and is_special:
+            return count > 25
+        return count > 15
+
+    over_rows = []
+    for team_row in matrix:
+        for cell in team_row["cells"]:
+            if cell["count"] > 0 and cell["over"]:
+                threshold = 25 if (("铆工" in cell["team"] or "钢筋" in cell["team"]) and any(k in cell["auth"] for k in ["司索", "角磨机", "千斤顶"])) else 15
+                over_rows.append({
+                    "team": cell["team"],
+                    "auth": cell["auth"],
+                    "count": cell["count"],
+                    "threshold": threshold,
+                    "exceed": cell["count"] - threshold,
+                })
+
+    over_rows.sort(key=lambda r: (-r["count"], r["team"], r["auth"]))
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "超标条目"
+    ws.sheet_view.showGridLines = False
+
+    hdr_font = Font(name="微软雅黑", size=10, bold=True, color="FFFFFF")
+    hdr_fill = PatternFill("solid", fgColor="B83B32")
+    cell_font = Font(name="微软雅黑", size=10, color="24332E")
+    row_fill = PatternFill("solid", fgColor="FFF0EF")
+    thin = Side(style="thin", color="E8D0CE")
+    center = Alignment(horizontal="center", vertical="center")
+
+    headers = ["班组", "授权名称", "持证人数", "阈值", "超出人数"]
+    for ci, h in enumerate(headers, 1):
+        c = ws.cell(row=1, column=ci, value=h)
+        c.font = hdr_font; c.fill = hdr_fill; c.alignment = center
+    ws.row_dimensions[1].height = 26
+
+    for ri, item in enumerate(over_rows):
+        rn = ri + 2
+        vals = [item["team"], item["auth"], item["count"], item["threshold"], item["exceed"]]
+        for ci, v in enumerate(vals, 1):
+            c = ws.cell(row=rn, column=ci, value=v)
+            c.font = cell_font; c.alignment = center
+            c.border = Border(bottom=thin)
+            if ri % 2 == 0:
+                c.fill = row_fill
+        ws.row_dimensions[rn].height = 24
+
+    ws.column_dimensions["A"].width = 22
+    ws.column_dimensions["B"].width = 28
+    ws.column_dimensions["C"].width = 14
+    ws.column_dimensions["D"].width = 10
+    ws.column_dimensions["E"].width = 14
+    ws.freeze_panes = "A2"
+
+    buf = BytesIO()
+    wb.save(buf); buf.seek(0)
+    now = datetime.now().strftime("%Y%m%d")
+    return send_file(buf, as_attachment=True, download_name=f"班组授权超标条目_{now}.xlsx",
+                     mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+
 # ── Experience Feedback Ledger ────────────────────────────────────────
 
 def _feedback_file_dict(row):

@@ -159,6 +159,7 @@ async function enterAdmin(password) {
   $('adminBtn').textContent = '已进入管理模式';
   $('newEventBtn').classList.remove('hidden');
   $('importBtn').classList.remove('hidden');
+  $('clearLedgerTopBtn').classList.remove('hidden');
   renderCategoryTabs();
   bindCategoryTabClicks();
   closeModals();
@@ -557,7 +558,7 @@ $('statsRefreshBtn').onclick = () => loadStats().catch(() => {});
 $('statsDateFrom').addEventListener('change', () => loadStats().catch(() => {}));
 $('statsDateTo').addEventListener('change', () => loadStats().catch(() => {}));
 
-$('clearLedgerBtn').onclick = async () => {
+async function clearAllLedger() {
   if (!confirm('确定清除全部外部刹车预警记录和文件吗？此操作无法撤销。')) return;
   try {
     const response = await fetch('/api/brake-ledger/clear', {
@@ -576,7 +577,10 @@ $('clearLedgerBtn').onclick = async () => {
     loadStats().catch(() => {});
     toast(`已清除 ${data.deleted} 个文件，可重新导入`);
   } catch (error) { toast(error.message); }
-};
+}
+
+$('clearLedgerBtn').onclick = clearAllLedger;
+$('clearLedgerTopBtn').onclick = clearAllLedger;
 
 document.querySelectorAll('[data-close]').forEach(btn => btn.onclick = closeModals);
 document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', e => { if (e.target === modal) closeModals(); }));

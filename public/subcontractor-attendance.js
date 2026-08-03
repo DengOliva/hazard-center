@@ -78,23 +78,10 @@ function renderResults() {
   $('kpiFull').textContent = data.full_attendance_count;
   $('kpiZero').textContent = data.zero_attendance_count;
   $('tableSummary').textContent = `按签到天数从少到多排列 · 共读取 ${data.attendance_record_count} 条打卡记录`;
-  renderDaily();
   renderPeople(data.people);
-  const attention = data.people.filter(item => item.status !== '全勤').slice(0, 8);
-  $('attentionList').innerHTML = attention.length ? attention.map(item =>
-    `<div class="attention-item"><b>${esc(item.name)}</b><span>${item.status === '未签到' ? '0 天签到' : `${item.signed_days}/${data.period_days} 天`}</span></div>`
-  ).join('') : '<div class="attention-ok">全部人员均已全勤</div>';
   $('unmatchedPanel').classList.toggle('hidden', !data.unmatched_names.length);
   $('unmatchedNames').innerHTML = data.unmatched_names.map(name => `<span>${esc(name)}</span>`).join('');
   $('results').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function renderDaily() {
-  const data = resultData;
-  $('dailyChart').innerHTML = data.daily.map(day => {
-    const height = Math.max(2, Math.round(day.rate * 100));
-    return `<div class="day-bar"><div class="bar-track" title="${day.signed_count}/${data.roster_count} 人"><div class="bar-fill" style="height:${height}%"></div></div><b>${day.signed_count}人</b><span>${day.date.slice(5)}</span></div>`;
-  }).join('');
 }
 
 function renderPeople(items) {

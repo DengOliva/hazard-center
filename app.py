@@ -2523,7 +2523,9 @@ def brake_ledger_import():
             return str(v).strip() if v is not None else default
         return default
 
+    overwrite = request.form.get("overwrite", "").strip().lower() == "true"
     imported = 0
+    overwritten = 0
     skipped_existing = 0
     skipped_filter = 0
     file_attached = False
@@ -2693,7 +2695,19 @@ def brake_ledger_import():
 
             if existing:
                 event_id = existing["id"]
-                skipped_existing += 1
+                if overwrite:
+                    conn.execute(
+                        """UPDATE brake_ledger_events
+                           SET name=?, record_date=?, category=?, description=?, issue_dept=?,
+                               responsible_dept=?, responsible_person=?, area=?, subcontractor=?,
+                               team=?, status=?, created_at=?
+                           WHERE id=?""",
+                        (name, date_str, category, description, issue_dept, responsible_dept,
+                         responsible_person, area, subcontractor, team, status, now, event_id),
+                    )
+                    overwritten += 1
+                else:
+                    skipped_existing += 1
                 # Attach the source xlsx file to the existing event
                 if not file_attached:
                     try:
@@ -2755,10 +2769,11 @@ def brake_ledger_import():
     return jsonify(
         ok=True,
         imported=imported,
+        overwritten=overwritten,
         skipped_existing=skipped_existing,
         skipped_filter=skipped_filter,
         file_attached=file_attached,
-        category=category if imported else "",
+        category=category if (imported or overwritten) else "",
     )
 
 

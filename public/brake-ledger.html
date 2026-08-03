@@ -79,6 +79,7 @@
       <p class="eyebrow">IMPORT FROM EXTERNAL</p><h2>导入外部台账</h2>
       <p>选择外部系统导出的 Excel 文件，系统自动识别类型并导入。</p>
       <p style="font-size:11px;color:var(--muted);margin-top:-14px">仅导入责任单位为中建二局、状态非作废的记录。偏差记录自动拆分为行为偏差和红黄牌。</p>
+      <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;cursor:pointer"><input type="checkbox" id="importOverwrite" style="width:auto;accent-color:var(--red)"><span>覆盖已存在的记录（以本次导入的分类、日期等字段为准）</span></label>
       <label class="dropzone" id="importDropzone" style="min-height:120px">
         <input id="importFileInput" type="file" accept=".xlsx,.xls">
         <span class="upload-icon">⇧</span>

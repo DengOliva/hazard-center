@@ -17,7 +17,6 @@
       </div>
       <nav class="training-tabs">
         <button class="tab active" data-tab="schedule">培训安排</button>
-        <button class="tab" data-tab="august">八月排班</button>
         <button class="tab" data-tab="materials">培训资料</button>
       </nav>
     </header>
@@ -38,15 +37,6 @@
       </section>
 
       <section id="trainingList" class="training-list"></section>
-    </div>
-
-    <div id="tabAugust" class="tab-panel">
-      <section class="filters panel">
-        <button class="primary" onclick="augustEditPassword()" id="augustUnlockBtn">解锁编辑</button>
-        <button onclick="augustReset()">刷新</button>
-        <span id="augustStatus" style="font-size:13px;color:var(--muted);margin-left:8px"></span>
-      </section>
-      <div id="augustGrid" class="august-grid"></div>
     </div>
 
     <div id="tabMaterials" class="tab-panel">
@@ -83,34 +73,6 @@
         <button class="danger" id="editResetBtn">恢复默认</button>
         <button onclick="closeEditModal()">取消</button>
         <button class="primary" onclick="saveEdit()">保存</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="augustEditModal">
-    <div class="modal-box" style="max-width:440px">
-      <h3 id="augustEditTitle">编辑培训日</h3>
-      <label><span>培训级别</span><select id="augEditLevel"><option value="公司级">公司级</option><option value="项目级">项目级</option></select></label>
-      <label><span>培训标题</span><input id="augEditTitle2" placeholder="例如：高处作业安全培训"></label>
-      <label><span>时间</span><input id="augEditTime" placeholder="19:00-20:30"></label>
-      <label><span>地点</span><input id="augEditLocation" placeholder="例如：项目部会议室"></label>
-      <label><span>讲师</span><input id="augEditInstructor" placeholder="讲师姓名"></label>
-      <label><span>备注</span><input id="augEditNote" placeholder="备注"></label>
-      <div class="btn-row">
-        <button class="btn-cancel" onclick="closeAugustEdit()">取消</button>
-        <button class="btn-save" id="augEditSaveBtn">保存</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="augustWeekModal">
-    <div class="modal-box" style="max-width:520px">
-      <h3 id="augustWeekTitle">自定义整周排班</h3>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">修改下面每天的级别和标题，保存后覆盖本周默认安排。</p>
-      <div id="augustWeekFields"></div>
-      <div class="btn-row" style="margin-top:12px">
-        <button class="btn-cancel" onclick="closeAugustWeek()">取消</button>
-        <button class="btn-save" id="augWeekSaveBtn">保存本周</button>
       </div>
     </div>
   </div>

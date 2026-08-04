@@ -599,6 +599,22 @@ def apply_training_overrides(events):
     return events
 
 
+def add_august_training(events):
+    """Generate August 2026 schedule: Mon/Wed/Fri=公司级, Tue/Thu/Sat=项目级, Sun off."""
+    import calendar
+    weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+    for d in range(1, 32):
+        wd = calendar.weekday(2026, 8, d)
+        if wd == 6:
+            continue
+        level = "公司级" if wd in (0, 2, 4) else "项目级"
+        date_str = f"2026-08-{d:02d}"
+        events.append(training_event(
+            f"aug:{date_str}:night", date_str, weekday_names[wd], "19:00-20:30",
+            "晚上", f"八月{level}培训", [level, "培训"], 90,
+        ))
+
+
 def add_annual_retraining(events):
     plans = {
         "2026-07-04": "7月年度复训",
@@ -774,6 +790,7 @@ def read_training_schedule():
                 ))
         workbook.close()
     add_annual_retraining(events)
+    add_august_training(events)
     apply_training_overrides(events)
     weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
     with db() as conn:

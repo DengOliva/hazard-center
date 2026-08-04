@@ -422,36 +422,3 @@
   }
 }
 
-/* ── August Schedule Grid ──────────────────────────────────────────── */
-
-.august-grid { display:flex; flex-direction:column; gap:16px; }
-.august-week { background:var(--card-bg,#fff); border-radius:10px; border:1px solid var(--border,#e0eae5); overflow:hidden; }
-.august-week-head { display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:var(--mint,#eef6f2); font-size:13px; font-weight:600; }
-.august-week-head button { padding:4px 12px; border-radius:5px; border:1px solid var(--border,#e0eae5); background:#fff; font-size:12px; cursor:pointer; }
-.august-week-head button:hover { background:var(--teal,#267b67); color:#fff; border-color:var(--teal,#267b67); }
-.august-days { display:grid; grid-template-columns:repeat(6,1fr); }
-.august-day { padding:10px; border-right:1px solid var(--mint,#eef6f2); border-bottom:1px solid var(--mint,#eef6f2); min-height:110px; cursor:pointer; transition:background .15s; }
-.august-day:hover { background:#f9fbf9; }
-.august-day:last-child { border-right:none; }
-.august-day .day-label { font-size:11px; color:var(--muted,#7a8e84); margin-bottom:4px; }
-.august-day .day-label b { font-size:14px; color:var(--text,#24332e); margin-right:4px; }
-.august-day.company { border-top:3px solid var(--teal,#267b67); }
-.august-day.project { border-top:3px solid #d4a017; }
-.august-day.override { box-shadow:inset 0 0 0 2px var(--red,#b83b32); }
-.august-day .level-tag { display:inline-block; padding:1px 7px; border-radius:3px; font-size:11px; font-weight:600; margin-bottom:4px; }
-.august-day.company .level-tag { background:#d9f3ec; color:var(--teal,#267b67); }
-.august-day.project .level-tag { background:#fff8e6; color:#8b6914; }
-.august-day .title { font-size:13px; font-weight:600; margin-bottom:2px; }
-.august-day .meta { font-size:11px; color:var(--muted,#7a8e84); }
-.august-day.empty { background:var(--bg,#f3f6f3); opacity:.5; cursor:default; border-top:3px solid transparent; }
-
-/* ── August Edit Modal ─────────────────────────────────────────────── */
-
-#augustEditModal .dialog { max-width:440px; }
-#augustEditModal label { display:block; margin-bottom:10px; font-size:13px; }
-#augustEditModal label span { display:block; margin-bottom:3px; color:var(--muted,#7a8e84); font-size:12px; }
-#augustEditModal input,#augustEditModal select { width:100%; padding:8px 12px; border:1px solid var(--border,#e0eae5); border-radius:6px; font-size:14px; }
-#augustEditModal .btn-row { display:flex; gap:8px; margin-top:14px; }
-#augustEditModal .btn-row button { flex:1; padding:8px; border:none; border-radius:6px; font-size:13px; cursor:pointer; }
-#augustEditModal .btn-save { background:var(--teal,#267b67); color:#fff; }
-#augustEditModal .btn-cancel { background:var(--bg,#f3f6f3); color:var(--text,#24332e); }

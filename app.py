@@ -600,19 +600,55 @@ def apply_training_overrides(events):
 
 
 def add_august_training(events):
-    """Generate August 2026 schedule: Mon/Wed/Fri=公司级, Tue/Thu/Sat=项目级, Sun off."""
+    """Generate August 2026: Mon/Wed/Fri=公司级, Tue/Thu/Sat=项目级, Sun off.
+    Mirrors the July Excel structure with morning/afternoon sessions."""
     import calendar
     weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+
     for d in range(1, 32):
         wd = calendar.weekday(2026, 8, d)
         if wd == 6:
             continue
-        level = "公司级" if wd in (0, 2, 4) else "项目级"
         date_str = f"2026-08-{d:02d}"
-        events.append(training_event(
-            f"aug:{date_str}:night", date_str, weekday_names[wd], "19:00-20:30",
-            "晚上", f"八月{level}培训", [level, "培训"], 90,
-        ))
+        weekday = weekday_names[wd]
+        day_index = len([e for e in events if e["date"] == date_str])
+        is_saturday = (wd == 5)
+
+        if wd in (0, 2, 4):  # Mon/Wed/Fri — 公司级
+            events.append(training_event(
+                f"aug:{date_str}:morning1", date_str, weekday, "08:00-10:00",
+                "上午第一场", "公司级线下理论培训", order=10 + day_index,
+            ))
+            events.append(training_event(
+                f"aug:{date_str}:morning2", date_str, weekday, "10:00-11:30",
+                "上午第二场", "手拉葫芦、架子工", order=20 + day_index,
+            ))
+            events.append(training_event(
+                f"aug:{date_str}:afternoon", date_str, weekday, "14:00-17:30",
+                "下午", "司索、受限空间、监火监护、焊工、电工", order=30 + day_index,
+            ))
+        else:  # Tue/Thu/Sat — 项目级
+            if is_saturday:
+                m1 = "项目级线下理论培训、违章培训"
+                m2 = "项目级线下实操培训、违章培训"
+                aft = "起重指挥、倒车指挥、违章培训、起重司机、叉车司机、驾驶员、违章培训"
+            else:
+                m1 = "项目级线下理论培训"
+                m2 = "项目级线下实操培训"
+                aft = "起重指挥、倒车指挥、起重司机、叉车司机、驾驶员"
+
+            events.append(training_event(
+                f"aug:{date_str}:morning1", date_str, weekday, "08:00-10:00",
+                "上午第一场", m1, order=10 + day_index,
+            ))
+            events.append(training_event(
+                f"aug:{date_str}:morning2", date_str, weekday, "10:00-11:30",
+                "上午第二场", m2, order=20 + day_index,
+            ))
+            events.append(training_event(
+                f"aug:{date_str}:afternoon", date_str, weekday, "14:00-17:30",
+                "下午", aft, order=30 + day_index,
+            ))
 
 
 def add_annual_retraining(events):

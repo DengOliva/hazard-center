@@ -312,6 +312,8 @@ async function enterAdmin(password) {
   $('adminBtn').textContent = '已进入管理模式';
   $('newEventBtn').classList.remove('hidden');
   $('batchImportBtn').classList.remove('hidden');
+  $('fullExportBtn').classList.remove('hidden');
+  $('fullImportBtn').classList.remove('hidden');
   renderCategoryTabs();
   bindCategoryTabClicks();
   closeModals();
@@ -427,6 +429,79 @@ async function deleteFile(fileId, clickEvent) {
     toast(error.message);
   }
 }
+
+$('fullExportBtn').onclick = async () => {
+  $('fullExportBtn').disabled = true;
+  $('fullExportBtn').textContent = '正在打包…';
+  try {
+    const resp = await fetch('/api/training-ledger/full-export', {
+      method: 'POST',
+      body: new URLSearchParams({ password: adminPassword }),
+    });
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      throw new Error(data.error || `请求失败 (${resp.status})`);
+    }
+    const blob = await resp.blob();
+    const disposition = resp.headers.get('Content-Disposition') || '';
+    const match = disposition.match(/filename\*=UTF-8''(.+)/);
+    const filename = match ? decodeURIComponent(match[1]) : '培训台账_全量备份.zip';
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('全量导出完成');
+  } catch (error) {
+    toast(error.message);
+  }
+  $('fullExportBtn').disabled = false;
+  $('fullExportBtn').textContent = '全量导出';
+};
+
+$('fullImportBtn').onclick = () => {
+  $('fullImportFile').value = '';
+  $('fullImportResult').style.display = 'none';
+  $('fullImportConfirmBtn').disabled = true;
+  $('fullImportConfirmBtn').textContent = '开始导入';
+  openModal('fullImportModal');
+};
+
+$('fullImportFile').onchange = () => {
+  $('fullImportConfirmBtn').disabled = !$('fullImportFile').files.length;
+};
+
+$('fullImportConfirmBtn').onclick = async () => {
+  const file = $('fullImportFile').files[0];
+  if (!file) return;
+  $('fullImportConfirmBtn').disabled = true;
+  $('fullImportConfirmBtn').textContent = '正在导入…';
+  $('fullImportResult').style.display = 'none';
+  try {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('password', adminPassword);
+    const resp = await fetch('/api/training-ledger/full-import', { method: 'POST', body: form });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || `导入失败 (${resp.status})`);
+    $('fullImportResult').style.display = '';
+    $('fullImportResult').innerHTML =
+      `导入完成：新增 ${data.imported_events} 条培训记录，` +
+      `${data.imported_files} 个附件` +
+      (data.skipped_events ? `，跳过 ${data.skipped_events} 条已存在记录` : '') +
+      (data.imported_categories ? `，新增 ${data.imported_categories} 个分类` : '');
+    toast('全量导入完成');
+    await loadEvents();
+    await loadCategories();
+    setCategory(currentCategory);
+  } catch (error) {
+    toast(error.message);
+    $('fullImportResult').style.display = '';
+    $('fullImportResult').style.background = '#FFF0F0';
+    $('fullImportResult').innerHTML = error.message;
+  }
+  $('fullImportConfirmBtn').disabled = !!$('fullImportFile').files.length;
+  $('fullImportConfirmBtn').textContent = '开始导入';
+};
 
 $('batchImportBtn').onclick = () => {
   batchQueue = [];

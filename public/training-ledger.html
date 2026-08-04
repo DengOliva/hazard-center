@@ -15,6 +15,8 @@
     <div class="top-actions">
       <label class="search"><span>⌕</span><input id="keyword" placeholder="搜索名称、对象、分包、班组、讲师等"></label>
       <button class="ghost" id="generateLedgerBtn">生成台账</button>
+      <button class="ghost hidden" id="fullExportBtn">全量导出</button>
+      <button class="ghost hidden" id="fullImportBtn">全量导入</button>
       <button class="ghost" id="adminBtn">管理上传</button>
       <button class="ghost hidden" id="batchImportBtn">批量导入</button>
       <button class="primary hidden" id="newEventBtn">＋ 新增培训</button>
@@ -180,6 +182,20 @@
         <input id="newCategoryName" placeholder="输入新模块名称">
         <button class="primary" id="addCategoryBtn">新增</button>
       </div>
+    </div>
+  </div>
+
+  <div class="modal" id="fullImportModal" aria-hidden="true">
+    <div class="dialog" style="max-width:460px">
+      <button type="button" class="close" data-close>×</button>
+      <p class="eyebrow">FULL IMPORT</p><h2>全量导入培训台账</h2>
+      <p>选择之前导出的 .zip 备份文件，将恢复所有培训记录及附件。</p>
+      <label class="batch-picker" id="fullImportPicker" style="margin:16px 0">
+        <input id="fullImportFile" type="file" accept=".zip,application/zip">
+        <span>＋</span><b>选择备份文件</b><small>支持 全量导出 生成的 .zip 文件</small>
+      </label>
+      <div id="fullImportResult" style="display:none;background:#E9F5F0;border-radius:8px;padding:12px 16px;margin-bottom:12px;font-size:14px"></div>
+      <button class="primary wide" id="fullImportConfirmBtn" disabled>开始导入</button>
     </div>
   </div>
 

@@ -1,10 +1,12 @@
 import io
 import json
 import math
+import mimetypes
 import os
 import re
 import sqlite3
 import uuid
+import zipfile
 from io import BytesIO
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -2283,6 +2285,191 @@ def training_ledger_stats():
             params,
         ).fetchone()
     return jsonify(sessions=row["sessions"], participants=row["participants"])
+
+
+# ── Training Ledger Full Export / Import ──────────────────────────────
+
+@app.post("/api/training-ledger/full-export")
+def training_ledger_full_export():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+    with db() as conn:
+        categories = conn.execute(
+            "SELECT id, name FROM training_categories ORDER BY sort_order, id"
+        ).fetchall()
+        events = conn.execute("""
+            SELECT * FROM training_ledger_events ORDER BY training_date DESC, id DESC
+        """).fetchall()
+        event_files = {}
+        for event in events:
+            files = conn.execute(
+                "SELECT * FROM training_ledger_files WHERE event_id=? ORDER BY id",
+                (event["id"],),
+            ).fetchall()
+            event_files[event["id"]] = [dict(f) for f in files]
+
+    zip_buf = io.BytesIO()
+    with zipfile.ZipFile(zip_buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        manifest = {
+            "version": 1,
+            "exported_at": datetime.now().isoformat(timespec="seconds"),
+            "categories": [{"id": c["id"], "name": c["name"]} for c in categories],
+            "event_count": len(events),
+            "total_files": sum(len(v) for v in event_files.values()),
+        }
+        zf.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=2))
+
+        for event in events:
+            cat_name = event["category"] or "未分类"
+            safe_date = event["training_date"]
+            safe_name = re.sub(r'[<>:"/\\|?*]+', "_", event["name"]).strip()
+            folder = f"{cat_name}/{safe_date}_{safe_name}"
+
+            meta = {
+                "name": event["name"],
+                "training_date": event["training_date"],
+                "description": event["description"] or "",
+                "schedule_time": event["schedule_time"] or "19:30-21:00",
+                "schedule_period": event["schedule_period"] or "晚上",
+                "training_location": event["training_location"] or "",
+                "instructor": event["instructor"] or "",
+                "audience": event["audience"] or "",
+                "participant_count": event["participant_count"] or 0,
+                "category": cat_name,
+            }
+            zf.writestr(f"{folder}/metadata.json", json.dumps(meta, ensure_ascii=False, indent=2))
+
+            for f in event_files.get(event["id"], []):
+                src = TRAINING_LEDGER_DIR / f["stored_name"]
+                if src.is_file():
+                    zf.write(str(src), f"{folder}/files/{f['original_name']}")
+
+    zip_buf.seek(0)
+    filename = f"培训台账_全量备份_{datetime.now():%Y%m%d_%H%M%S}.zip"
+    return send_file(
+        zip_buf,
+        as_attachment=True,
+        download_name=filename,
+        mimetype="application/zip",
+    )
+
+
+@app.post("/api/training-ledger/full-import")
+def training_ledger_full_import():
+    if not ledger_password_ok():
+        return jsonify(error="管理密码错误"), 403
+
+    uploaded = request.files.get("file")
+    if not uploaded or not uploaded.filename:
+        return jsonify(error="请选择备份文件"), 400
+    if not uploaded.filename.lower().endswith(".zip"):
+        return jsonify(error="仅支持 .zip 备份文件"), 400
+
+    try:
+        with zipfile.ZipFile(uploaded, "r") as zf:
+            namelist = zf.namelist()
+            if "manifest.json" not in namelist:
+                return jsonify(error="无效的备份文件：缺少 manifest.json"), 400
+
+            manifest = json.loads(zf.read("manifest.json"))
+            if manifest.get("version") != 1:
+                return jsonify(error=f"不支持的备份版本：{manifest.get('version')}"), 400
+
+            with db() as conn:
+                imported_categories = 0
+                imported_events = 0
+                imported_files = 0
+                skipped_events = 0
+
+                for cat in manifest.get("categories", []):
+                    existing = conn.execute(
+                        "SELECT id FROM training_categories WHERE name=?", (cat["name"],)
+                    ).fetchone()
+                    if not existing:
+                        max_order = conn.execute(
+                            "SELECT COALESCE(MAX(sort_order), -1) FROM training_categories"
+                        ).fetchone()[0]
+                        conn.execute(
+                            "INSERT INTO training_categories (name, sort_order, created_at) VALUES (?,?,?)",
+                            (cat["name"], max_order + 1, datetime.now().isoformat(timespec="seconds")),
+                        )
+                        imported_categories += 1
+
+                event_folders = set()
+                for entry in namelist:
+                    if entry.endswith("/metadata.json"):
+                        parts = entry.split("/")
+                        if len(parts) >= 3:
+                            event_folders.add("/".join(parts[:-1]))
+
+                for folder in sorted(event_folders):
+                    meta_raw = zf.read(f"{folder}/metadata.json")
+                    meta = json.loads(meta_raw)
+
+                    existing = conn.execute(
+                        "SELECT id FROM training_ledger_events WHERE name=? AND training_date=?",
+                        (meta["name"], meta["training_date"]),
+                    ).fetchone()
+                    if existing:
+                        skipped_events += 1
+                        continue
+
+                    now = datetime.now().isoformat(timespec="seconds")
+                    cursor = conn.execute("""
+                        INSERT INTO training_ledger_events
+                        (name, training_date, description, schedule_time, schedule_period,
+                         training_location, instructor, audience, participant_count, category, created_at)
+                        VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                    """, (
+                        meta["name"], meta["training_date"], meta.get("description", ""),
+                        meta.get("schedule_time", "19:30-21:00"), meta.get("schedule_period", "晚上"),
+                        meta.get("training_location", ""), meta.get("instructor", ""),
+                        meta.get("audience", ""), meta.get("participant_count", 0),
+                        meta.get("category", "专题培训"), now,
+                    ))
+                    event_id = cursor.lastrowid
+                    imported_events += 1
+
+                    files_prefix = f"{folder}/files/"
+                    for entry in namelist:
+                        if entry.startswith(files_prefix) and not entry.endswith("/"):
+                            original_name = entry[len(files_prefix):]
+                            info = zf.getinfo(entry)
+                            file_bytes = zf.read(entry)
+
+                            safe_original = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", original_name).strip(" .") or "文件"
+                            suffix = Path(safe_original).suffix.lower()
+                            stored_name = f"{event_id}_{uuid.uuid4().hex}{suffix}"
+                            target = TRAINING_LEDGER_DIR / stored_name
+                            target.write_bytes(file_bytes)
+
+                            content_type = mimetypes.guess_type(original_name)[0] or "application/octet-stream"
+                            kind = "image" if content_type.startswith("image/") else "file"
+                            year, month, day = map(int, meta["training_date"].split("-"))
+                            file_label = "照片" if kind == "image" else "签到单"
+                            display_name = f"{year}年{month}月{day}日{meta['name']}{file_label}{suffix}"
+
+                            conn.execute("""
+                                INSERT INTO training_ledger_files
+                                (event_id, original_name, stored_name, display_name, kind, content_type, size, created_at)
+                                VALUES (?,?,?,?,?,?,?,?)
+                            """, (event_id, original_name, stored_name, display_name, kind, content_type, target.stat().st_size, now))
+                            imported_files += 1
+
+                conn.commit()
+
+    except zipfile.BadZipFile:
+        return jsonify(error="无效的 ZIP 文件"), 400
+    except json.JSONDecodeError:
+        return jsonify(error="备份文件中的 manifest.json 格式无效"), 400
+
+    return jsonify(
+        ok=True,
+        imported_categories=imported_categories,
+        imported_events=imported_events,
+        imported_files=imported_files,
+        skipped_events=skipped_events,
+    )
 
 
 # ── Brake Warning Ledger ──────────────────────────────────────────────
